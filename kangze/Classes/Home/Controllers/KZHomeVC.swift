@@ -60,11 +60,11 @@ class KZHomeVC: KZCommonNavBarVC {
         case 1://公司动态
             goDynamic()
         case 2://订单
-            break
+            goOrder()
         case 3://朋友圈素材
-            break
+            goFriendCircle()
         case 4://消息
-            break
+            goMsg()
         default:
             break
         }
@@ -72,6 +72,21 @@ class KZHomeVC: KZCommonNavBarVC {
     ///公司动态
     func goDynamic(){
         let vc = KZCompanyDynamicManagerVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    ///订单
+    func goOrder(){
+        let vc = KZOrderManagerVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    ///朋友圈
+    func goFriendCircle(){
+        let vc = KZFriendCircleVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    ///消息
+    func goMsg(){
+        let vc = KZMessageVC()
         navigationController?.pushViewController(vc, animated: true)
     }
 }

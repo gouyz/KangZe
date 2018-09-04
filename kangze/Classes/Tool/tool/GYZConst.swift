@@ -59,6 +59,8 @@ let kPushTime = 0.3
 /// alertViewController 取消的回调返回的索引
 let cancelIndex = -1
 
+/////3列，列间隔为10，距离屏幕边距左右各10
+let kPhotosImgHeight3: CGFloat = (kScreenWidth - 40)/3.0
 /////4列，列间隔为10，距离屏幕边距左右各10
 let kPhotosImgHeight: CGFloat = (kScreenWidth - 50)/4.0
 /////3列，列间隔为10，距离屏幕边距右10,左50

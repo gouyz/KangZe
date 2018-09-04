@@ -31,11 +31,10 @@ class KZOrderManagerVC: GYZBaseVC {
     ///设置控制器
     func setChildVcs() -> [UIViewController] {
         
-        var childVC : [PWOrderVC] = []
+        var childVC : [KZOrderVC] = []
         for index in 0 ..< titleArr.count{
             
-            let vc = PWOrderVC()
-            vc.isHasBottomBar = isHasBottomBar
+            let vc = KZOrderVC()
             vc.orderStatus = stateValue[index]
             childVC.append(vc)
         }
@@ -61,7 +60,7 @@ class KZOrderManagerVC: GYZBaseVC {
         /// 显示角标
         style.showBadge = false
         
-        scrollPageView = ScrollPageView.init(frame: self.view.frame, segmentStyle: style, titles: titleArr, childVcs: setChildVcs(), parentViewController: self)
+        scrollPageView = ScrollPageView.init(frame: CGRect.init(x: 0, y: kTitleAndStateHeight, width: kScreenWidth, height: self.view.frame.height - kTitleAndStateHeight), segmentStyle: style, titles: titleArr, childVcs: setChildVcs(), parentViewController: self)
         view.addSubview(scrollPageView!)
     }
 }

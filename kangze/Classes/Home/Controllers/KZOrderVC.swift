@@ -9,8 +9,12 @@
 import UIKit
 
 private let orderCell = "orderCell"
+private let orderHeader = "orderHeader"
+private let orderFooter = "orderFooter"
 
 class KZOrderVC: GYZBaseVC {
+    
+    var orderStatus: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +38,11 @@ class KZOrderVC: GYZBaseVC {
         let table = UITableView(frame: CGRect.zero, style: .grouped)
         table.dataSource = self
         table.delegate = self
-        table.sese = kGrayLineColor
+        table.separatorStyle = .none
         
-        table.register(KZCompanyDynamicCell.self, forCellReuseIdentifier: orderCell)
+        table.register(KZOrderCell.self, forCellReuseIdentifier: orderCell)
+        table.register(KZOrderHeaderView.self, forHeaderFooterViewReuseIdentifier: orderHeader)
+        table.register(KZOrderFooterView.self, forHeaderFooterViewReuseIdentifier: orderFooter)
         
         return table
     }()
@@ -46,35 +52,39 @@ class KZOrderVC: GYZBaseVC {
 extension KZOrderVC: UITableViewDelegate,UITableViewDataSource{
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 5
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
+        return section + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: orderCell) as! KZCompanyDynamicCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: orderCell) as! KZOrderCell
         
         cell.selectionStyle = .none
         return cell
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        return UIView()
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: orderHeader) as! KZOrderHeaderView
+        
+        return headerView
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
-        return UIView()
+        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: orderFooter) as! KZOrderFooterView
+        
+        return footerView
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return 100
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return kMargin
+        return kTitleHeight
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.00001
+        return 70
     }
 }

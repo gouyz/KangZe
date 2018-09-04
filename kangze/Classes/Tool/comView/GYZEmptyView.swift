@@ -40,7 +40,8 @@ class GYZEmptyView: UIView {
         iconImgView.snp.makeConstraints { (make) in
             make.centerX.equalTo(viewBg)
             make.top.equalTo(viewBg)
-            make.size.equalTo(CGSize.init(width: 130, height: 160))
+            make.width.equalTo(130)
+            make.height.equalTo(160)
         }
         desLab.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
