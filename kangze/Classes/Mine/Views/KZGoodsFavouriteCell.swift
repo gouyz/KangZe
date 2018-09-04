@@ -1,14 +1,14 @@
 //
-//  KZShopCell.swift
+//  KZGoodsFavouriteCell.swift
 //  kangze
-//  商城 商品cell
-//  Created by gouyz on 2018/8/29.
+//  商品收藏 cell
+//  Created by gouyz on 2018/9/4.
 //  Copyright © 2018年 gyz. All rights reserved.
 //
 
 import UIKit
 
-class KZShopCell: UITableViewCell {
+class KZGoodsFavouriteCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -24,9 +24,8 @@ class KZShopCell: UITableViewCell {
     func setupUI(){
         contentView.addSubview(iconView)
         contentView.addSubview(nameLab)
-        contentView.addSubview(saleLab)
         contentView.addSubview(priceLab)
-        contentView.addSubview(payNumberLab)
+        contentView.addSubview(numberLab)
         
         iconView.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
@@ -39,21 +38,15 @@ class KZShopCell: UITableViewCell {
             make.right.equalTo(-kMargin)
             make.height.equalTo(kTitleHeight)
         }
-        saleLab.snp.makeConstraints { (make) in
+        priceLab.snp.makeConstraints { (make) in
             make.left.right.equalTo(nameLab)
             make.top.equalTo(nameLab.snp.bottom)
-            make.height.equalTo(20)
+            make.bottom.equalTo(numberLab.snp.top)
         }
-        priceLab.snp.makeConstraints { (make) in
-            make.left.equalTo(nameLab)
+        numberLab.snp.makeConstraints { (make) in
+            make.left.right.equalTo(nameLab)
             make.bottom.equalTo(iconView)
             make.height.equalTo(20)
-            make.width.equalTo(80)
-        }
-        payNumberLab.snp.makeConstraints { (make) in
-            make.left.equalTo(priceLab.snp.right)
-            make.bottom.height.equalTo(priceLab)
-            make.right.equalTo(-kMargin)
         }
     }
     
@@ -69,15 +62,6 @@ class KZShopCell: UITableViewCell {
         
         return lab
     }()
-    /// 月销
-    lazy var saleLab : UILabel = {
-        let lab = UILabel()
-        lab.font = k12Font
-        lab.textColor = kGaryFontColor
-        lab.text = "月销4578件"
-        
-        return lab
-    }()
     /// 单价
     lazy var priceLab : UILabel = {
         let lab = UILabel()
@@ -88,11 +72,11 @@ class KZShopCell: UITableViewCell {
         return lab
     }()
     /// 付款人数
-    lazy var payNumberLab : UILabel = {
+    lazy var numberLab : UILabel = {
         let lab = UILabel()
         lab.font = k12Font
-        lab.textColor = kGaryFontColor
-        lab.text = "1258人付款"
+        lab.textColor = kBlackFontColor
+        lab.text = "1258人收藏"
         
         return lab
     }()

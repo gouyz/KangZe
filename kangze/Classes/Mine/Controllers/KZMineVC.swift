@@ -45,7 +45,9 @@ class KZMineVC: GYZBaseVC {
         
         tableView.tableHeaderView = userHeaderView
         
-        
+        userHeaderView.bgView.addOnClickListener(target: self, action: #selector(onClickedLogin))
+        userHeaderView.leftView.addOnClickListener(target: self, action: #selector(onClickedFavourite))
+        userHeaderView.rightView.addOnClickListener(target: self, action: #selector(onClickedKuCun))
     }
     
     override func didReceiveMemoryWarning() {
@@ -70,6 +72,25 @@ class KZMineVC: GYZBaseVC {
     
     lazy var userHeaderView: KZMineHeaderView = KZMineHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: 210 + kStateHeight))
     
+    /// 未登录时，点击登录
+    @objc func onClickedLogin(){
+        goLogin()
+    }
+    /// 登录
+    func goLogin(){
+        let vc = BPLoginVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 商品收藏
+    @objc func onClickedFavourite(){
+        let vc = KZGoodsFavouriteVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 库存
+    @objc func onClickedKuCun(){
+//        let vc = KZGoodsFavouriteVC()
+//        navigationController?.pushViewController(vc, animated: true)
+    }
     ///控制跳转
     func goController(menu: KZMineModel){
         //1:动态获取命名空间

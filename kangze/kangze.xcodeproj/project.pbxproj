@@ -3,12 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0A243CB2213D1F88003660B6 /* KZCartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A243CB1213D1F88003660B6 /* KZCartCell.swift */; };
 		0A243CB4213D23C3003660B6 /* KZCartBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A243CB3213D23C3003660B6 /* KZCartBottomView.swift */; };
+		0A3184BA213ED42E003AB178 /* KZForgetPwdVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3184B9213ED42E003AB178 /* KZForgetPwdVC.swift */; };
+		0A3184BC213EDC36003AB178 /* KZGoodsFavouriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3184BB213EDC36003AB178 /* KZGoodsFavouriteVC.swift */; };
+		0A3184BE213EDD1E003AB178 /* KZGoodsFavouriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3184BD213EDD1E003AB178 /* KZGoodsFavouriteCell.swift */; };
 		0A6F3C532136309800BBFEBB /* KZShopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6F3C522136309800BBFEBB /* KZShopCell.swift */; };
 		0A6F3C5521366E3B00BBFEBB /* KZGoodsDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6F3C5421366E3B00BBFEBB /* KZGoodsDetailVC.swift */; };
 		0A6F3C57213687E500BBFEBB /* KZGoodsDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6F3C56213687E500BBFEBB /* KZGoodsDetailHeaderView.swift */; };
@@ -151,6 +154,9 @@
 /* Begin PBXFileReference section */
 		0A243CB1213D1F88003660B6 /* KZCartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCartCell.swift; sourceTree = "<group>"; };
 		0A243CB3213D23C3003660B6 /* KZCartBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCartBottomView.swift; sourceTree = "<group>"; };
+		0A3184B9213ED42E003AB178 /* KZForgetPwdVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZForgetPwdVC.swift; sourceTree = "<group>"; };
+		0A3184BB213EDC36003AB178 /* KZGoodsFavouriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsFavouriteVC.swift; sourceTree = "<group>"; };
+		0A3184BD213EDD1E003AB178 /* KZGoodsFavouriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsFavouriteCell.swift; sourceTree = "<group>"; };
 		0A6F3C522136309800BBFEBB /* KZShopCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZShopCell.swift; sourceTree = "<group>"; };
 		0A6F3C5421366E3B00BBFEBB /* KZGoodsDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsDetailVC.swift; sourceTree = "<group>"; };
 		0A6F3C56213687E500BBFEBB /* KZGoodsDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsDetailHeaderView.swift; sourceTree = "<group>"; };
@@ -540,6 +546,7 @@
 			isa = PBXGroup;
 			children = (
 				0A75CE982135214E009B87E6 /* KZMineVC.swift */,
+				0A3184BB213EDC36003AB178 /* KZGoodsFavouriteVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -548,6 +555,7 @@
 			isa = PBXGroup;
 			children = (
 				0A902C222139166600149DE1 /* KZMineHeaderView.swift */,
+				0A3184BD213EDD1E003AB178 /* KZGoodsFavouriteCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -634,6 +642,7 @@
 			children = (
 				0A75CDF621351FCC009B87E6 /* BPLoginVC.swift */,
 				0A75CDF721351FCC009B87E6 /* BPRegisterVC.swift */,
+				0A3184B9213ED42E003AB178 /* KZForgetPwdVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -904,19 +913,22 @@
 				TargetAttributes = {
 					0A75CD9321351CCE009B87E6 = {
 						CreatedOnToolsVersion = 9.3;
+						ProvisioningStyle = Automatic;
 					};
 					0A75CDA721351CD0009B87E6 = {
 						CreatedOnToolsVersion = 9.3;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 0A75CD9321351CCE009B87E6;
 					};
 					0A75CDB221351CD1009B87E6 = {
 						CreatedOnToolsVersion = 9.3;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 0A75CD9321351CCE009B87E6;
 					};
 				};
 			};
 			buildConfigurationList = 0A75CD8F21351CCE009B87E6 /* Build configuration list for PBXProject "kangze" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1032,6 +1044,7 @@
 			files = (
 				0A75CE8321351FCD009B87E6 /* WXApiManager.swift in Sources */,
 				0A902C232139166600149DE1 /* KZMineHeaderView.swift in Sources */,
+				0A3184BC213EDC36003AB178 /* KZGoodsFavouriteVC.swift in Sources */,
 				0A902C2D213927B200149DE1 /* KZCompanyDynamicCell.swift in Sources */,
 				0A7C9B20213CBF6B00E04E81 /* KZOrderHeaderView.swift in Sources */,
 				0A75CE4321351FCC009B87E6 /* LHSBaseModel.swift in Sources */,
@@ -1063,6 +1076,7 @@
 				0A902C2B2139259F00149DE1 /* KZCompanyArticlesVC.swift in Sources */,
 				0A75CE4D21351FCC009B87E6 /* GYZLabArrowCell.swift in Sources */,
 				0A75CE8921351FCD009B87E6 /* GYZUpdateVersionTool.swift in Sources */,
+				0A3184BA213ED42E003AB178 /* KZForgetPwdVC.swift in Sources */,
 				0A75CE5621351FCC009B87E6 /* GYZBaseNavigationVC.swift in Sources */,
 				0A7C9B28213CDD4F00E04E81 /* KZFriendCircleCell.swift in Sources */,
 				0A75CE8F21351FCD009B87E6 /* GYZTool.swift in Sources */,
@@ -1093,6 +1107,7 @@
 				0A75CE7721351FCD009B87E6 /* SelectionTextField.swift in Sources */,
 				0A75CE7D21351FCD009B87E6 /* MMCardItem.swift in Sources */,
 				0A75CE5A21351FCC009B87E6 /* BPLoginVC.swift in Sources */,
+				0A3184BE213EDD1E003AB178 /* KZGoodsFavouriteCell.swift in Sources */,
 				0A75CE8021351FCD009B87E6 /* GYZSheetView.swift in Sources */,
 				0A75CE8721351FCD009B87E6 /* ContentView.swift in Sources */,
 				0A75CE4B21351FCC009B87E6 /* LHSCheckView.swift in Sources */,
@@ -1318,10 +1333,7 @@
 				DEVELOPMENT_TEAM = 99YWG4PDCT;
 				INFOPLIST_FILE = kangze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gouyz.kangze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1341,10 +1353,7 @@
 				DEVELOPMENT_TEAM = 99YWG4PDCT;
 				INFOPLIST_FILE = kangze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gouyz.kangze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1361,11 +1370,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = kangzeTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gouyz.kangzeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1381,11 +1386,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = kangzeTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gouyz.kangzeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1400,11 +1401,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = kangzeUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gouyz.kangzeUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1419,11 +1416,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = kangzeUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gouyz.kangzeUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

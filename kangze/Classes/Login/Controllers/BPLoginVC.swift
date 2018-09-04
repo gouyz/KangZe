@@ -23,7 +23,6 @@ class BPLoginVC: GYZBaseVC {
         
         setupUI()
         
-        registerBtn.set(image: UIImage.init(named: "icon_register_arrow"), title: "立即注册", titlePosition: .left, additionalSpacing: kMargin, state: .normal)
     }
     
     override func didReceiveMemoryWarning() {
@@ -124,6 +123,7 @@ class BPLoginVC: GYZBaseVC {
         let btn = UIButton.init(type: .custom)
         btn.setTitleColor(kBlueFontColor, for: .normal)
         btn.titleLabel?.font = k15Font
+        btn.setTitle("立即注册", for: .normal)
         
         btn.addTarget(self, action: #selector(onClickedRegister), for: .touchUpInside)
         btn.cornerRadius = kCornerRadius
@@ -136,7 +136,6 @@ class BPLoginVC: GYZBaseVC {
     /// 注册
     @objc func onClickedRegister(){
         let forgetPwdVC = BPRegisterVC()
-        forgetPwdVC.registerType = .register
         navigationController?.pushViewController(forgetPwdVC, animated: true)
     }
     /// 登录
@@ -145,8 +144,7 @@ class BPLoginVC: GYZBaseVC {
     }
     /// 忘记密码
     @objc func clickedForgetPwdBtn() {
-        let forgetPwdVC = BPRegisterVC()
-        forgetPwdVC.registerType = .forgetpwd
+        let forgetPwdVC = KZForgetPwdVC()
         navigationController?.pushViewController(forgetPwdVC, animated: true)
     }
 }

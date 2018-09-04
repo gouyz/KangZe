@@ -8,7 +8,7 @@
 		<key>image</key>
 		<string>icon_mine_order</string>
 		<key>controller</key>
-		<string></string>
+		<string>KZOrderManagerVC</string>
 	</dict>
 	<dict>
 		<key>title</key>

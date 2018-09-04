@@ -29,16 +29,17 @@ class KZMineHeaderView: UIView {
         bgView.addSubview(typeLab)
         bgView.addSubview(phoneLab)
         
-        self.addSubview(bgBottomView)
-        bgBottomView.addSubview(favouriteNumberLab)
-        bgBottomView.addSubview(favouriteLab)
-        bgBottomView.addSubview(kuCunNumberLab)
-        bgBottomView.addSubview(kuCunLab)
+        self.addSubview(leftView)
+        leftView.addSubview(favouriteNumberLab)
+        leftView.addSubview(favouriteLab)
+        self.addSubview(rightView)
+        rightView.addSubview(kuCunNumberLab)
+        rightView.addSubview(kuCunLab)
         
         bgView.snp.makeConstraints { (make) in
             make.left.right.equalTo(self)
             make.top.equalTo(kStateHeight)
-            make.bottom.equalTo(bgBottomView.snp.top)
+            make.bottom.equalTo(leftView.snp.top)
         }
         userHeaderView.snp.makeConstraints { (make) in
             make.centerX.equalTo(self)
@@ -61,9 +62,9 @@ class KZMineHeaderView: UIView {
             make.left.right.height.equalTo(typeLab)
             make.top.equalTo(typeLab.snp.bottom)
         }
-        
-        bgBottomView.snp.makeConstraints { (make) in
-            make.left.bottom.right.equalTo(self)
+        leftView.snp.makeConstraints { (make) in
+            make.left.bottom.equalTo(self)
+            make.width.equalTo(rightView)
             make.height.equalTo(50)
         }
         favouriteNumberLab.snp.makeConstraints { (make) in
@@ -76,6 +77,11 @@ class KZMineHeaderView: UIView {
             make.left.equalTo(favouriteNumberLab.snp.right).offset(kMargin)
             make.top.height.width.equalTo(favouriteNumberLab)
             make.right.equalTo(-kMargin)
+        }
+        rightView.snp.makeConstraints { (make) in
+            make.left.equalTo(leftView.snp.right)
+            make.right.bottom.equalTo(self)
+            make.height.equalTo(leftView)
         }
         favouriteLab.snp.makeConstraints { (make) in
             make.left.height.equalTo(favouriteNumberLab)
@@ -135,12 +141,13 @@ class KZMineHeaderView: UIView {
     }()
     
     /// 背景
-    lazy var bgBottomView: UIView = {
+    lazy var leftView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.RGBColor(21, g: 123, b: 182)
         
         return view
     }()
+    
     /// 我的收藏 数量
     lazy var favouriteNumberLab: UILabel = {
         let lab = UILabel()
@@ -160,6 +167,13 @@ class KZMineHeaderView: UIView {
         lab.text = "我的收藏"
         
         return lab
+    }()
+    /// 背景
+    lazy var rightView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.RGBColor(21, g: 123, b: 182)
+        
+        return view
     }()
     /// 我的库存 数量
     lazy var kuCunNumberLab: UILabel = {
