@@ -124,6 +124,18 @@
 		0A7C9B28213CDD4F00E04E81 /* KZFriendCircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7C9B27213CDD4F00E04E81 /* KZFriendCircleCell.swift */; };
 		0A7C9B2A213D0A0D00E04E81 /* KZPublicFriendCircleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7C9B29213D0A0C00E04E81 /* KZPublicFriendCircleVC.swift */; };
 		0A7C9B2C213D0E8D00E04E81 /* KZMessageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7C9B2B213D0E8D00E04E81 /* KZMessageVC.swift */; };
+		0A8F32DD213F7EEC00980EDE /* KZMyKuCunVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32DC213F7EEC00980EDE /* KZMyKuCunVC.swift */; };
+		0A8F32DF213F7F6D00980EDE /* KZMyKuCunCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32DE213F7F6D00980EDE /* KZMyKuCunCell.swift */; };
+		0A8F32E1213F83DB00980EDE /* KZHistorySendRecordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32E0213F83DB00980EDE /* KZHistorySendRecordVC.swift */; };
+		0A8F32E3213F858700980EDE /* KZHistorySendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32E2213F858700980EDE /* KZHistorySendCell.swift */; };
+		0A8F32E5213FAE2100980EDE /* KZApplySendVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32E4213FAE2100980EDE /* KZApplySendVC.swift */; };
+		0A8F32E7213FB6F100980EDE /* KZMyAddressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32E6213FB6F100980EDE /* KZMyAddressVC.swift */; };
+		0A8F32E9213FB96200980EDE /* KZMyAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32E8213FB96200980EDE /* KZMyAddressCell.swift */; };
+		0A8F32EB213FBF3B00980EDE /* KZEditAddressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32EA213FBF3B00980EDE /* KZEditAddressVC.swift */; };
+		0A8F32ED213FC7A100980EDE /* KZSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32EC213FC7A100980EDE /* KZSettingVC.swift */; };
+		0A8F32EF213FC91600980EDE /* KZAboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32EE213FC91600980EDE /* KZAboutVC.swift */; };
+		0A8F32F1213FCEE700980EDE /* KZMyAreasVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32F0213FCEE700980EDE /* KZMyAreasVC.swift */; };
+		0A8F32F3213FD22A00980EDE /* KZApplyFriendsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32F2213FD22A00980EDE /* KZApplyFriendsVC.swift */; };
 		0A902C212139147200149DE1 /* KZMineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A902C202139147200149DE1 /* KZMineModel.swift */; };
 		0A902C232139166600149DE1 /* KZMineHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A902C222139166600149DE1 /* KZMineHeaderView.swift */; };
 		0A902C252139231000149DE1 /* KZCompanyDynamicManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A902C242139231000149DE1 /* KZCompanyDynamicManagerVC.swift */; };
@@ -282,6 +294,18 @@
 		0A7C9B27213CDD4F00E04E81 /* KZFriendCircleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZFriendCircleCell.swift; sourceTree = "<group>"; };
 		0A7C9B29213D0A0C00E04E81 /* KZPublicFriendCircleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZPublicFriendCircleVC.swift; sourceTree = "<group>"; };
 		0A7C9B2B213D0E8D00E04E81 /* KZMessageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMessageVC.swift; sourceTree = "<group>"; };
+		0A8F32DC213F7EEC00980EDE /* KZMyKuCunVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyKuCunVC.swift; sourceTree = "<group>"; };
+		0A8F32DE213F7F6D00980EDE /* KZMyKuCunCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyKuCunCell.swift; sourceTree = "<group>"; };
+		0A8F32E0213F83DB00980EDE /* KZHistorySendRecordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZHistorySendRecordVC.swift; sourceTree = "<group>"; };
+		0A8F32E2213F858700980EDE /* KZHistorySendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZHistorySendCell.swift; sourceTree = "<group>"; };
+		0A8F32E4213FAE2100980EDE /* KZApplySendVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZApplySendVC.swift; sourceTree = "<group>"; };
+		0A8F32E6213FB6F100980EDE /* KZMyAddressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyAddressVC.swift; sourceTree = "<group>"; };
+		0A8F32E8213FB96200980EDE /* KZMyAddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyAddressCell.swift; sourceTree = "<group>"; };
+		0A8F32EA213FBF3B00980EDE /* KZEditAddressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZEditAddressVC.swift; sourceTree = "<group>"; };
+		0A8F32EC213FC7A100980EDE /* KZSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZSettingVC.swift; sourceTree = "<group>"; };
+		0A8F32EE213FC91600980EDE /* KZAboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZAboutVC.swift; sourceTree = "<group>"; };
+		0A8F32F0213FCEE700980EDE /* KZMyAreasVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyAreasVC.swift; sourceTree = "<group>"; };
+		0A8F32F2213FD22A00980EDE /* KZApplyFriendsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZApplyFriendsVC.swift; sourceTree = "<group>"; };
 		0A902C202139147200149DE1 /* KZMineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMineModel.swift; sourceTree = "<group>"; };
 		0A902C222139166600149DE1 /* KZMineHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMineHeaderView.swift; sourceTree = "<group>"; };
 		0A902C242139231000149DE1 /* KZCompanyDynamicManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCompanyDynamicManagerVC.swift; sourceTree = "<group>"; };
@@ -547,6 +571,15 @@
 			children = (
 				0A75CE982135214E009B87E6 /* KZMineVC.swift */,
 				0A3184BB213EDC36003AB178 /* KZGoodsFavouriteVC.swift */,
+				0A8F32DC213F7EEC00980EDE /* KZMyKuCunVC.swift */,
+				0A8F32E0213F83DB00980EDE /* KZHistorySendRecordVC.swift */,
+				0A8F32E4213FAE2100980EDE /* KZApplySendVC.swift */,
+				0A8F32E6213FB6F100980EDE /* KZMyAddressVC.swift */,
+				0A8F32EA213FBF3B00980EDE /* KZEditAddressVC.swift */,
+				0A8F32EC213FC7A100980EDE /* KZSettingVC.swift */,
+				0A8F32EE213FC91600980EDE /* KZAboutVC.swift */,
+				0A8F32F0213FCEE700980EDE /* KZMyAreasVC.swift */,
+				0A8F32F2213FD22A00980EDE /* KZApplyFriendsVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -556,6 +589,9 @@
 			children = (
 				0A902C222139166600149DE1 /* KZMineHeaderView.swift */,
 				0A3184BD213EDD1E003AB178 /* KZGoodsFavouriteCell.swift */,
+				0A8F32DE213F7F6D00980EDE /* KZMyKuCunCell.swift */,
+				0A8F32E2213F858700980EDE /* KZHistorySendCell.swift */,
+				0A8F32E8213FB96200980EDE /* KZMyAddressCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1055,7 +1091,9 @@
 				0A75CE8A21351FCD009B87E6 /* GYZAddressBookManager.swift in Sources */,
 				0A75CE4821351FCC009B87E6 /* GYZCommonInfoCell.swift in Sources */,
 				0A75CE9E21353318009B87E6 /* KZHomeCell.swift in Sources */,
+				0A8F32F3213FD22A00980EDE /* KZApplyFriendsVC.swift in Sources */,
 				0A75CE4A21351FCC009B87E6 /* GYZCommonIconArrowCell.swift in Sources */,
+				0A8F32ED213FC7A100980EDE /* KZSettingVC.swift in Sources */,
 				0A75CE4921351FCC009B87E6 /* GYZPhotoView.swift in Sources */,
 				0A75CE5F21351FCC009B87E6 /* GYZUIButton+Extension.swift in Sources */,
 				0A75CE6921351FCD009B87E6 /* LHSCustomAlertView.swift in Sources */,
@@ -1067,19 +1105,24 @@
 				0A7C9B2A213D0A0D00E04E81 /* KZPublicFriendCircleVC.swift in Sources */,
 				0A75CE9C21352F1F009B87E6 /* KZHomeAdsHeaderView.swift in Sources */,
 				0A75CE5E21351FCC009B87E6 /* ETNavBarTransparent.swift in Sources */,
+				0A8F32E7213FB6F100980EDE /* KZMyAddressVC.swift in Sources */,
 				0A7C9B2C213D0E8D00E04E81 /* KZMessageVC.swift in Sources */,
+				0A8F32F1213FCEE700980EDE /* KZMyAreasVC.swift in Sources */,
 				0A715A57213E0CFC0006C01D /* KZSubmitOrderVC.swift in Sources */,
 				0A75CE5921351FCC009B87E6 /* LHSUserInfoModel.swift in Sources */,
 				0A75CE7E21351FCD009B87E6 /* GYZScanQrcodeVC.swift in Sources */,
+				0A8F32DF213F7F6D00980EDE /* KZMyKuCunCell.swift in Sources */,
 				0A75CE8621351FCD009B87E6 /* ScrollSegmentView.swift in Sources */,
 				0A75CE6E21351FCD009B87E6 /* HXTagAttribute.m in Sources */,
 				0A902C2B2139259F00149DE1 /* KZCompanyArticlesVC.swift in Sources */,
 				0A75CE4D21351FCC009B87E6 /* GYZLabArrowCell.swift in Sources */,
+				0A8F32E3213F858700980EDE /* KZHistorySendCell.swift in Sources */,
 				0A75CE8921351FCD009B87E6 /* GYZUpdateVersionTool.swift in Sources */,
 				0A3184BA213ED42E003AB178 /* KZForgetPwdVC.swift in Sources */,
 				0A75CE5621351FCC009B87E6 /* GYZBaseNavigationVC.swift in Sources */,
 				0A7C9B28213CDD4F00E04E81 /* KZFriendCircleCell.swift in Sources */,
 				0A75CE8F21351FCD009B87E6 /* GYZTool.swift in Sources */,
+				0A8F32E1213F83DB00980EDE /* KZHistorySendRecordVC.swift in Sources */,
 				0A6F3C5521366E3B00BBFEBB /* KZGoodsDetailVC.swift in Sources */,
 				0A75CE8E21351FCD009B87E6 /* GYZThrowLineTool.swift in Sources */,
 				0A243CB4213D23C3003660B6 /* KZCartBottomView.swift in Sources */,
@@ -1087,6 +1130,7 @@
 				0A75CE5021351FCC009B87E6 /* GYZBottomSendView.swift in Sources */,
 				0A7C9B22213CC21500E04E81 /* KZOrderFooterView.swift in Sources */,
 				0A75CE9121351FCD009B87E6 /* GYZConst.swift in Sources */,
+				0A8F32E9213FB96200980EDE /* KZMyAddressCell.swift in Sources */,
 				0A75CE4521351FCC009B87E6 /* LHSAddPhotoView.swift in Sources */,
 				0A75CE5C21351FCC009B87E6 /* GYZLoginInputView.swift in Sources */,
 				0A75CE6321351FCD009B87E6 /* GYZUIColor+Extension.swift in Sources */,
@@ -1094,6 +1138,7 @@
 				0A715A59213E53820006C01D /* GYZLabAndFieldCell.swift in Sources */,
 				0A75CE6221351FCD009B87E6 /* GYZString+Extension.swift in Sources */,
 				0A75CE6421351FCD009B87E6 /* GYZUIViewControl+Empty.swift in Sources */,
+				0A8F32DD213F7EEC00980EDE /* KZMyKuCunVC.swift in Sources */,
 				0A75CE7821351FCD009B87E6 /* ZCycleView.swift in Sources */,
 				0A715A5D213E709F0006C01D /* KZSelectPayMethodView.swift in Sources */,
 				0A75CE4C21351FCC009B87E6 /* GYZLabAndFieldView.swift in Sources */,
@@ -1110,6 +1155,7 @@
 				0A3184BE213EDD1E003AB178 /* KZGoodsFavouriteCell.swift in Sources */,
 				0A75CE8021351FCD009B87E6 /* GYZSheetView.swift in Sources */,
 				0A75CE8721351FCD009B87E6 /* ContentView.swift in Sources */,
+				0A8F32EB213FBF3B00980EDE /* KZEditAddressVC.swift in Sources */,
 				0A75CE4B21351FCC009B87E6 /* LHSCheckView.swift in Sources */,
 				0A75CE8B21351FCD009B87E6 /* GYZLunarFormatter.swift in Sources */,
 				0A902C272139251C00149DE1 /* KZCompanyDynamicVC.swift in Sources */,
@@ -1118,6 +1164,7 @@
 				0A75CE8C21351FCD009B87E6 /* GYZOpenCameraPhotosTool.swift in Sources */,
 				0A75CE8221351FCD009B87E6 /* GYZSheetCell.swift in Sources */,
 				0A75CE6C21351FCD009B87E6 /* HXTagsView.m in Sources */,
+				0A8F32EF213FC91600980EDE /* KZAboutVC.swift in Sources */,
 				0A75CE6621351FCD009B87E6 /* GYZUIViewController+Loading.swift in Sources */,
 				0A75CE7C21351FCD009B87E6 /* MMShareSheet.swift in Sources */,
 				0A75CE8821351FCD009B87E6 /* GYZNetWork.swift in Sources */,
@@ -1132,6 +1179,7 @@
 				0A78E7BF21379BE1008F2F34 /* KZGoodDetailBottomView.swift in Sources */,
 				0A75CE6F21351FCD009B87E6 /* HXTagCollectionViewFlowLayout.m in Sources */,
 				0A75CE5521351FCC009B87E6 /* GYZBaseWhiteNavVC.swift in Sources */,
+				0A8F32E5213FAE2100980EDE /* KZApplySendVC.swift in Sources */,
 				0A75CE7321351FCD009B87E6 /* PickerView.swift in Sources */,
 				0A7C9B1C213CBA3C00E04E81 /* KZOrderManagerVC.swift in Sources */,
 				0A75CE8121351FCD009B87E6 /* GYZActionSheet.swift in Sources */,
@@ -1317,8 +1365,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

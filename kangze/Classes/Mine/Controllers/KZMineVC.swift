@@ -88,8 +88,8 @@ class KZMineVC: GYZBaseVC {
     }
     /// 库存
     @objc func onClickedKuCun(){
-//        let vc = KZGoodsFavouriteVC()
-//        navigationController?.pushViewController(vc, animated: true)
+        let vc = KZMyKuCunVC()
+        navigationController?.pushViewController(vc, animated: true)
     }
     ///控制跳转
     func goController(menu: KZMineModel){

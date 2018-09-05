@@ -21,6 +21,7 @@ class KZPosPayVC: GYZBaseVC {
         super.viewDidLoad()
 
         self.navigationItem.title = "pos机核单"
+        self.view.backgroundColor = kWhiteColor
         setUpUI()
         
     }

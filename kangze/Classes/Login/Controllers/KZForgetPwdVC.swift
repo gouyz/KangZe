@@ -9,15 +9,27 @@
 import UIKit
 import MBProgressHUD
 
+public enum RegisterVCType : Int {
+    
+    
+    case register // 注册
+    
+    case forgetpwd // 忘记密码
+    
+    case modifypwd // 修改密码
+}
+
 class KZForgetPwdVC: GYZBaseVC {
     
+    /// 类型
+    var registerType: RegisterVCType = .forgetpwd
     ///记录获取的验证码
     var codeStr: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.title = "忘记密码"
+        self.navigationItem.title = (registerType == .forgetpwd ? "忘记密码" : "修改密码")
         self.view.backgroundColor = kWhiteColor
         
         setupUI()

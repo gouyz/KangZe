@@ -24,7 +24,7 @@
 		<key>image</key>
 		<string>icon_mine_apply_friend</string>
 		<key>controller</key>
-		<string></string>
+		<string>KZApplyFriendsVC</string>
 	</dict>
 	<dict>
 		<key>title</key>
@@ -32,7 +32,7 @@
 		<key>image</key>
 		<string>icon_mine_register</string>
 		<key>controller</key>
-		<string></string>
+		<string>BPRegisterVC</string>
 	</dict>
 	<dict>
 		<key>title</key>
@@ -48,7 +48,7 @@
 		<key>image</key>
 		<string>icon_mine_address</string>
 		<key>controller</key>
-		<string></string>
+		<string>KZMyAddressVC</string>
 	</dict>
 	<dict>
 		<key>title</key>
@@ -56,7 +56,7 @@
 		<key>image</key>
 		<string>icon_mine_areas</string>
 		<key>controller</key>
-		<string></string>
+		<string>KZMyAreasVC</string>
 	</dict>
 	<dict>
 		<key>title</key>
@@ -64,7 +64,7 @@
 		<key>image</key>
 		<string>icon_mine_setting</string>
 		<key>controller</key>
-		<string></string>
+		<string>KZSettingVC</string>
 	</dict>
 </array>
 </plist>

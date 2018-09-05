@@ -1,0 +1,116 @@
+//
+//  KZApplyFriendsVC.swift
+//  kangze
+//  邀请好友
+//  Created by gouyz on 2018/9/5.
+//  Copyright © 2018年 gyz. All rights reserved.
+//
+
+import UIKit
+
+class KZApplyFriendsVC: GYZBaseVC {
+    
+    /// 生成二维码内容
+    let qrCodeConment: String = "测试一下"
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.navigationItem.title = "邀请好友"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_shared_black")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: #selector(clickedSharedBtn))
+        
+        setupUI()
+        
+        logoImgView.image = qrCodeConment.generateQRCode(size: 200, logo: UIImage.init(named: "icon_logo"))
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    func setupUI(){
+        view.addSubview(logoImgView)
+        view.addSubview(desLab)
+        view.addSubview(desLab1)
+        view.addSubview(codeLab)
+        
+        desLab.snp.makeConstraints { (make) in
+            make.top.equalTo(kTitleAndStateHeight + kMargin)
+            make.left.equalTo(kMargin)
+            make.right.equalTo(-kMargin)
+            make.height.equalTo(kTitleHeight)
+        }
+        logoImgView.snp.makeConstraints { (make) in
+            make.centerX.equalTo(view)
+            make.top.equalTo(desLab.snp.bottom).offset(kMargin)
+            make.size.equalTo(CGSize.init(width: 200, height: 200))
+        }
+        desLab1.snp.makeConstraints { (make) in
+            make.left.right.equalTo(desLab)
+            make.top.equalTo(logoImgView.snp.bottom).offset(kTitleHeight)
+            make.height.equalTo(kTitleHeight)
+        }
+        codeLab.snp.makeConstraints { (make) in
+            make.left.right.equalTo(desLab)
+            make.top.equalTo(desLab1.snp.bottom)
+            make.height.equalTo(kTitleHeight)
+        }
+    }
+    
+    /// 生成二维码logo
+    lazy var logoImgView: UIImageView = UIImageView()
+    
+    /// 您的邀请二维码
+    lazy var desLab: UILabel = {
+        let lab = UILabel()
+        lab.font = k15Font
+        lab.textColor = kBlackFontColor
+        lab.text = "您的邀请二维码："
+        lab.textAlignment = .center
+        
+        return lab
+    }()
+    /// 您的邀请链接
+    lazy var desLab1: UILabel = {
+        let lab = UILabel()
+        lab.font = k15Font
+        lab.textColor = kBlackFontColor
+        lab.text = "您的邀请链接："
+        lab.textAlignment = .center
+        
+        return lab
+    }()
+    ///
+    fileprivate lazy var codeLab: UILabel = {
+        let lab = UILabel()
+        lab.font = k15Font
+        lab.textColor = kBlackFontColor
+        lab.textAlignment = .center
+        lab.backgroundColor = kWhiteColor
+        lab.cornerRadius = kCornerRadius
+        lab.text = "2839483247889"
+        
+        return lab
+    }()
+    /// 分享
+    @objc func clickedSharedBtn(){
+        showShareView()
+    }
+    
+    /// 分享界面
+    func showShareView(){
+        
+        let cancelBtn = [
+            "title": "取消",
+            "type": "danger"
+        ]
+        let mmShareSheet = MMShareSheet.init(title: "分享至", cards: kSharedCards, duration: nil, cancelBtn: cancelBtn)
+        mmShareSheet.callBack = { [weak self](handler) ->() in
+            
+            if handler != "cancel" {// 取消
+                
+            }
+        }
+        mmShareSheet.present()
+    }
+}

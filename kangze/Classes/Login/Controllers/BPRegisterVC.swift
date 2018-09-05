@@ -1,7 +1,7 @@
 //
 //  BPRegisterVC.swift
 //  BenefitPet
-//  注册、忘记密码、修改密码
+//  注册
 //  Created by gouyz on 2018/7/27.
 //  Copyright © 2018年 gyz. All rights reserved.
 //
@@ -9,20 +9,8 @@
 import UIKit
 import MBProgressHUD
 
-public enum RegisterVCType : Int {
-    
-    
-    case register // 注册
-    
-    case forgetpwd // 忘记密码
-    
-    case modifypwd // 修改密码
-}
-
 class BPRegisterVC: GYZBaseVC {
-    
-    /// 类型
-    var registerType: RegisterVCType = .register
+
     ///记录获取的验证码
     var codeStr: String = ""
 
@@ -290,9 +278,8 @@ class BPRegisterVC: GYZBaseVC {
     /// 身份证正面照片
     lazy var idCardImgView: UIImageView = {
         let imgView = UIImageView()
-        imgView.backgroundColor = kBackgroundColor
         imgView.cornerRadius = kCornerRadius
-        imgView.image = UIImage.init(named: "")
+        imgView.image = UIImage.init(named: "icon_add_img_big")
         
         return imgView
     }()
@@ -308,9 +295,8 @@ class BPRegisterVC: GYZBaseVC {
     /// 身份证反面照片
     lazy var idCardBgImgView: UIImageView = {
         let imgView = UIImageView()
-        imgView.backgroundColor = kBackgroundColor
         imgView.cornerRadius = kCornerRadius
-        imgView.image = UIImage.init(named: "")
+        imgView.image = UIImage.init(named: "icon_add_img_big")
         
         return imgView
     }()

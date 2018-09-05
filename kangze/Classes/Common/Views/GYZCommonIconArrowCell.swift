@@ -31,7 +31,7 @@ class GYZCommonIconArrowCell: UITableViewCell {
         iconView.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
             make.centerY.equalTo(contentView)
-            make.size.equalTo(CGSize.init(width: 15, height: 15))
+            make.size.equalTo(CGSize.init(width: 20, height: 20))
         }
         nameLab.snp.makeConstraints { (make) in
             make.left.equalTo(iconView.snp.right).offset(kMargin)

@@ -66,9 +66,13 @@ class KZSubmitOrderVC: GYZBaseVC {
     }()
     /// 提交订单
     @objc func clickedSubmitBtn(){
+        showPayView()
+    }
+    
+    func showPayView(){
         let payView = KZSelectPayMethodView()
         payView.selectPayTypeBlock = { [weak self](index) in
-
+            
             payView.hide()
             self?.dealPay(index: index)
         }
