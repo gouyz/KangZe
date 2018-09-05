@@ -12,6 +12,8 @@
 		0A3184BA213ED42E003AB178 /* KZForgetPwdVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3184B9213ED42E003AB178 /* KZForgetPwdVC.swift */; };
 		0A3184BC213EDC36003AB178 /* KZGoodsFavouriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3184BB213EDC36003AB178 /* KZGoodsFavouriteVC.swift */; };
 		0A3184BE213EDD1E003AB178 /* KZGoodsFavouriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3184BD213EDD1E003AB178 /* KZGoodsFavouriteCell.swift */; };
+		0A494BE321401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A494BE221401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift */; };
+		0A494BE52140231E00F4E28C /* KZRealNameConfirmVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A494BE42140231E00F4E28C /* KZRealNameConfirmVC.swift */; };
 		0A6F3C532136309800BBFEBB /* KZShopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6F3C522136309800BBFEBB /* KZShopCell.swift */; };
 		0A6F3C5521366E3B00BBFEBB /* KZGoodsDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6F3C5421366E3B00BBFEBB /* KZGoodsDetailVC.swift */; };
 		0A6F3C57213687E500BBFEBB /* KZGoodsDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6F3C56213687E500BBFEBB /* KZGoodsDetailHeaderView.swift */; };
@@ -169,6 +171,8 @@
 		0A3184B9213ED42E003AB178 /* KZForgetPwdVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZForgetPwdVC.swift; sourceTree = "<group>"; };
 		0A3184BB213EDC36003AB178 /* KZGoodsFavouriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsFavouriteVC.swift; sourceTree = "<group>"; };
 		0A3184BD213EDD1E003AB178 /* KZGoodsFavouriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsFavouriteCell.swift; sourceTree = "<group>"; };
+		0A494BE221401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZConfirmHeHuoRenVC.swift; sourceTree = "<group>"; };
+		0A494BE42140231E00F4E28C /* KZRealNameConfirmVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZRealNameConfirmVC.swift; sourceTree = "<group>"; };
 		0A6F3C522136309800BBFEBB /* KZShopCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZShopCell.swift; sourceTree = "<group>"; };
 		0A6F3C5421366E3B00BBFEBB /* KZGoodsDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsDetailVC.swift; sourceTree = "<group>"; };
 		0A6F3C56213687E500BBFEBB /* KZGoodsDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsDetailHeaderView.swift; sourceTree = "<group>"; };
@@ -580,6 +584,8 @@
 				0A8F32EE213FC91600980EDE /* KZAboutVC.swift */,
 				0A8F32F0213FCEE700980EDE /* KZMyAreasVC.swift */,
 				0A8F32F2213FD22A00980EDE /* KZApplyFriendsVC.swift */,
+				0A494BE221401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift */,
+				0A494BE42140231E00F4E28C /* KZRealNameConfirmVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1092,6 +1098,7 @@
 				0A75CE4821351FCC009B87E6 /* GYZCommonInfoCell.swift in Sources */,
 				0A75CE9E21353318009B87E6 /* KZHomeCell.swift in Sources */,
 				0A8F32F3213FD22A00980EDE /* KZApplyFriendsVC.swift in Sources */,
+				0A494BE52140231E00F4E28C /* KZRealNameConfirmVC.swift in Sources */,
 				0A75CE4A21351FCC009B87E6 /* GYZCommonIconArrowCell.swift in Sources */,
 				0A8F32ED213FC7A100980EDE /* KZSettingVC.swift in Sources */,
 				0A75CE4921351FCC009B87E6 /* GYZPhotoView.swift in Sources */,
@@ -1174,6 +1181,7 @@
 				0A243CB2213D1F88003660B6 /* KZCartCell.swift in Sources */,
 				0A75CE8421351FCD009B87E6 /* SegmentStyle.swift in Sources */,
 				0A75CE6D21351FCD009B87E6 /* HXTagsCell.m in Sources */,
+				0A494BE321401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift in Sources */,
 				0A75CE6721351FCD009B87E6 /* GYZEmptyView.swift in Sources */,
 				0A715A5F213E82860006C01D /* KZPosPayVC.swift in Sources */,
 				0A78E7BF21379BE1008F2F34 /* KZGoodDetailBottomView.swift in Sources */,
