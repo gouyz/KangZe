@@ -16,7 +16,7 @@
 		<key>image</key>
 		<string>icon_mine_money</string>
 		<key>controller</key>
-		<string></string>
+		<string>KZMyMoneyVC</string>
 	</dict>
 	<dict>
 		<key>title</key>

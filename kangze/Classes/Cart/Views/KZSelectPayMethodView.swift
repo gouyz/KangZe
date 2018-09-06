@@ -106,7 +106,8 @@ class KZSelectPayMethodView: UIView {
         }
         
         alipayView.snp.makeConstraints { (make) in
-            make.left.right.height.equalTo(yuEView)
+            make.left.right.equalTo(yuEView)
+            make.height.equalTo(50)
             make.top.equalTo(lineView.snp.bottom)
         }
         alipayIconView.snp.makeConstraints { (make) in
