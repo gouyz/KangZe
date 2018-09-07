@@ -33,6 +33,9 @@ class KZGoodsDetailVC: GYZBaseVC {
             make.height.equalTo(kBottomTabbarHeight)
         }
         
+        headerView.productView.addOnClickListener(target: self, action: #selector(onClickedProductView))
+        headerView.areasView.addOnClickListener(target: self, action: #selector(onClickedAreasView))
+        
         webView.load(URLRequest.init(url: URL.init(string: "https://www.baidu.com/")!))
     }
     
@@ -72,6 +75,18 @@ class KZGoodsDetailVC: GYZBaseVC {
     
     /// 底部View
     lazy var bottomView: KZGoodDetailBottomView = KZGoodDetailBottomView()
+    
+    /// 产品参数
+    @objc func onClickedProductView(){
+        let paramView = KZGoodsParamsView()
+        paramView.show()
+    }
+    /// 我的区域
+    @objc func onClickedAreasView(){
+        
+        let vc = KZSelectAreaVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 extension KZGoodsDetailVC : WKNavigationDelegate,UIScrollViewDelegate{
     ///MARK WKNavigationDelegate

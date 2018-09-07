@@ -17,6 +17,8 @@
 		0A48FCB6214270C0000B5C1F /* KZGoodsParamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48FCB5214270C0000B5C1F /* KZGoodsParamsView.swift */; };
 		0A494BE321401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A494BE221401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift */; };
 		0A494BE52140231E00F4E28C /* KZRealNameConfirmVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A494BE42140231E00F4E28C /* KZRealNameConfirmVC.swift */; };
+		0A49D6E22142BAB700F6352A /* KZSelectAreaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A49D6E12142BAB700F6352A /* KZSelectAreaVC.swift */; };
+		0A49D6E42142C2D900F6352A /* KZSelectAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A49D6E32142C2D900F6352A /* KZSelectAreaView.swift */; };
 		0A6F3C532136309800BBFEBB /* KZShopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6F3C522136309800BBFEBB /* KZShopCell.swift */; };
 		0A6F3C5521366E3B00BBFEBB /* KZGoodsDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6F3C5421366E3B00BBFEBB /* KZGoodsDetailVC.swift */; };
 		0A6F3C57213687E500BBFEBB /* KZGoodsDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6F3C56213687E500BBFEBB /* KZGoodsDetailHeaderView.swift */; };
@@ -199,6 +201,8 @@
 		0A48FCB5214270C0000B5C1F /* KZGoodsParamsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsParamsView.swift; sourceTree = "<group>"; };
 		0A494BE221401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZConfirmHeHuoRenVC.swift; sourceTree = "<group>"; };
 		0A494BE42140231E00F4E28C /* KZRealNameConfirmVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZRealNameConfirmVC.swift; sourceTree = "<group>"; };
+		0A49D6E12142BAB700F6352A /* KZSelectAreaVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZSelectAreaVC.swift; sourceTree = "<group>"; };
+		0A49D6E32142C2D900F6352A /* KZSelectAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZSelectAreaView.swift; sourceTree = "<group>"; };
 		0A6F3C522136309800BBFEBB /* KZShopCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZShopCell.swift; sourceTree = "<group>"; };
 		0A6F3C5421366E3B00BBFEBB /* KZGoodsDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsDetailVC.swift; sourceTree = "<group>"; };
 		0A6F3C56213687E500BBFEBB /* KZGoodsDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsDetailHeaderView.swift; sourceTree = "<group>"; };
@@ -535,6 +539,7 @@
 			children = (
 				0A75CE94213520B3009B87E6 /* KZShopVC.swift */,
 				0A6F3C5421366E3B00BBFEBB /* KZGoodsDetailVC.swift */,
+				0A49D6E12142BAB700F6352A /* KZSelectAreaVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -546,6 +551,7 @@
 				0A6F3C56213687E500BBFEBB /* KZGoodsDetailHeaderView.swift */,
 				0A78E7BE21379BE0008F2F34 /* KZGoodDetailBottomView.swift */,
 				0A48FCB5214270C0000B5C1F /* KZGoodsParamsView.swift */,
+				0A49D6E32142C2D900F6352A /* KZSelectAreaView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1179,6 +1185,7 @@
 				0A902C212139147200149DE1 /* KZMineModel.swift in Sources */,
 				0A71F31A214117DC001201C1 /* KZAddBankCardVC.swift in Sources */,
 				0A75CE4421351FCC009B87E6 /* GYZCommonArrowCell.swift in Sources */,
+				0A49D6E22142BAB700F6352A /* KZSelectAreaVC.swift in Sources */,
 				0A75CE7921351FCD009B87E6 /* ZCycleViewCell.swift in Sources */,
 				0A75CE6521351FCD009B87E6 /* GYZDate+Extension.swift in Sources */,
 				0A75CE972135211D009B87E6 /* KZCartVC.swift in Sources */,
@@ -1258,6 +1265,7 @@
 				0A71F31C21411884001201C1 /* KZMyBankCell.swift in Sources */,
 				0A75CE7C21351FCD009B87E6 /* MMShareSheet.swift in Sources */,
 				0A75CE8821351FCD009B87E6 /* GYZNetWork.swift in Sources */,
+				0A49D6E42142C2D900F6352A /* KZSelectAreaView.swift in Sources */,
 				0A75CE6121351FCC009B87E6 /* MBProgressHUD+Extension.swift in Sources */,
 				0A75CE6021351FCC009B87E6 /* GYZUIImage+Extension.swift in Sources */,
 				0A75CE8521351FCD009B87E6 /* ScrollPageView.swift in Sources */,

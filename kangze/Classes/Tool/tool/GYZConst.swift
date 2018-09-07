@@ -119,7 +119,7 @@ let kNoNetWork = "当前网络不可用，请检查网络情况"
 /// 数据返回的分页数量
 let kPageSize = 10
 /// 网络数据请求成功标识
-let kQuestSuccessTag = 1
+let kQuestSuccessTag = 200
 
 /// 字体常量
 let k10Font = UIFont.systemFont(ofSize: 10.0)

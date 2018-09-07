@@ -13,6 +13,17 @@ class BPRegisterVC: GYZBaseVC {
 
     ///记录获取的验证码
     var codeStr: String = ""
+    /// 选择身份证正面图片
+    var selectIDCardImg: UIImage?
+    /// 选择身份证反面图片
+    var selectIDCardBgImg: UIImage?
+    
+    /// 选择身份证正面图片
+    var selectIDCardImgUrl: String = ""
+    /// 选择身份证反面图片
+    var selectIDCardBgImgUrl: String = ""
+    /// 身份证号
+    var idCardNo: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -280,6 +291,8 @@ class BPRegisterVC: GYZBaseVC {
         let imgView = UIImageView()
         imgView.cornerRadius = kCornerRadius
         imgView.image = UIImage.init(named: "icon_add_img_big")
+        imgView.tag = 101
+        imgView.addOnClickListener(target: self, action: #selector(onClickedSelectImg(sender:)))
         
         return imgView
     }()
@@ -297,6 +310,8 @@ class BPRegisterVC: GYZBaseVC {
         let imgView = UIImageView()
         imgView.cornerRadius = kCornerRadius
         imgView.image = UIImage.init(named: "icon_add_img_big")
+        imgView.tag = 102
+        imgView.addOnClickListener(target: self, action: #selector(onClickedSelectImg(sender:)))
         
         return imgView
     }()
@@ -329,7 +344,7 @@ class BPRegisterVC: GYZBaseVC {
     }()
     
     
-    /// 忘记密码
+    /// 注册
     @objc func clickedOkBtn(btn: UIButton){
         hiddenKeyBoard()
         
@@ -344,12 +359,30 @@ class BPRegisterVC: GYZBaseVC {
         if pwdInputView.textFiled.text!.isEmpty {
             MBProgressHUD.showAutoDismissHUD(message: "请输入密码")
             return
-        }else if (pwdInputView.textFiled.text?.count < 6 || pwdInputView.textFiled.text?.count > 20){
-            MBProgressHUD.showAutoDismissHUD(message: "请输入6-20位密码")
+        }
+        if repwdInputView.textFiled.text!.isEmpty {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入确认密码")
             return
         }
         
+        if pwdInputView.textFiled.text != repwdInputView.textFiled.text {
+            MBProgressHUD.showAutoDismissHUD(message: "新密码与确认密码不一致")
+            return
+        }
+        if nameInputView.textFiled.text!.isEmpty {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入姓名")
+            return
+        }
+        if !idCardInputView.textFiled.text!.isEmpty {
+            if !(idCardInputView.textFiled.text?.IsIdentityCard())!{
+                MBProgressHUD.showAutoDismissHUD(message: "请输入正确的身份证号")
+                return
+            }
+            
+            idCardNo = idCardInputView.textFiled.text!
+        }
         
+        requestRegister()
     }
     /// 判断手机号是否有效
     ///
@@ -406,22 +439,22 @@ class BPRegisterVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "注册中...")
         
-        GYZNetWork.requestNetwork("User/register", parameters: ["member_name":phoneInputView.textFiled.text!,"member_passwd": pwdInputView.textFiled.text!,"code":codeStr,"submit":"==get"],  success: { (response) in
+        GYZNetWork.requestNetwork("login&op=register", parameters: ["username":nameInputView.textFiled.text!,"password": pwdInputView.textFiled.text!,"mobile": phoneInputView.textFiled.text!,"password_confirm": repwdInputView.textFiled.text!,"inviter_code": applyCodeInputView.textFiled.text!,"shenfen_code": idCardNo,"sf_code_img1":selectIDCardImgUrl,"sf_code_img2":selectIDCardBgImgUrl,"client": ""],  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             //            GYZLog(response)
-            if response["status"].intValue == kQuestSuccessTag{//请求成功
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
-                let data = response["data"]
+                let data = response["datas"]
                 
                 userDefaults.set(true, forKey: kIsLoginTagKey)//是否登录标识
-                userDefaults.set(data["member_id"].stringValue, forKey: "userId")//用户ID
-                userDefaults.set(data["member_name"].stringValue, forKey: "phone")//用户电话
-                //                userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
-                //                userDefaults.set(info["head_img"].url, forKey: "headImg")//用户logo
+                userDefaults.set(data["userid"].stringValue, forKey: "userId")//用户ID
+//                userDefaults.set(data["username"].stringValue, forKey: "username")//用户电话
+                userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
+                userDefaults.set(data["key"], forKey: "key")//key
                 _ = weakSelf?.navigationController?.popViewController(animated: true)
             }else{
-                MBProgressHUD.showAutoDismissHUD(message: response["result"]["msg"].stringValue)
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }
             
         }, failture: { (error) in
@@ -435,6 +468,10 @@ class BPRegisterVC: GYZBaseVC {
         phoneInputView.textFiled.resignFirstResponder()
         pwdInputView.textFiled.resignFirstResponder()
         codeInputView.textFiled.resignFirstResponder()
+        repwdInputView.textFiled.resignFirstResponder()
+        nameInputView.textFiled.resignFirstResponder()
+        applyCodeInputView.textFiled.resignFirstResponder()
+        idCardInputView.textFiled.resignFirstResponder()
     }
     
     ///获取验证码
@@ -452,6 +489,50 @@ class BPRegisterVC: GYZBaseVC {
                 
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["message"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    /// 选择图片
+    @objc func onClickedSelectImg(sender: UITapGestureRecognizer){
+        
+        let tag = sender.view?.tag
+        GYZOpenCameraPhotosTool.shareTool.choosePicture(self, editor: false, finished: { [weak self] (image) in
+            
+            if tag == 101 {
+                self?.selectIDCardImg = image
+                self?.idCardImgView.image = image
+            }else{
+                self?.selectIDCardBgImg = image
+                self?.idCardBgImgView.image = image
+            }
+        })
+    }
+    
+    /// 上传头像
+    func requestUpLoadImg(img : UIImage){
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        let imgParam: ImageFileUploadParam = ImageFileUploadParam()
+        imgParam.name = "file"
+        imgParam.fileName = "idCardImg.jpg"
+        imgParam.mimeType = "image/jpg"
+        imgParam.data = UIImageJPEGRepresentation(img, 0.5)
+        
+        GYZNetWork.uploadImageRequest("upload&op=sfz_upload", uploadParam: [imgParam], success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                let data = response["datas"]
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }
             
         }, failture: { (error) in

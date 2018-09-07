@@ -1,18 +1,17 @@
 //
-//  KZGoodsParamsView.swift
+//  KZSelectAreaView.swift
 //  kangze
-//  商品参数
+//  选择区域
 //  Created by gouyz on 2018/9/7.
 //  Copyright © 2018年 gyz. All rights reserved.
 //
 
 import UIKit
 
-private let goodsParamsCell = "goodsParamsCell"
-private let goodsParamsHeader = "goodsParamsHeader"
+private let selectAreaCell = "selectAreaCell"
 
-class KZGoodsParamsView: UIView {
-    
+class KZSelectAreaView: UIView {
+
     /// 数据源
     var dataSource = [String]()
     
@@ -46,17 +45,11 @@ class KZGoodsParamsView: UIView {
         bgView.addOnClickListener(target: self, action: #selector(onBlankClicked))
         
         bgView.addSubview(tableView)
-        bgView.addSubview(cancleBtn)
         
-        bgView.frame = CGRect.init(x: 0, y: frame.size.height, width: kScreenWidth, height: kCellH * 10)
+        bgView.frame = CGRect.init(x: 0, y: frame.size.height, width: kScreenWidth, height: kScreenHeight * 0.7)
         
         tableView.snp.makeConstraints { (make) in
-            make.top.left.right.equalTo(bgView)
-            make.bottom.equalTo(cancleBtn.snp.top)
-        }
-        cancleBtn.snp.makeConstraints { (make) in
-            make.left.right.bottom.equalTo(bgView)
-            make.height.equalTo(kCellH)
+            make.top.left.right.bottom.equalTo(bgView)
         }
     }
     
@@ -70,7 +63,7 @@ class KZGoodsParamsView: UIView {
         
         return view
     }()
-
+    
     /// 初始化tableViewxx
     lazy var tableView : UITableView = {
         let table = UITableView(frame: CGRect.zero, style: .plain)
@@ -78,22 +71,9 @@ class KZGoodsParamsView: UIView {
         table.delegate = self
         table.separatorStyle = .none
         
-        table.register(GYZCommonInfoCell.self, forCellReuseIdentifier: goodsParamsCell)
-        table.register(LHSGeneralHeaderView.self, forHeaderFooterViewReuseIdentifier: goodsParamsHeader)
+        table.register(GYZLabArrowCell.self, forCellReuseIdentifier: selectAreaCell)
         
         return table
-    }()
-    
-    /// 关闭
-    lazy var cancleBtn : UIButton = {
-        let btn = UIButton.init(type: .custom)
-        btn.backgroundColor = kBtnClickBGColor
-        btn.titleLabel?.font = k15Font
-        btn.setTitleColor(kWhiteColor, for: .normal)
-        btn.setTitle("关闭", for: .normal)
-        btn.addTarget(self, action: #selector(clickedCancleBtn), for: .touchUpInside)
-        
-        return btn
     }()
     /// 显示
     func show(){
@@ -146,35 +126,22 @@ class KZGoodsParamsView: UIView {
         hide()
     }
     
-    /// 取消
-    @objc func clickedCancleBtn(){
-        hide()
-    }
-
 }
-extension KZGoodsParamsView : UITableViewDelegate,UITableViewDataSource{
+extension KZSelectAreaView : UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return titleArr.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: goodsParamsCell) as! GYZCommonInfoCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: selectAreaCell) as! GYZLabArrowCell
         
-        
-        cell.titleLab.text = titleArr[indexPath.row]
-        cell.contentLab.text = titleArr[indexPath.row]
-        cell.contentLab.textAlignment = .left
+        cell.rightIconView.isHidden = true
+        cell.nameLab.text = titleArr[indexPath.row]
         
         return cell
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: goodsParamsHeader) as! LHSGeneralHeaderView
-        
-        headerView.contentView.backgroundColor = kWhiteColor
-        headerView.nameLab.textAlignment = .center
-        headerView.nameLab.text = "产品参数"
-        
-        return headerView
+        return UIView()
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
@@ -183,13 +150,12 @@ extension KZGoodsParamsView : UITableViewDelegate,UITableViewDataSource{
     
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return kCellH
+        return kTitleHeight
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return kCellH
+        return 0.00001
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.00001
     }
 }
-
