@@ -35,12 +35,12 @@ class KZMyVIPManagerVC: GYZBaseVC {
     ///设置控制器
     func setChildVcs() -> [GYZBaseVC] {
         
-        let shouRuVC = KZMyShouRuVC()
+        let customerVC = KZCustomerInfoVC()
         
-        let bonusVC = KZMyBonusVC()
-        let bonusVC1 = KZMyBonusVC()
+        let kuCunVC = KZKuCunInfoVC()
+        let dataVC = KZShengYiDataVC()
         
-        return [shouRuVC,bonusVC,bonusVC1]
+        return [customerVC,kuCunVC,dataVC]
     }
     
     /// 设置scrollView
