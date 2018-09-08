@@ -84,8 +84,10 @@ class GYZNetWork: NSObject {
         
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             
-            for param in parameters!{
-                multipartFormData.append( (param.value.data(using: String.Encoding.utf8)!), withName: param.key)
+            if parameters != nil{
+                for param in parameters!{
+                    multipartFormData.append( (param.value.data(using: String.Encoding.utf8)!), withName: param.key)
+                }
             }
             
             

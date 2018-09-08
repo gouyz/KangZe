@@ -33,6 +33,9 @@ class BPRegisterVC: GYZBaseVC {
         
         setupUI()
         
+        nameInputView.textFiled.isSecureTextEntry = false
+        applyCodeInputView.textFiled.isSecureTextEntry = false
+        idCardInputView.textFiled.isSecureTextEntry = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -355,7 +358,7 @@ class BPRegisterVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "请输入验证码")
             return
         }
-        
+
         if pwdInputView.textFiled.text!.isEmpty {
             MBProgressHUD.showAutoDismissHUD(message: "请输入密码")
             return
@@ -364,7 +367,7 @@ class BPRegisterVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "请输入确认密码")
             return
         }
-        
+
         if pwdInputView.textFiled.text != repwdInputView.textFiled.text {
             MBProgressHUD.showAutoDismissHUD(message: "新密码与确认密码不一致")
             return
@@ -381,8 +384,14 @@ class BPRegisterVC: GYZBaseVC {
             
             idCardNo = idCardInputView.textFiled.text!
         }
-        
-        requestRegister()
+        createHUD(message: "注册中...")
+        if selectIDCardImg != nil {
+            requestUpLoadImg(img: selectIDCardImg!, isBgImg: false)
+        }else if selectIDCardBgImg != nil {
+            requestUpLoadImg(img: selectIDCardBgImg!, isBgImg: true)
+        }else{
+           requestRegister()
+        }
     }
     /// 判断手机号是否有效
     ///
@@ -437,9 +446,8 @@ class BPRegisterVC: GYZBaseVC {
     func requestRegister(){
         
         weak var weakSelf = self
-        createHUD(message: "注册中...")
         
-        GYZNetWork.requestNetwork("login&op=register", parameters: ["username":nameInputView.textFiled.text!,"password": pwdInputView.textFiled.text!,"mobile": phoneInputView.textFiled.text!,"password_confirm": repwdInputView.textFiled.text!,"inviter_code": applyCodeInputView.textFiled.text!,"shenfen_code": idCardNo,"sf_code_img1":selectIDCardImgUrl,"sf_code_img2":selectIDCardBgImgUrl,"client": ""],  success: { (response) in
+        GYZNetWork.requestNetwork("login&op=register", parameters: ["username":nameInputView.textFiled.text!,"password": pwdInputView.textFiled.text!,"mobile": phoneInputView.textFiled.text!,"password_confirm": repwdInputView.textFiled.text!,"inviter_code": applyCodeInputView.textFiled.text!,"shenfen_code": idCardNo,"sf_code_img1":selectIDCardImgUrl,"sf_code_img2":selectIDCardBgImgUrl,"mobilecode":codeInputView.textFiled.text!,"client": "ios"],  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             //            GYZLog(response)
@@ -450,6 +458,8 @@ class BPRegisterVC: GYZBaseVC {
                 userDefaults.set(true, forKey: kIsLoginTagKey)//是否登录标识
                 userDefaults.set(data["userid"].stringValue, forKey: "userId")//用户ID
 //                userDefaults.set(data["username"].stringValue, forKey: "username")//用户电话
+                userDefaults.set(data["is_shehe"].stringValue, forKey: "is_shehe")//是否完成实名认证
+                userDefaults.set(data["is_buydl"].stringValue, forKey: "is_buydl")//是否完成合伙人套餐购买认证   1.是     0.否
                 userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
                 userDefaults.set(data["key"], forKey: "key")//key
                 _ = weakSelf?.navigationController?.popViewController(animated: true)
@@ -513,25 +523,36 @@ class BPRegisterVC: GYZBaseVC {
     }
     
     /// 上传头像
-    func requestUpLoadImg(img : UIImage){
+    func requestUpLoadImg(img : UIImage,isBgImg: Bool){
         weak var weakSelf = self
-        createHUD(message: "加载中...")
         
         let imgParam: ImageFileUploadParam = ImageFileUploadParam()
-        imgParam.name = "file"
-        imgParam.fileName = "idCardImg.jpg"
-        imgParam.mimeType = "image/jpg"
+        imgParam.name = "image"
+        imgParam.fileName = "idCardImg.png"
+        imgParam.mimeType = "image/png"
         imgParam.data = UIImageJPEGRepresentation(img, 0.5)
         
         GYZNetWork.uploadImageRequest("upload&op=sfz_upload", uploadParam: [imgParam], success: { (response) in
             
-            weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
                 let data = response["datas"]
+                if isBgImg{/// 身份证反面
+                    weakSelf?.selectIDCardBgImgUrl = data["img"].stringValue
+                    weakSelf?.requestRegister()
+                }else{
+                    weakSelf?.selectIDCardImgUrl = data["img"].stringValue
+                    
+                    if weakSelf?.selectIDCardBgImg != nil{
+                        weakSelf?.requestUpLoadImg(img: (weakSelf?.selectIDCardBgImg)!, isBgImg: true)
+                    }else{
+                        weakSelf?.requestRegister()
+                    }
+                }
                 
             }else{
+                weakSelf?.hud?.hide(animated: true)
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }
             
