@@ -26,7 +26,8 @@ class KZAddBankCardVC: GYZBaseVC {
         bgView.addSubview(iconView)
         bgView.addSubview(bankNameLab)
         bgView.addSubview(lineView2)
-        view.addSubview(saveBtn)
+        bgView.addSubview(noteLab)
+        bgView.addSubview(saveBtn)
         
         bgView.snp.makeConstraints { (make) in
             make.left.right.bottom.equalTo(view)
@@ -78,10 +79,15 @@ class KZAddBankCardVC: GYZBaseVC {
             make.left.right.height.equalTo(lineView)
             make.top.equalTo(nameLab.snp.bottom)
         }
+        noteLab.snp.makeConstraints { (make) in
+            make.left.right.equalTo(saveBtn)
+            make.height.equalTo(30)
+            make.top.equalTo(lineView2.snp.bottom)
+        }
         saveBtn.snp.makeConstraints { (make) in
             make.left.equalTo(30)
             make.right.equalTo(-30)
-            make.top.equalTo(lineView2.snp.bottom).offset(30)
+            make.top.equalTo(noteLab.snp.bottom).offset(30)
             make.height.equalTo(kUIButtonHeight)
         }
         
@@ -181,7 +187,15 @@ class KZAddBankCardVC: GYZBaseVC {
         
         return view
     }()
-    
+    /// 备注
+    lazy var noteLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k13Font
+        lab.textColor = kRedFontColor
+        lab.text = "目前仅支持建设银行、农业银行、中国银行、交通银行"
+        
+        return lab
+    }()
     
     /// 确定
     lazy var saveBtn : UIButton = {

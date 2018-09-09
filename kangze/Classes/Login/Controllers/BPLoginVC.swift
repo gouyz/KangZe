@@ -141,7 +141,18 @@ class BPLoginVC: GYZBaseVC {
     }
     /// 登录
     @objc func clickedLoginBtn() {
-        KeyWindow.rootViewController = GYZMainTabBarVC()
+        hiddenKeyBoard()
+        
+        if !validPhoneNO() {
+            return
+        }
+        
+        if pwdInputView.textFiled.text!.isEmpty {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入密码")
+            return
+        }
+        
+        requestLogin()
     }
     /// 忘记密码
     @objc func clickedForgetPwdBtn() {
@@ -149,10 +160,33 @@ class BPLoginVC: GYZBaseVC {
         navigationController?.pushViewController(forgetPwdVC, animated: true)
     }
     
+    /// 判断手机号是否有效
+    ///
+    /// - Returns:
+    func validPhoneNO() -> Bool{
+        
+        if phoneInputView.textFiled.text!.isEmpty {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入手机号")
+            return false
+        }
+        if phoneInputView.textFiled.text!.isMobileNumber(){
+            return true
+        }else{
+            MBProgressHUD.showAutoDismissHUD(message: "请输入正确的手机号")
+            return false
+        }
+        
+    }
+    /// 隐藏键盘
+    func hiddenKeyBoard(){
+        phoneInputView.textFiled.resignFirstResponder()
+        pwdInputView.textFiled.resignFirstResponder()
+    }
     ///登录
     func requestLogin(){
         
         weak var weakSelf = self
+        createHUD(message: "登录中...")
         
         GYZNetWork.requestNetwork("login&op=login", parameters: ["mobile": phoneInputView.textFiled.text!,"password": pwdInputView.textFiled.text!,"client": "ios"],  success: { (response) in
             
@@ -168,8 +202,8 @@ class BPLoginVC: GYZBaseVC {
                 userDefaults.set(data["is_buydl"].stringValue, forKey: "is_buydl")//是否完成合伙人套餐购买认证   1.是     0.否
                 //                userDefaults.set(data["username"].stringValue, forKey: "username")//用户电话
                 userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
-                userDefaults.set(data["key"], forKey: "key")//key
-                _ = weakSelf?.navigationController?.popViewController(animated: true)
+                userDefaults.set(data["key"].stringValue, forKey: "key")//key
+                _ = weakSelf?.navigationController?.popToRootViewController(animated: true)
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }

@@ -1,8 +1,8 @@
 //
-//  KZCompanyIntroduceVC.swift
+//  KZArticleDetailVC.swift
 //  kangze
-//  公司介绍
-//  Created by gouyz on 2018/8/31.
+//  文章详情
+//  Created by gouyz on 2018/9/8.
 //  Copyright © 2018年 gyz. All rights reserved.
 //
 
@@ -10,11 +10,13 @@ import UIKit
 import WebKit
 import MBProgressHUD
 
-class KZCompanyIntroduceVC: GYZBaseVC {
+class KZArticleDetailVC: GYZBaseVC {
 
     /// 加载内容
     var url: String = ""
     var dataModel: KZArticleModel?
+    /// 文章id
+    var articleId: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +25,7 @@ class KZCompanyIntroduceVC: GYZBaseVC {
         webView.snp.makeConstraints { (make) in
             make.edges.equalTo(0)
         }
-        requestIntroduceDatas()
+        requestDetailDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -45,13 +47,13 @@ class KZCompanyIntroduceVC: GYZBaseVC {
         return webView
     }()
     
-    ///获取公司介绍数据
-    func requestIntroduceDatas(){
+    ///获取详情数据
+    func requestDetailDatas(){
         
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("article&op=company_introduce",parameters: nil,  success: { (response) in
+        GYZNetWork.requestNetwork("article&op=article_show",parameters: ["article_id":articleId],method : .get,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
@@ -73,6 +75,7 @@ class KZCompanyIntroduceVC: GYZBaseVC {
     }
     /// 加载
     func loadContent(){
+        self.navigationItem.title = dataModel?.article_title
         url = (dataModel?.article_content)!
         if url.hasPrefix("http://") || url.hasPrefix("https://") {
             
@@ -82,7 +85,7 @@ class KZCompanyIntroduceVC: GYZBaseVC {
         }
     }
 }
-extension KZCompanyIntroduceVC : WKNavigationDelegate{
+extension KZArticleDetailVC : WKNavigationDelegate{
     ///MARK WKNavigationDelegate
     // 页面开始加载时调用
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
@@ -105,3 +108,4 @@ extension KZCompanyIntroduceVC : WKNavigationDelegate{
         self.hud?.hide(animated: true)
     }
 }
+

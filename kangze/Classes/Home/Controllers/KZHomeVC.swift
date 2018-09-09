@@ -7,10 +7,16 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let homeCell = "homeCell"
 
 class KZHomeVC: KZCommonNavBarVC {
+    
+    var dataModel: KZHomeModel?
+    let titleArr: [String] = ["本周热销","合伙人套餐","续货套餐"]
+    let iconArr: [String] = ["icon_home_hot_sale","icon_home_hehuo","icon_home_xuhuo"]
+    var goodsList: [KZGoodsModel] = [KZGoodsModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +31,7 @@ class KZHomeVC: KZCommonNavBarVC {
         headerView.operatorBlock = {[weak self] (tag) in
             self?.dealOperator(index: tag)
         }
+        requestHomeDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -53,6 +60,38 @@ class KZHomeVC: KZCommonNavBarVC {
     }()
     
     lazy var headerView: KZHomeAdsHeaderView = KZHomeAdsHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: (kScreenWidth - kMargin * 2) * 0.4 + 80))
+    
+    ///获取首页数据
+    func requestHomeDatas(){
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("goods&op=shop_index",parameters: nil,method : .get,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"].dictionaryObject else { return }
+                weakSelf?.dataModel = KZHomeModel.init(dict: data)
+                weakSelf?.setData()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    func setData(){
+        headerView.adsImgView.setUrlsGroup([(dataModel?.header_pic)!])
+        tableView.reloadData()
+    }
     
     /// 公司动态、订单、朋友圈素材、消息
     func dealOperator(index : Int){
@@ -96,26 +135,21 @@ extension KZHomeVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        if dataModel != nil {
+            return (dataModel?.goodList!.count)!
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: homeCell) as! KZHomeCell
         
-        if indexPath.row == 0 {
-            cell.iconView.image = UIImage.init(named: "icon_home_hot_sale")
-            cell.nameLab.text = "本周热销"
-            cell.adsImgView.image = UIImage.init(named: "icon_home_hot_sale_banner")
-        }else if indexPath.row == 1 {
-            cell.iconView.image = UIImage.init(named: "icon_home_hehuo")
-            cell.nameLab.text = "合伙人套餐"
-            cell.adsImgView.image = UIImage.init(named: "icon_home_hehuo_banner")
-        }else{
-            cell.iconView.image = UIImage.init(named: "icon_home_xuhuo")
-            cell.nameLab.text = "续货套餐"
-            cell.adsImgView.image = UIImage.init(named: "icon_home_xuhuo_banner")
-        }
+        let model = dataModel?.goodList![indexPath.row]
+        
+        cell.iconView.image = UIImage.init(named: iconArr[indexPath.row])
+        cell.nameLab.text = titleArr[indexPath.row]
+        cell.adsImgView.kf.setImage(with: URL.init(string: (model?.goods_image)!), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
         
         cell.selectionStyle = .none
         return cell

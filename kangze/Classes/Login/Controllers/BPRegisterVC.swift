@@ -419,29 +419,6 @@ class BPRegisterVC: GYZBaseVC {
 //        }
     }
     
-    /// 找回密码
-    func requestUpdatePwd(){
-        
-        weak var weakSelf = self
-        createHUD(message: "加载中...")
-        
-        GYZNetWork.requestNetwork("app/editPassword.do", parameters: ["phone":phoneInputView.textFiled.text!,"password": pwdInputView.textFiled.text!,"code":codeInputView.textFiled.text!],  success: { (response) in
-            
-            weakSelf?.hud?.hide(animated: true)
-            GYZLog(response)
-            if response["code"].intValue == kQuestSuccessTag{//请求成功
-                
-                _ = weakSelf?.navigationController?.popViewController(animated: true)
-            }else{
-                MBProgressHUD.showAutoDismissHUD(message: response["message"].stringValue)
-            }
-            
-        }, failture: { (error) in
-            weakSelf?.hud?.hide(animated: true)
-            GYZLog(error)
-        })
-    }
-    
     /// 注册
     func requestRegister(){
         
@@ -461,8 +438,8 @@ class BPRegisterVC: GYZBaseVC {
                 userDefaults.set(data["is_shehe"].stringValue, forKey: "is_shehe")//是否完成实名认证
                 userDefaults.set(data["is_buydl"].stringValue, forKey: "is_buydl")//是否完成合伙人套餐购买认证   1.是     0.否
                 userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
-                userDefaults.set(data["key"], forKey: "key")//key
-                _ = weakSelf?.navigationController?.popViewController(animated: true)
+                userDefaults.set(data["key"].stringValue, forKey: "key")//key
+                _ = weakSelf?.navigationController?.popToRootViewController(animated: true)
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }

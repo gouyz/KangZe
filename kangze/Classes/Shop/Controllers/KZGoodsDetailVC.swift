@@ -8,6 +8,7 @@
 
 import UIKit
 import WebKit
+import MBProgressHUD
 
 private let goodsDetailCell = "goodsDetailCell"
 
@@ -16,6 +17,9 @@ class KZGoodsDetailVC: GYZBaseVC {
     
     /// header 高度
     var headerViewH: CGFloat = kScreenWidth * 0.75 + 110 + kTitleHeight * 3
+    
+    var goodsId: String = ""
+    var dataModel: KZGoodsModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +40,8 @@ class KZGoodsDetailVC: GYZBaseVC {
         headerView.productView.addOnClickListener(target: self, action: #selector(onClickedProductView))
         headerView.areasView.addOnClickListener(target: self, action: #selector(onClickedAreasView))
         
-        webView.load(URLRequest.init(url: URL.init(string: "https://www.baidu.com/")!))
+        requestDetailDatas()
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -79,6 +84,7 @@ class KZGoodsDetailVC: GYZBaseVC {
     /// 产品参数
     @objc func onClickedProductView(){
         let paramView = KZGoodsParamsView()
+        paramView.dataModel = dataModel?.attr
         paramView.show()
     }
     /// 我的区域
@@ -86,6 +92,58 @@ class KZGoodsDetailVC: GYZBaseVC {
         
         let vc = KZSelectAreaVC()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    ///获取详情数据
+    func requestDetailDatas(){
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("goods&op=goods_detail_kz",parameters: ["goods_id":goodsId,"key": userDefaults.string(forKey: "key") ?? ""],method : .get,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"].dictionaryObject else { return }
+                weakSelf?.dataModel = KZGoodsModel.init(dict: data)
+                weakSelf?.setData()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    func setData(){
+        if dataModel?.goods_type != "2" {// 合伙人套餐
+            headerViewH = kScreenWidth * 0.75 + 110 + kTitleHeight * 2
+            headerView.frame = CGRect.init(x: 0, y: -headerViewH, width: kScreenWidth, height: headerViewH)
+            webView.scrollView.contentInset = UIEdgeInsets.init(top: headerViewH, left: 0, bottom: 0, right: 0)
+        }
+        headerView.iconView.kf.setImage(with: URL.init(string: (dataModel?.goods_image)!), placeholder: UIImage.init(named: "icon_shop_default"), options: nil, progressBlock: nil, completionHandler: nil)
+        headerView.nameLab.text = dataModel?.goods_name
+        headerView.priceLab.text = "￥" + (dataModel?.goods_price)!
+        headerView.typeLab.text = dataModel?.member_type_name
+        headerView.saleLab.text = "月销：" + (dataModel?.month_sell_count)! + "件"
+        
+        if !(dataModel?.mobile_body?.isEmpty)! {
+            webView.loadHTMLString((dataModel?.mobile_body)!, baseURL: nil)
+        }
+        
+        if dataModel?.is_collect == "0" {// 是否收藏
+            bottomView.favouriteBtn.set(image: UIImage.init(named: "icon_favorite_rating"), title: "收藏", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
+            bottomView.favouriteBtn.setTitleColor(kHeightGaryFontColor, for: .normal)
+        }else{
+            bottomView.favouriteBtn.set(image: UIImage.init(named: "icon_favorite_rating_selected"), title: "收藏", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
+            bottomView.favouriteBtn.setTitleColor(kBlueFontColor, for: .normal)
+        }
     }
 }
 extension KZGoodsDetailVC : WKNavigationDelegate,UIScrollViewDelegate{

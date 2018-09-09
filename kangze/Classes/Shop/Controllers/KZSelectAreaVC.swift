@@ -9,6 +9,9 @@
 import UIKit
 
 class KZSelectAreaVC: GYZBaseVC {
+    
+    /// 选择结果回调
+    var resultBlock:((_ proviceModel: KZAreasModel,_ cityModel: KZAreasModel,_ areaModel: KZAreasModel) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A15503A214551D700023171 /* KZMyAddressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A155039214551D700023171 /* KZMyAddressModel.swift */; };
+		0A15503C21455FE100023171 /* KZAreasModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A15503B21455FE100023171 /* KZAreasModel.swift */; };
 		0A243CB2213D1F88003660B6 /* KZCartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A243CB1213D1F88003660B6 /* KZCartCell.swift */; };
 		0A243CB4213D23C3003660B6 /* KZCartBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A243CB3213D23C3003660B6 /* KZCartBottomView.swift */; };
 		0A3184BA213ED42E003AB178 /* KZForgetPwdVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3184B9213ED42E003AB178 /* KZForgetPwdVC.swift */; };
@@ -17,6 +19,11 @@
 		0A48FCB6214270C0000B5C1F /* KZGoodsParamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48FCB5214270C0000B5C1F /* KZGoodsParamsView.swift */; };
 		0A494BE321401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A494BE221401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift */; };
 		0A494BE52140231E00F4E28C /* KZRealNameConfirmVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A494BE42140231E00F4E28C /* KZRealNameConfirmVC.swift */; };
+		0A496E672143F9FF00E55C5B /* KZArticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A496E662143F9FF00E55C5B /* KZArticleModel.swift */; };
+		0A496E6921440C4000E55C5B /* KZArticleDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A496E6821440C4000E55C5B /* KZArticleDetailVC.swift */; };
+		0A496E6B2144118800E55C5B /* KZOrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A496E6A2144118800E55C5B /* KZOrderModel.swift */; };
+		0A496E6D214413DB00E55C5B /* KZGoodsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A496E6C214413DB00E55C5B /* KZGoodsModel.swift */; };
+		0A496E6F214438D900E55C5B /* KZHomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A496E6E214438D900E55C5B /* KZHomeModel.swift */; };
 		0A49D6E22142BAB700F6352A /* KZSelectAreaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A49D6E12142BAB700F6352A /* KZSelectAreaVC.swift */; };
 		0A49D6E42142C2D900F6352A /* KZSelectAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A49D6E32142C2D900F6352A /* KZSelectAreaView.swift */; };
 		0A6F3C532136309800BBFEBB /* KZShopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6F3C522136309800BBFEBB /* KZShopCell.swift */; };
@@ -191,6 +198,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A155039214551D700023171 /* KZMyAddressModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyAddressModel.swift; sourceTree = "<group>"; };
+		0A15503B21455FE100023171 /* KZAreasModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZAreasModel.swift; sourceTree = "<group>"; };
 		0A243CB1213D1F88003660B6 /* KZCartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCartCell.swift; sourceTree = "<group>"; };
 		0A243CB3213D23C3003660B6 /* KZCartBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCartBottomView.swift; sourceTree = "<group>"; };
 		0A3184B9213ED42E003AB178 /* KZForgetPwdVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZForgetPwdVC.swift; sourceTree = "<group>"; };
@@ -201,6 +210,11 @@
 		0A48FCB5214270C0000B5C1F /* KZGoodsParamsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsParamsView.swift; sourceTree = "<group>"; };
 		0A494BE221401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZConfirmHeHuoRenVC.swift; sourceTree = "<group>"; };
 		0A494BE42140231E00F4E28C /* KZRealNameConfirmVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZRealNameConfirmVC.swift; sourceTree = "<group>"; };
+		0A496E662143F9FF00E55C5B /* KZArticleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZArticleModel.swift; sourceTree = "<group>"; };
+		0A496E6821440C4000E55C5B /* KZArticleDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZArticleDetailVC.swift; sourceTree = "<group>"; };
+		0A496E6A2144118800E55C5B /* KZOrderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZOrderModel.swift; sourceTree = "<group>"; };
+		0A496E6C214413DB00E55C5B /* KZGoodsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsModel.swift; sourceTree = "<group>"; };
+		0A496E6E214438D900E55C5B /* KZHomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZHomeModel.swift; sourceTree = "<group>"; };
 		0A49D6E12142BAB700F6352A /* KZSelectAreaVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZSelectAreaVC.swift; sourceTree = "<group>"; };
 		0A49D6E32142C2D900F6352A /* KZSelectAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZSelectAreaView.swift; sourceTree = "<group>"; };
 		0A6F3C522136309800BBFEBB /* KZShopCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZShopCell.swift; sourceTree = "<group>"; };
@@ -482,6 +496,9 @@
 		0A75CDC721351FCB009B87E6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0A496E662143F9FF00E55C5B /* KZArticleModel.swift */,
+				0A496E6A2144118800E55C5B /* KZOrderModel.swift */,
+				0A496E6E214438D900E55C5B /* KZHomeModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -499,6 +516,7 @@
 				0A7C9B25213CCEB300E04E81 /* KZFriendCircleVC.swift */,
 				0A7C9B29213D0A0C00E04E81 /* KZPublicFriendCircleVC.swift */,
 				0A7C9B2B213D0E8D00E04E81 /* KZMessageVC.swift */,
+				0A496E6821440C4000E55C5B /* KZArticleDetailVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -530,6 +548,8 @@
 		0A75CDCB21351FCB009B87E6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0A496E6C214413DB00E55C5B /* KZGoodsModel.swift */,
+				0A15503B21455FE100023171 /* KZAreasModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -619,6 +639,7 @@
 			isa = PBXGroup;
 			children = (
 				0A902C202139147200149DE1 /* KZMineModel.swift */,
+				0A155039214551D700023171 /* KZMyAddressModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1185,6 +1206,7 @@
 				0A902C212139147200149DE1 /* KZMineModel.swift in Sources */,
 				0A71F31A214117DC001201C1 /* KZAddBankCardVC.swift in Sources */,
 				0A75CE4421351FCC009B87E6 /* GYZCommonArrowCell.swift in Sources */,
+				0A496E6B2144118800E55C5B /* KZOrderModel.swift in Sources */,
 				0A49D6E22142BAB700F6352A /* KZSelectAreaVC.swift in Sources */,
 				0A75CE7921351FCD009B87E6 /* ZCycleViewCell.swift in Sources */,
 				0A75CE6521351FCD009B87E6 /* GYZDate+Extension.swift in Sources */,
@@ -1221,6 +1243,7 @@
 				0A243CB4213D23C3003660B6 /* KZCartBottomView.swift in Sources */,
 				0A6F3C532136309800BBFEBB /* KZShopCell.swift in Sources */,
 				0A87F207214217C5002F0AB8 /* KZCustomerInfoVC.swift in Sources */,
+				0A496E672143F9FF00E55C5B /* KZArticleModel.swift in Sources */,
 				0A75CE5021351FCC009B87E6 /* GYZBottomSendView.swift in Sources */,
 				0A7C9B22213CC21500E04E81 /* KZOrderFooterView.swift in Sources */,
 				0A75CE9121351FCD009B87E6 /* GYZConst.swift in Sources */,
@@ -1284,6 +1307,7 @@
 				0A75CE5521351FCC009B87E6 /* GYZBaseWhiteNavVC.swift in Sources */,
 				0A8F32E5213FAE2100980EDE /* KZApplySendVC.swift in Sources */,
 				0A75CE7321351FCD009B87E6 /* PickerView.swift in Sources */,
+				0A15503C21455FE100023171 /* KZAreasModel.swift in Sources */,
 				0A7C9B1C213CBA3C00E04E81 /* KZOrderManagerVC.swift in Sources */,
 				0A75CE8121351FCD009B87E6 /* GYZActionSheet.swift in Sources */,
 				0A75CE4E21351FCC009B87E6 /* LHSSelectPayMethodView.swift in Sources */,
@@ -1291,6 +1315,8 @@
 				0A75CE8D21351FCD009B87E6 /* GYZAlertViewTools.swift in Sources */,
 				0A75CE4621351FCC009B87E6 /* GYZFuncModelView.swift in Sources */,
 				0A75CE5D21351FCC009B87E6 /* GYZUIView+Extension.swift in Sources */,
+				0A496E6921440C4000E55C5B /* KZArticleDetailVC.swift in Sources */,
+				0A15503A214551D700023171 /* KZMyAddressModel.swift in Sources */,
 				0A71F30A21410713001201C1 /* KZRecordCell.swift in Sources */,
 				0A75CE6A21351FCD009B87E6 /* GYZLoadingView.swift in Sources */,
 				0A75CE7A21351FCD009B87E6 /* ZCycleLayout.swift in Sources */,
@@ -1299,10 +1325,12 @@
 				0A75CE5421351FCC009B87E6 /* GYZMainTabBarVC.swift in Sources */,
 				0A71F31221411224001201C1 /* KZCashVC.swift in Sources */,
 				0A75CE7621351FCD009B87E6 /* UsefulPickerView.swift in Sources */,
+				0A496E6F214438D900E55C5B /* KZHomeModel.swift in Sources */,
 				0A75CEA22135472A009B87E6 /* GYZSearchNavBarView.swift in Sources */,
 				0A75CE5721351FCC009B87E6 /* GYZBaseVC.swift in Sources */,
 				0A48FCB2214220AC000B5C1F /* KZKuCunInfoVC.swift in Sources */,
 				0A71F316214114E7001201C1 /* KZCashRecordVC.swift in Sources */,
+				0A496E6D214413DB00E55C5B /* KZGoodsModel.swift in Sources */,
 				0A71F2FE2140BF4E001201C1 /* KZMyMoneyVC.swift in Sources */,
 				0A902C252139231000149DE1 /* KZCompanyDynamicManagerVC.swift in Sources */,
 				0A75CE932135206A009B87E6 /* KZHomeVC.swift in Sources */,

@@ -37,6 +37,7 @@ class KZGoodsDetailHeaderView: UIView {
         productView.addSubview(rightIconView1)
         
         self.addSubview(areasView)
+        areasView.addSubview(areasDesLab)
         areasView.addSubview(areasLab)
         areasView.addSubview(rightIconView2)
         
@@ -110,9 +111,14 @@ class KZGoodsDetailHeaderView: UIView {
             make.top.equalTo(productView.snp.bottom).offset(klineWidth)
             make.height.equalTo(kTitleHeight)
         }
-        areasLab.snp.makeConstraints { (make) in
+        areasDesLab.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
             make.top.bottom.equalTo(areasView)
+            make.width.equalTo(80)
+        }
+        areasLab.snp.makeConstraints { (make) in
+            make.left.equalTo(areasDesLab.snp.right).offset(kMargin)
+            make.top.bottom.equalTo(areasDesLab)
             make.right.equalTo(rightIconView2.snp.left).offset(-kMargin)
         }
         rightIconView2.snp.makeConstraints { (make) in
@@ -214,7 +220,7 @@ class KZGoodsDetailHeaderView: UIView {
         lab.font = k12Font
         lab.textAlignment = .right
         lab.textColor = kGaryFontColor
-        lab.text = "江苏南京"
+        lab.text = ""
         
         return lab
     }()
@@ -248,11 +254,22 @@ class KZGoodsDetailHeaderView: UIView {
     }()
     
     ///
-    lazy var areasLab : UILabel = {
+    lazy var areasDesLab : UILabel = {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlackFontColor
         lab.text = "我的区域"
+        
+        return lab
+    }()
+    
+    ///
+    lazy var areasLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k15Font
+        lab.textColor = kBlackFontColor
+        lab.textAlignment = .right
+        lab.text = "江苏省常州市武进区"
         
         return lab
     }()

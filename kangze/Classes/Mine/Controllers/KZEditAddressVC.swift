@@ -44,6 +44,11 @@ class KZEditAddressVC: GYZBaseVC {
         view.addSubview(lineView1)
         view.addSubview(phoneView)
         view.addSubview(lineView2)
+        view.addSubview(areasView)
+        areasView.addSubview(areasDesLab)
+        areasView.addSubview(areasLab)
+        areasView.addSubview(rightIconView)
+        view.addSubview(lineView4)
         view.addSubview(addressView)
         view.addSubview(lineView3)
         
@@ -82,9 +87,32 @@ class KZEditAddressVC: GYZBaseVC {
             make.left.right.height.equalTo(lineView)
             make.top.equalTo(phoneView.snp.bottom)
         }
-        addressView.snp.makeConstraints { (make) in
+        areasView.snp.makeConstraints { (make) in
             make.left.right.height.equalTo(nameView)
             make.top.equalTo(lineView2.snp.bottom)
+        }
+        areasDesLab.snp.makeConstraints { (make) in
+            make.left.equalTo(kMargin)
+            make.top.bottom.equalTo(areasView)
+            make.width.equalTo(80)
+        }
+        areasLab.snp.makeConstraints { (make) in
+            make.left.equalTo(areasDesLab.snp.right).offset(kMargin)
+            make.top.bottom.equalTo(areasDesLab)
+            make.right.equalTo(rightIconView.snp.left).offset(-kMargin)
+        }
+        rightIconView.snp.makeConstraints { (make) in
+            make.centerY.equalTo(areasView)
+            make.right.equalTo(-kMargin)
+            make.size.equalTo(CGSize.init(width: 7, height: 12))
+        }
+        lineView4.snp.makeConstraints { (make) in
+            make.left.right.height.equalTo(lineView)
+            make.top.equalTo(areasView.snp.bottom)
+        }
+        addressView.snp.makeConstraints { (make) in
+            make.left.right.height.equalTo(nameView)
+            make.top.equalTo(lineView4.snp.bottom)
         }
         lineView3.snp.makeConstraints { (make) in
             make.left.right.height.equalTo(lineView)
@@ -157,6 +185,46 @@ class KZEditAddressVC: GYZBaseVC {
         
         return line
     }()
+    /// 我的区域
+    lazy var areasView: UIView = {
+        let view = UIView()
+        view.backgroundColor = kWhiteColor
+        view.addOnClickListener(target: self, action: #selector(onClickedSelectArea))
+        
+        return view
+    }()
+    
+    ///
+    lazy var areasDesLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k15Font
+        lab.textColor = kBlackFontColor
+        lab.text = "选择区域"
+        
+        return lab
+    }()
+    
+    ///
+    lazy var areasLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k15Font
+        lab.textColor = kBlackFontColor
+        lab.textAlignment = .right
+        lab.text = "请选择区域"
+        
+        return lab
+    }()
+    
+    /// 右侧箭头图标
+    lazy var rightIconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_right_arrow"))
+    
+    
+    /// 分割线
+    var lineView4 : UIView = {
+        let line = UIView()
+        line.backgroundColor = kGrayLineColor
+        return line
+    }()
     /// 收货地址
     lazy var addressView : GYZLabAndFieldView = {
         let lab = GYZLabAndFieldView.init(desName: "收货地址：", placeHolder: "请填写收货地址", isPhone: false)
@@ -202,5 +270,10 @@ class KZEditAddressVC: GYZBaseVC {
             sex = "1"
             manCheckBtn.isSelected = false
         }
+    }
+    /// 选择区域
+    @objc func onClickedSelectArea(){
+        let vc = KZSelectAreaVC()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

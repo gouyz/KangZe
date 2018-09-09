@@ -83,7 +83,7 @@ extension String {
     /// - returns: 时间戳对应的Date
     func dateFromTimeInterval() -> Date? {
         
-        return Date.init(timeIntervalSince1970: TimeInterval(self)!/1000.0)
+        return Date.init(timeIntervalSince1970: TimeInterval(self)!)
     }
     
     /// 根据时间戳获取日期

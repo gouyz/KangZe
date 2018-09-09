@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MBProgressHUD
+import SwiftyJSON
 
 private let mineCell = "mineCell"
 
@@ -14,6 +16,8 @@ class KZMineVC: GYZBaseVC {
     
     ///工作平台模块
     var menuModels: [KZMineModel] = [KZMineModel]()
+    /// 选择用户头像
+    var selectUserImg: UIImage!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,13 +50,24 @@ class KZMineVC: GYZBaseVC {
         tableView.tableHeaderView = userHeaderView
         
         userHeaderView.bgView.addOnClickListener(target: self, action: #selector(onClickedLogin))
+        userHeaderView.userHeaderView.addOnClickListener(target: self, action: #selector(onClickedUpdateHeader))
         userHeaderView.leftView.addOnClickListener(target: self, action: #selector(onClickedFavourite))
         userHeaderView.rightView.addOnClickListener(target: self, action: #selector(onClickedKuCun))
+        
+
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if userDefaults.bool(forKey: kIsLoginTagKey) {
+            requestMineData()
+        }
     }
     
     
@@ -72,8 +87,49 @@ class KZMineVC: GYZBaseVC {
     
     lazy var userHeaderView: KZMineHeaderView = KZMineHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: 210 + kStateHeight))
     
+    
+    /// 获取我的 数据
+    func requestMineData(){
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_index&op=member_indexkz", parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            //            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.setHeaderData(data: response["datas"])
+                
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    /// 设置header
+    func setHeaderData(data: JSON){
+        userHeaderView.nameLab.text = data["user_name"].string
+        userHeaderView.userHeaderView.kf.setImage(with: URL.init(string: data["avatar"].stringValue), placeholder: UIImage.init(named: "icon_header_default"), options: nil, progressBlock: nil, completionHandler: nil)
+        userHeaderView.typeLab.text = data["type_name"].string
+        userHeaderView.phoneLab.text = data["member_mobile"].string
+        userHeaderView.favouriteNumberLab.text = data["fav_count"].stringValue
+        userHeaderView.kuCunNumberLab.text = data["stock"].stringValue
+        
+        userDefaults.set(data["is_shehe"].stringValue, forKey: "is_shehe")//是否完成实名认证
+        userDefaults.set(data["is_buydl"].stringValue, forKey: "is_buydl")//是否完成合伙人套餐购买认证   1.是     0.否
+    }
+    
     /// 未登录时，点击登录
     @objc func onClickedLogin(){
+        
+        if userDefaults.bool(forKey: kIsLoginTagKey) {
+            return
+        }
         goLogin()
     }
     /// 登录
@@ -90,6 +146,16 @@ class KZMineVC: GYZBaseVC {
     @objc func onClickedKuCun(){
         let vc = KZMyKuCunVC()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    /// 修改头像
+    @objc func onClickedUpdateHeader(){
+        GYZOpenCameraPhotosTool.shareTool.choosePicture(self, editor: true, finished: { [weak self] (image) in
+            
+            self?.selectUserImg = image
+            self?.userHeaderView.userHeaderView.image = image
+            self?.requestUpdateHeaderImg()
+        })
     }
     ///控制跳转
     func goController(menu: KZMineModel){
@@ -110,6 +176,57 @@ class KZMineVC: GYZBaseVC {
         let controller = typeClass.init()
         
         navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    /// 上传头像
+    func requestUpdateHeaderImg(){
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        let imgParam: ImageFileUploadParam = ImageFileUploadParam()
+        imgParam.name = "image"
+        imgParam.fileName = "idCardImg.png"
+        imgParam.mimeType = "image/png"
+        imgParam.data = UIImageJPEGRepresentation(selectUserImg, 0.5)
+        
+        GYZNetWork.uploadImageRequest("upload&op=headpic_upload", uploadParam: [imgParam], success: { (response) in
+            
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.requestUpdateUrl(url:response["datas"]["img"].stringValue)
+                
+            }else{
+                weakSelf?.hud?.hide(animated: true)
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    /// 修改头像
+    func requestUpdateUrl(url: String){
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("member&op=check_member_avatar", parameters: ["key": userDefaults.string(forKey: "key") ?? "","member_avatar":url],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
     
 }

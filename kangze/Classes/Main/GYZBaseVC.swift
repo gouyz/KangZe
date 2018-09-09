@@ -73,11 +73,11 @@ class GYZBaseVC: UIViewController {
     }
     /// 获取用户信息
     func getUserInfo(){
-        let model = userDefaults.data(forKey: USERINFO)
-        if model != nil {
-            
-            userInfo = NSKeyedUnarchiver.unarchiveObject(with: model!) as? LHSUserInfoModel
-        }
+//        let model = userDefaults.data(forKey: USERINFO)
+//        if model != nil {
+//            
+//            userInfo = NSKeyedUnarchiver.unarchiveObject(with: model!) as? LHSUserInfoModel
+//        }
     }
     
     override func didReceiveMemoryWarning() {

@@ -71,8 +71,8 @@ class KZHomeAdsHeaderView: UIView {
     /// 广告轮播图
     lazy var adsImgView: ZCycleView = {
         let adsView = ZCycleView()
-        //        adsView.placeholderImage = UIImage.init(named: "icon_home_ads_default")
-        adsView.setImagesGroup([#imageLiteral(resourceName: "icon_home_banner"),#imageLiteral(resourceName: "icon_home_banner"),#imageLiteral(resourceName: "icon_home_banner")])
+        adsView.placeholderImage = UIImage.init(named: "icon_home_banner")
+//        adsView.setImagesGroup([#imageLiteral(resourceName: "icon_home_banner"),#imageLiteral(resourceName: "icon_home_banner"),#imageLiteral(resourceName: "icon_home_banner")])
         adsView.pageControlAlignment = .center
         adsView.pageControlIndictirColor = kWhiteColor
         adsView.pageControlCurrentIndictirColor = kBlueFontColor

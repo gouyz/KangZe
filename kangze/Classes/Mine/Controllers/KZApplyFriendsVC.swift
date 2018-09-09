@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class KZApplyFriendsVC: GYZBaseVC {
     
@@ -21,7 +22,9 @@ class KZApplyFriendsVC: GYZBaseVC {
         
         setupUI()
         
-        logoImgView.image = qrCodeConment.generateQRCode(size: 200, logo: UIImage.init(named: "icon_logo"))
+//        logoImgView.image = qrCodeConment.generateQRCode(size: 200, logo: UIImage.init(named: "icon_logo"))
+        
+        requestApplyFriend()
     }
 
     override func didReceiveMemoryWarning() {
@@ -88,7 +91,6 @@ class KZApplyFriendsVC: GYZBaseVC {
         lab.textAlignment = .center
         lab.backgroundColor = kWhiteColor
         lab.cornerRadius = kCornerRadius
-        lab.text = "2839483247889"
         
         return lab
     }()
@@ -112,5 +114,31 @@ class KZApplyFriendsVC: GYZBaseVC {
             }
         }
         mmShareSheet.present()
+    }
+    
+    /// 邀请好友
+    func requestApplyFriend(){
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member&op=get_yqm", parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                let data = response["datas"]
+                weakSelf?.logoImgView.kf.setImage(with: URL.init(string: data["yqm"].stringValue), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
+                weakSelf?.codeLab.text = data["yqm_url"].stringValue
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
 }

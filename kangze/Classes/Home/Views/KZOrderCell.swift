@@ -9,6 +9,19 @@
 import UIKit
 
 class KZOrderCell: UITableViewCell {
+    
+    /// 填充数据
+    var dataModel : KZGoodsModel?{
+        didSet{
+            if let model = dataModel {
+                
+                iconView.kf.setImage(with: URL.init(string: model.goods_image_url!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                nameLab.text = model.goods_name
+                priceLab.text = "￥" + model.goods_price!
+                numberLab.text = "x" + model.goods_num!
+            }
+        }
+    }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -58,7 +71,6 @@ class KZOrderCell: UITableViewCell {
         lab.font = k13Font
         lab.textColor = kBlackFontColor
         lab.numberOfLines = 3
-        lab.text = "澳洲原装天然海藻油DHA帮助大脑发育增强记忆降低血糖全球妈妈的首选"
         
         return lab
     }()
@@ -78,7 +90,6 @@ class KZOrderCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k13Font
         lab.textColor = kRedFontColor
-        lab.text = "￥298"
         
         return lab
     }()

@@ -125,7 +125,7 @@ class KZMineHeaderView: UIView {
         lab.font = k12Font
         lab.textColor = kWhiteColor
         lab.textAlignment = .center
-        lab.text = "零售型会员"
+        lab.text = "会员"
         
         return lab
     }()
@@ -135,7 +135,7 @@ class KZMineHeaderView: UIView {
         lab.font = k12Font
         lab.textColor = kWhiteColor
         lab.textAlignment = .center
-        lab.text = "15426587890"
+        lab.text = "手机号"
         
         return lab
     }()
@@ -154,7 +154,7 @@ class KZMineHeaderView: UIView {
         lab.font = k12Font
         lab.textColor = kWhiteColor
         lab.textAlignment = .center
-        lab.text = "12"
+        lab.text = "0"
         
         return lab
     }()
@@ -181,7 +181,7 @@ class KZMineHeaderView: UIView {
         lab.font = k12Font
         lab.textColor = kWhiteColor
         lab.textAlignment = .center
-        lab.text = "8"
+        lab.text = "0"
         
         return lab
     }()

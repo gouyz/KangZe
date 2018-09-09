@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let myAddressCell = "myAddressCell"
 
@@ -14,6 +15,7 @@ class KZMyAddressVC: GYZBaseVC {
     
     /// 选择结果回调
 //    var resultBlock:((_ model: LHSReceiveAddressModel) -> Void)?
+    var dataList: [KZMyAddressModel] = [KZMyAddressModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +38,7 @@ class KZMyAddressVC: GYZBaseVC {
             }
         }
         
+        requestAddressDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -93,6 +96,53 @@ class KZMyAddressVC: GYZBaseVC {
 //        editVC.addressInfo = addressInfo
         navigationController?.pushViewController(editVC, animated: true)
     }
+    
+    ///获取我的地址数据
+    func requestAddressDatas(){
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_address&op=address_list",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["address_list"].array else { return }
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZMyAddressModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content:"暂无地址")
+                    weakSelf?.view.bringSubview(toFront: (weakSelf?.submitBtn)!)
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            //第一次加载失败，显示加载错误页面
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestAddressDatas()
+            })
+            weakSelf?.view.bringSubview(toFront: (weakSelf?.submitBtn)!)
+        })
+    }
 }
 extension KZMyAddressVC: UITableViewDelegate,UITableViewDataSource{
     
@@ -101,12 +151,14 @@ extension KZMyAddressVC: UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 12
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: myAddressCell) as! KZMyAddressCell
+        
+        cell.dataModel = dataList[indexPath.row]
         
         cell.delBtn.tag = indexPath.row
         cell.delBtn.addTarget(self, action: #selector(onClickedDelBtn(sender:)), for: .touchUpInside)

@@ -9,6 +9,24 @@
 import UIKit
 
 class KZOrderFooterView: UITableViewHeaderFooterView {
+    
+    /// 填充数据
+    var dataModel : KZOrderModel?{
+        didSet{
+            if let model = dataModel {
+                
+                totalLab.text = "共\((model.goodList?.count)!)件商品  合计：￥\(model.goods_amount!)"
+                ///订单状态：0(已取消)10(默认):未付款;20:已付款;30:已发货;40:已收货;
+                let status: String = model.order_state!
+                if status == "10"{
+                    deleteBtn.isHidden = false
+                }else if status == "20"{
+                    deleteBtn.isHidden = true
+                    operatorBtn.isHidden = true
+                }
+            }
+        }
+    }
 
     override init(reuseIdentifier: String?){
         
@@ -57,7 +75,6 @@ class KZOrderFooterView: UITableViewHeaderFooterView {
         lab.font = k13Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .right
-        lab.text = "共2件商品  合计：￥298"
         
         return lab
     }()
@@ -81,7 +98,7 @@ class KZOrderFooterView: UITableViewHeaderFooterView {
         
         return btn
     }()
-    /// 去结算、申请发货、确认收货等操作
+    /// 去结算
     lazy var operatorBtn : UIButton = {
         let btn = UIButton.init(type: .custom)
         btn.backgroundColor = kBlueFontColor
@@ -93,7 +110,7 @@ class KZOrderFooterView: UITableViewHeaderFooterView {
         
         return btn
     }()
-    /// 去结算、申请发货、确认收货等操作
+    /// 去结算
     @objc func clickedOperateBtn(btn: UIButton){
         
     }

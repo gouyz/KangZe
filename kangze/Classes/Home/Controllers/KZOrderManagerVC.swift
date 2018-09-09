@@ -10,10 +10,12 @@ import UIKit
 
 class KZOrderManagerVC: GYZBaseVC {
     
-    let titleArr : [String] = ["全部","待付款","待发货","待收货"]
+    let titleArr : [String] = ["全部","待付款","已付款"]
     
-    //订单状态1待受理2已受理3已发货4已取消5已完成
-    let stateValue : [String] = ["1","2","3","4"]
+    //订单状态        空                全部订单
+    //state_new         待付款
+    //state_pay         已付款
+    let stateValue : [String] = ["","state_new","state_pay"]
     var scrollPageView: ScrollPageView?
 
     override func viewDidLoad() {

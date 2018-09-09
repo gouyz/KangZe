@@ -9,6 +9,23 @@
 import UIKit
 
 class KZShopCell: UITableViewCell {
+    /// 填充数据
+    var dataModel : KZGoodsModel?{
+        didSet{
+            if let model = dataModel {
+                
+                iconView.kf.setImage(with: URL.init(string: model.goods_image_url!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                
+                let name: String = model.goos_type_str! + model.goods_name!
+                let nameAttr : NSMutableAttributedString = NSMutableAttributedString(string: name)
+                nameAttr.addAttribute(NSAttributedStringKey.foregroundColor, value: kRedFontColor, range: NSMakeRange(0, (model.goos_type_str?.count)!))
+                nameLab.attributedText = nameAttr
+                priceLab.text = "￥" + model.goods_price!
+                saleLab.text = "月销\(model.month_sell_count!)件"
+                payNumberLab.text = "\(model.pay_count!)人付款"
+            }
+        }
+    }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -74,7 +91,7 @@ class KZShopCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k12Font
         lab.textColor = kGaryFontColor
-        lab.text = "月销4578件"
+        lab.text = "月销0件"
         
         return lab
     }()
@@ -83,7 +100,6 @@ class KZShopCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k13Font
         lab.textColor = kRedFontColor
-        lab.text = "￥298"
         
         return lab
     }()
@@ -92,7 +108,7 @@ class KZShopCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k12Font
         lab.textColor = kGaryFontColor
-        lab.text = "1258人付款"
+        lab.text = "0人付款"
         
         return lab
     }()

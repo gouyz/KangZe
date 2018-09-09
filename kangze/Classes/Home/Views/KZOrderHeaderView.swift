@@ -9,6 +9,17 @@
 import UIKit
 
 class KZOrderHeaderView: UITableViewHeaderFooterView {
+    
+    /// 填充数据
+    var dataModel : KZOrderModel?{
+        didSet{
+            if let model = dataModel {
+                
+                orderNoLab.text = "订单号：" + model.order_sn!
+                orderStatusLab.text = model.state_desc
+            }
+        }
+    }
 
     override init(reuseIdentifier: String?){
         
@@ -55,7 +66,7 @@ class KZOrderHeaderView: UITableViewHeaderFooterView {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlackFontColor
-        lab.text = "订单号：HY1381232843"
+        lab.text = "订单号："
         
         return lab
     }()
@@ -65,7 +76,7 @@ class KZOrderHeaderView: UITableViewHeaderFooterView {
         lab.font = k15Font
         lab.textColor = kBlueFontColor
         lab.textAlignment = .right
-        lab.text = "待发货"
+        lab.text = "待付款"
         
         return lab
     }()

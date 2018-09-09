@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let myAreasCell = "myAreasCell"
 
 class KZMyAreasVC: GYZBaseVC {
+    
+    /// 数据list
+    var dataList: [String] = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +26,7 @@ class KZMyAreasVC: GYZBaseVC {
             make.edges.equalTo(0)
         }
         
+        requestAreaDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -41,6 +46,48 @@ class KZMyAreasVC: GYZBaseVC {
         
         return table
     }()
+    
+    ///获取区域数据
+    func requestAreaDatas(){
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_area&op=area_list",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["area_list"].array else { return }
+                
+                for item in data{
+                    weakSelf?.dataList.append(item.stringValue)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content:"暂无区域")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            //第一次加载失败，显示加载错误页面
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestAreaDatas()
+            })
+        })
+    }
 }
 
 extension KZMyAreasVC: UITableViewDelegate,UITableViewDataSource{
@@ -49,7 +96,7 @@ extension KZMyAreasVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -57,7 +104,7 @@ extension KZMyAreasVC: UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: myAreasCell) as! GYZLabArrowCell
         
         cell.rightIconView.isHidden = true
-        cell.nameLab.text = "江苏省常州市新北区"
+        cell.nameLab.text = dataList[indexPath.row]
         
         cell.selectionStyle = .none
         return cell

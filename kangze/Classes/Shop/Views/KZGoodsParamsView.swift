@@ -13,10 +13,26 @@ private let goodsParamsHeader = "goodsParamsHeader"
 
 class KZGoodsParamsView: UIView {
     
-    /// 数据源
-    var dataSource = [String]()
+    /// 填充数据
+    var dataModel : KZGoodsAttrModel?{
+        didSet{
+            if let model = dataModel {
+                
+                infoArr.append((model.goods_produce_time?.getDateTime(format: "yyyy年MM月dd日"))!)
+                infoArr.append(model.brand_name!)
+                infoArr.append(model.gc_name!)
+                infoArr.append(model.goods_xinghao!)
+                infoArr.append(model.is_imported!)
+                infoArr.append(model.packaging_type!)
+                infoArr.append(model.applicable_user!)
+                
+                tableView.reloadData()
+            }
+        }
+    }
     
-    let titleArr: [String] = ["生产日期","品牌","系类","型号","所含营养","是否进口","包装种类","适用阶段"]
+    let titleArr: [String] = ["生产日期","品牌","系类","型号","是否进口","包装种类","适用阶段"]
+    var infoArr: [String] = [String]()
     
     // MARK: 生命周期方法
     override init(frame:CGRect){
@@ -161,8 +177,10 @@ extension KZGoodsParamsView : UITableViewDelegate,UITableViewDataSource{
         
         
         cell.titleLab.text = titleArr[indexPath.row]
-        cell.contentLab.text = titleArr[indexPath.row]
-        cell.contentLab.textAlignment = .left
+        if infoArr.count > 0 {
+            cell.contentLab.text = infoArr[indexPath.row]
+            cell.contentLab.textAlignment = .left
+        }
         
         return cell
     }

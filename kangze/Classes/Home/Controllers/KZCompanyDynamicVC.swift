@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let companyDynamicCell = "companyDynamicCell"
 
 class KZCompanyDynamicVC: GYZBaseVC {
+    
+    /// 数据
+    var dataList: [KZArticleModel] = [KZArticleModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +25,7 @@ class KZCompanyDynamicVC: GYZBaseVC {
             make.edges.equalTo(0)
         }
         
+        requestDynamicDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -57,6 +62,44 @@ class KZCompanyDynamicVC: GYZBaseVC {
         }
         mmShareSheet.present()
     }
+    
+    ///获取动态数据
+    func requestDynamicDatas(){
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("article&op=company_dt",parameters: nil,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["article_list"].array else { return }
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZArticleModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    MBProgressHUD.showAutoDismissHUD(message: "暂无动态")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
 }
 
 extension KZCompanyDynamicVC: UITableViewDelegate,UITableViewDataSource{
@@ -65,13 +108,14 @@ extension KZCompanyDynamicVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: companyDynamicCell) as! KZCompanyDynamicCell
         
+        cell.dataModel = dataList[indexPath.row]
         cell.sharedBlock = {[weak self] in
             
             self?.showShareView()
@@ -86,6 +130,11 @@ extension KZCompanyDynamicVC: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
         return UIView()
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = KZArticleDetailVC()
+        vc.articleId = dataList[indexPath.row].article_id!
+        navigationController?.pushViewController(vc, animated: true)
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

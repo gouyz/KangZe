@@ -102,8 +102,6 @@ let kAliPayScheme = "LazyHuiUserAlipayAPI"
 
 /// 存储选择小区信息的key
 let COMMUNITY_SELECTED = "community_selected"
-/// 存储用户信息的key
-let USERINFO = "userInfo"
 
 //APPID，应用提交时候替换
 let APPID = "1387703257"

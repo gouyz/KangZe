@@ -9,6 +9,18 @@
 import UIKit
 
 class KZMyAddressCell: UITableViewCell {
+    
+    /// 填充数据
+    var dataModel : KZMyAddressModel?{
+        didSet{
+            if let model = dataModel {
+                
+                nameLab.text = model.true_name
+                phoneLab.text = model.mob_phone
+                addressLab.text = model.province_name! + model.city_name! + model.area_name! + model.address!
+            }
+        }
+    }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
