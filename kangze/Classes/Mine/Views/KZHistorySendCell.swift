@@ -9,6 +9,37 @@
 import UIKit
 
 class KZHistorySendCell: UITableViewCell {
+    
+    /// 填充数据
+    var dataModel : KZHistorySendGoodsModel?{
+        didSet{
+            if let model = dataModel {
+                
+                orderNoLab.text = "订单号：" + model.sendSn!
+                dateLab.text = model.add_time
+                personLab.text = "收件人：" + (model.addressInfo?.true_name)!
+                phoneLab.text = "电话：" + (model.addressInfo?.mob_phone)!
+                addressLab.text = "地址：" + (model.addressInfo?.province_name)! + (model.addressInfo?.city_name)! + (model.addressInfo?.area_name)! + (model.addressInfo?.address)!
+                
+                iconView.kf.setImage(with: URL.init(string: (model.goodsInfo?.goods_image_url)!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                
+                nameLab.text = model.goodsInfo?.goods_name
+                numberLab.text = "X\(model.goods_num!)"
+                
+                if model.status == "2" && model.pay_status == "1"{
+                    receivedBtn.isHidden = false
+                    receivedBtn.snp.updateConstraints({ (make) in
+                        make.height.equalTo(20)
+                    })
+                }else{
+                    receivedBtn.isHidden = true
+                    receivedBtn.snp.updateConstraints({ (make) in
+                        make.height.equalTo(0)
+                    })
+                }
+            }
+        }
+    }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -98,7 +129,6 @@ class KZHistorySendCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k13Font
         lab.textColor = kBlueFontColor
-        lab.text = "订单号：DJ12324343"
         
         return lab
     }()
@@ -116,7 +146,6 @@ class KZHistorySendCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k13Font
         lab.textColor = kBlackFontColor
-        lab.text = "收件人：张女士"
         
         return lab
     }()

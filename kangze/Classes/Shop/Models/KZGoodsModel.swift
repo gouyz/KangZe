@@ -64,6 +64,11 @@ class KZGoodsModel: LHSBaseModel {
     /// 会员信息
     var member : [String: String]?
     
+    /// 收藏id
+    var fav_id : String? = ""
+    /// 收藏次数
+    var goods_collect : String? = "0"
+    
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "attr"{
             guard let datas = value as? [String : Any] else { return }

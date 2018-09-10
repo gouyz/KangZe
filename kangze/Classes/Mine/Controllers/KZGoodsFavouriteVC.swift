@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let goodsFavouriteCell = "goodsFavouriteCell"
 
 class KZGoodsFavouriteVC: GYZBaseVC {
+    
+    var currPage : Int = 1
+    var dataList: [KZGoodsModel] = [KZGoodsModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +24,8 @@ class KZGoodsFavouriteVC: GYZBaseVC {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(0)
         }
+        
+        requestGoodsDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -34,21 +40,94 @@ class KZGoodsFavouriteVC: GYZBaseVC {
         table.separatorColor = kGrayLineColor
         
         table.register(KZGoodsFavouriteCell.self, forCellReuseIdentifier: goodsFavouriteCell)
-        //        weak var weakSelf = self
-        //        ///添加下拉刷新
-        //        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
-        //            weakSelf?.refresh()
-        //        })
-        //        ///添加上拉加载更多
-        //        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
-        //            weakSelf?.loadMore()
-        //        })
-        
+        weak var weakSelf = self
+        ///添加下拉刷新
+        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
+            weakSelf?.refresh()
+        })
+        ///添加上拉加载更多
+        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
+            weakSelf?.loadMore()
+        })
         return table
     }()
+    
+    ///获取数据
+    func requestGoodsDatas(){
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_favorites&op=favorites_list",parameters: ["curpage":currPage,"page":kPageSize,"key": userDefaults.string(forKey: "key") ?? ""],method : .get,  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            weakSelf?.closeRefresh()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["favorites_list"].array else { return }
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZGoodsModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content: "暂无收藏商品信息")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            weakSelf?.closeRefresh()
+            GYZLog(error)
+            
+            if weakSelf?.currPage == 1{//第一次加载失败，显示加载错误页面
+                weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                    weakSelf?.refresh()
+                    weakSelf?.hiddenEmptyView()
+                })
+            }
+        })
+    }
+    
+    
+    // MARK: - 上拉加载更多/下拉刷新
+    /// 下拉刷新
+    func refresh(){
+        currPage = 1
+        requestGoodsDatas()
+    }
+    
+    /// 上拉加载更多
+    func loadMore(){
+        currPage += 1
+        requestGoodsDatas()
+    }
+    
+    /// 关闭上拉/下拉刷新
+    func closeRefresh(){
+        if tableView.mj_header.isRefreshing{//下拉刷新
+            dataList.removeAll()
+            GYZTool.endRefresh(scorllView: tableView)
+        }else if tableView.mj_footer.isRefreshing{//上拉加载更多
+            GYZTool.endLoadMore(scorllView: tableView)
+        }
+    }
     /// 商品详情
-    func goGoodsDetail(){
+    func goGoodsDetail(index: Int){
         let vc = KZGoodsDetailVC()
+        vc.goodsId = dataList[index].goods_id!
         navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -58,21 +137,14 @@ extension KZGoodsFavouriteVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 12
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: goodsFavouriteCell) as! KZGoodsFavouriteCell
         
-        if indexPath.row == 2 {
-            let name: String = "合伙人套餐  澳洲原装天然海藻油DHA帮助大脑发育增强记忆降低血糖全球妈妈的首选"
-            let nameAttr : NSMutableAttributedString = NSMutableAttributedString(string: name)
-            nameAttr.addAttribute(NSAttributedStringKey.foregroundColor, value: kRedFontColor, range: NSMakeRange(0, 5))
-            cell.nameLab.attributedText = nameAttr
-        }else{
-            cell.nameLab.text = "澳洲原装天然海藻油DHA帮助大脑发育增强记忆降低血糖全球妈妈的首选"
-        }
+        cell.dataModel = dataList[indexPath.row]
         
         cell.selectionStyle = .none
         return cell
@@ -88,7 +160,7 @@ extension KZGoodsFavouriteVC: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        goGoodsDetail()
+        goGoodsDetail(index: indexPath.row)
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

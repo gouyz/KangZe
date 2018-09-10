@@ -9,6 +9,23 @@
 import UIKit
 
 class KZGoodsFavouriteCell: UITableViewCell {
+    
+    /// 填充数据
+    var dataModel : KZGoodsModel?{
+        didSet{
+            if let model = dataModel {
+                
+                iconView.kf.setImage(with: URL.init(string: model.goods_image_url!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                
+                let name: String = model.goos_type_str! + model.goods_name!
+                let nameAttr : NSMutableAttributedString = NSMutableAttributedString(string: name)
+                nameAttr.addAttribute(NSAttributedStringKey.foregroundColor, value: kRedFontColor, range: NSMakeRange(0, (model.goos_type_str?.count)!))
+                nameLab.attributedText = nameAttr
+                priceLab.text = "￥" + model.goods_price!
+                numberLab.text = "\(model.goods_collect!)人收藏"
+            }
+        }
+    }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
