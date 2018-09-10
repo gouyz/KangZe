@@ -7,8 +7,19 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class KZRealNameConfirmVC: GYZBaseVC {
+    
+    /// 选择身份证正面图片
+    var selectIDCardImg: UIImage?
+    /// 选择身份证反面图片
+    var selectIDCardBgImg: UIImage?
+    
+    /// 选择身份证正面图片
+    var selectIDCardImgUrl: String = ""
+    /// 选择身份证反面图片
+    var selectIDCardBgImgUrl: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,6 +124,7 @@ class KZRealNameConfirmVC: GYZBaseVC {
     /// 真实姓名
     lazy var realNameView : GYZLabAndFieldView = {
         let lab = GYZLabAndFieldView.init(desName: "真实姓名：", placeHolder: "请填写真实姓名", isPhone: false)
+        lab.textFiled.isSecureTextEntry = false
         
         return lab
     }()
@@ -125,6 +137,7 @@ class KZRealNameConfirmVC: GYZBaseVC {
     /// 身份证号
     lazy var idCardView : GYZLabAndFieldView = {
         let lab = GYZLabAndFieldView.init(desName: "身份证号：", placeHolder: "请填写身份证号", isPhone: false)
+        lab.textFiled.isSecureTextEntry = false
         
         return lab
     }()
@@ -147,6 +160,8 @@ class KZRealNameConfirmVC: GYZBaseVC {
         let imgView = UIImageView()
         imgView.cornerRadius = kCornerRadius
         imgView.image = UIImage.init(named: "icon_add_img_big")
+        imgView.tag = 101
+        imgView.addOnClickListener(target: self, action: #selector(onClickedSelectImg(sender:)))
         
         return imgView
     }()
@@ -164,6 +179,8 @@ class KZRealNameConfirmVC: GYZBaseVC {
         let imgView = UIImageView()
         imgView.cornerRadius = kCornerRadius
         imgView.image = UIImage.init(named: "icon_add_img_big")
+        imgView.tag = 102
+        imgView.addOnClickListener(target: self, action: #selector(onClickedSelectImg(sender:)))
         
         return imgView
     }()
@@ -185,5 +202,109 @@ class KZRealNameConfirmVC: GYZBaseVC {
     /// 确认上传
     @objc func clickedOkBtn(){
         
+        if realNameView.textFiled.text!.isEmpty {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入姓名")
+            return
+        }
+        if !idCardView.textFiled.text!.isEmpty {
+            if !(idCardView.textFiled.text?.IsIdentityCard())!{
+                MBProgressHUD.showAutoDismissHUD(message: "请输入正确的身份证号")
+                return
+            }
+        }else{
+            MBProgressHUD.showAutoDismissHUD(message: "请输入身份证号")
+            return
+        }
+        if selectIDCardImg == nil {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择身份证正面照片")
+            return
+        }
+        if selectIDCardBgImg == nil {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择身份证反面照片")
+            return
+        }
+        requestUpLoadImg(img: selectIDCardImg!, isBgImg: false)
+    }
+    
+    /// 选择图片
+    @objc func onClickedSelectImg(sender: UITapGestureRecognizer){
+        
+        let tag = sender.view?.tag
+        GYZOpenCameraPhotosTool.shareTool.choosePicture(self, editor: false, finished: { [weak self] (image) in
+            
+            if tag == 101 {
+                self?.selectIDCardImg = image
+                self?.idCardImgView.image = image
+            }else{
+                self?.selectIDCardBgImg = image
+                self?.idCardBgImgView.image = image
+            }
+        })
+    }
+    
+    /// 上传头像
+    func requestUpLoadImg(img : UIImage,isBgImg: Bool){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        weak var weakSelf = self
+        
+        let imgParam: ImageFileUploadParam = ImageFileUploadParam()
+        imgParam.name = "image"
+        imgParam.fileName = "idCardImg.png"
+        imgParam.mimeType = "image/png"
+        imgParam.data = UIImageJPEGRepresentation(img, 0.5)
+        
+        GYZNetWork.uploadImageRequest("upload&op=sfz_upload", uploadParam: [imgParam], success: { (response) in
+            
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                let data = response["datas"]
+                if isBgImg{/// 身份证反面
+                    weakSelf?.selectIDCardBgImgUrl = data["img"].stringValue
+                    weakSelf?.requestConfirmInfo()
+                }else{
+                    weakSelf?.selectIDCardImgUrl = data["img"].stringValue
+                    
+                    weakSelf?.requestUpLoadImg(img: (weakSelf?.selectIDCardBgImg)!, isBgImg: true)
+                }
+                
+            }else{
+                weakSelf?.hud?.hide(animated: true)
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    ///认证
+    func requestConfirmInfo(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("member&op=edit",parameters: ["key": userDefaults.string(forKey: "key") ?? "","member_truename":realNameView.textFiled.text!,"shenfen_code":idCardView.textFiled.text!,"sf_code_img1":selectIDCardImgUrl,"sf_code_img2":selectIDCardBgImgUrl],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.clickedBackBtn()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
 }

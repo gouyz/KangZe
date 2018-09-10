@@ -46,6 +46,10 @@ class KZMyKuCunVC: GYZBaseVC {
     ///获取库存数据
     func requestKuCunDatas(){
         
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
         weak var weakSelf = self
         showLoadingView()
         

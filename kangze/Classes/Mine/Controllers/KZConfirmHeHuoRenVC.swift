@@ -7,8 +7,14 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class KZConfirmHeHuoRenVC: GYZBaseVC {
+    
+    /// 是否实名认证
+    var isConfirmUserInfo: Bool = false
+    /// 是否购买认证
+    var isConfirmBuy: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +29,10 @@ class KZConfirmHeHuoRenVC: GYZBaseVC {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        requestConfirmUserInfo()
     }
     
     func setupUI(){
@@ -164,12 +174,103 @@ class KZConfirmHeHuoRenVC: GYZBaseVC {
     ///实名身份认证
     @objc func onClickedRealNameConfirm(){
         
+        if isConfirmUserInfo {
+            MBProgressHUD.showAutoDismissHUD(message: "已认证，不需要再次认证")
+            return
+        }
+        
         let vc = KZRealNameConfirmVC()
         navigationController?.pushViewController(vc, animated: true)
     }
     ///合伙人套餐购买认证
     @objc func onClickedHeHuoRenConfirm(){
+        if isConfirmBuy {
+            MBProgressHUD.showAutoDismissHUD(message: "已认证，不需要再次认证")
+            return
+        }
         let vc = KZGoodsDetailVC()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    ///查看当前用户是否完善了信息
+    func requestConfirmUserInfo(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member&op=check_hur_rz",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+//            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.requestConfirmBuy()
+                let data = response["datas"]["is_rz"].stringValue
+                var str = "未完成"
+                if data == "1"{
+                    str = "已完成"
+                    weakSelf?.isConfirmUserInfo = true
+                    weakSelf?.nameStatusLab.textColor = kBlueFontColor
+                }else{
+                    weakSelf?.isConfirmUserInfo = false
+                    weakSelf?.nameStatusLab.textColor = kGaryFontColor
+                }
+                
+                weakSelf?.nameStatusLab.text = str
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+                weakSelf?.hud?.hide(animated: true)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    ///查看当前用户是否完成了合伙人套餐购买认证
+    func requestConfirmBuy(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("member&op=check_hur_rz2",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                let data = response["datas"]["is_rz"].stringValue
+                var str = "未完成"
+                if data == "1"{
+                    str = "已完成"
+                    weakSelf?.isConfirmBuy = true
+                    weakSelf?.buyStatusLab.textColor = kBlueFontColor
+                }else{
+                    weakSelf?.isConfirmBuy = false
+                    weakSelf?.buyStatusLab.textColor = kGaryFontColor
+                }
+                
+                weakSelf?.buyStatusLab.text = str
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
 }

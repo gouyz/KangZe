@@ -55,6 +55,10 @@ class KZGoodsFavouriteVC: GYZBaseVC {
     ///获取数据
     func requestGoodsDatas(){
         
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
         weak var weakSelf = self
         showLoadingView()
         

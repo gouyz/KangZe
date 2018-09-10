@@ -50,6 +50,9 @@ class KZHistorySendRecordVC: GYZBaseVC {
     }()
     ///获取数据
     func requestDatas(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
         weak var weakSelf = self
         showLoadingView()
@@ -99,6 +102,10 @@ class KZHistorySendRecordVC: GYZBaseVC {
     
     ///确认收货
     func requestReceiveGoods(index: Int){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
         weak var weakSelf = self
         createHUD(message: "加载中...")
