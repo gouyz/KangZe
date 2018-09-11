@@ -66,7 +66,6 @@ class KZMyShouRuHeaderView: UITableViewHeaderFooterView {
         lab.font = k15Font
         lab.textColor = kBlueFontColor
         lab.textAlignment = .center
-        lab.text = "本季度"
         
         return lab
     }()

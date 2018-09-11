@@ -47,5 +47,7 @@ class KZShouRuChildModel: LHSBaseModel {
     var goods_pay_price : String? = "0"
     /// 商品名称
     var goods_name : String?
+    /// 会员id
+    var member_id : String?
     
 }

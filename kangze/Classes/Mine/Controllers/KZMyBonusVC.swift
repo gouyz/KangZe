@@ -7,10 +7,15 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let myBonusCell = "myBonusCell"
 
 class KZMyBonusVC: GYZBaseVC {
+    
+    let titleArr : [String] = ["一级市场","二级市场","三级市场"]
+    
+    var contentArr:[String] = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +26,8 @@ class KZMyBonusVC: GYZBaseVC {
             
             make.edges.equalTo(0)
         }
+        
+        requestDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -41,6 +48,45 @@ class KZMyBonusVC: GYZBaseVC {
         return table
     }()
     
+    ///获取奖金数据
+    func requestDatas(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_invite&op=invite_jj",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],method : .get,  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                guard let data = response["datas"].array else { return }
+                
+                for item in data{
+                    weakSelf?.contentArr.append(item.stringValue)
+                }
+                
+                weakSelf?.tableView.reloadData()
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestDatas()
+            })
+        })
+    }
+    
 }
 
 extension KZMyBonusVC: UITableViewDelegate,UITableViewDataSource{
@@ -49,13 +95,22 @@ extension KZMyBonusVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 12
+        return titleArr.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: myBonusCell) as! KZMyBonusCell
         
+        cell.nameLab.text = titleArr[indexPath.row]
+        if contentArr.count == titleArr.count {
+            cell.moneyLab.text = "本月销售业绩：￥" + String.init(format: "%.2f", Double(contentArr[indexPath.row])!)
+        }
+        if indexPath.row == 0 {
+            cell.rightIconView.isHidden = false
+        }else{
+            cell.rightIconView.isHidden = true
+        }
         
         cell.selectionStyle = .none
         return cell
@@ -69,8 +124,11 @@ extension KZMyBonusVC: UITableViewDelegate,UITableViewDataSource{
         return UIView()
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = KZMyBonusDetailVC()
-        navigationController?.pushViewController(vc, animated: true)
+        if indexPath.row == 0 {
+            let vc = KZMyBonusDetailVC()
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

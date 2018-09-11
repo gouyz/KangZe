@@ -13,7 +13,11 @@ private let myAddressCell = "myAddressCell"
 
 class KZMyAddressVC: GYZBaseVC {
     
+    /// 选择结果回调
+    var resultBlock:((_ model: KZMyAddressModel) -> Void)?
     var dataList: [KZMyAddressModel] = [KZMyAddressModel]()
+    /// 是否是选择地址
+    var isSelected: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -222,6 +226,15 @@ extension KZMyAddressVC: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
         return UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if isSelected {
+            if resultBlock != nil{
+                resultBlock!(dataList[indexPath.row])
+            }
+            clickedBackBtn()
+        }
     }
     
     ///MARK : UITableViewDelegate

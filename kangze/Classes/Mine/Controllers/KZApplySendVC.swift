@@ -7,8 +7,21 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class KZApplySendVC: GYZBaseVC {
+    
+    /// 收货地址
+    var selectAddressModel: KZMyAddressModel?
+    var goodsId: String = ""
+    
+    var dataModel: KZApplySendModel?
+    /// 商品数量
+    var totalNum: Int = 1
+    // 运费
+    var freight: String = "0.00"
+    /// 订单编号
+    var orderNo: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +31,9 @@ class KZApplySendVC: GYZBaseVC {
         
         
         setupUI()
+        addIconView.addOnClickListener(target: self, action: #selector(didClickAddBtn))
+        minusIconView.addOnClickListener(target: self, action: #selector(didClickMinusBtn))
+        requestData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -160,7 +176,7 @@ class KZApplySendVC: GYZBaseVC {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlackFontColor
-        lab.text = "收件人：张女士"
+        lab.text = "收件人："
         
         return lab
     }()
@@ -175,7 +191,7 @@ class KZApplySendVC: GYZBaseVC {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlackFontColor
-        lab.text = "电话：13323467899"
+        lab.text = "电话："
         
         return lab
     }()
@@ -197,7 +213,7 @@ class KZApplySendVC: GYZBaseVC {
         lab.font = k15Font
         lab.textColor = kBlackFontColor
         lab.numberOfLines = 2
-        lab.text = "地址：常州市新北区常州市新北区常州市新北区"
+        lab.text = "地址："
         
         return lab
     }()
@@ -220,7 +236,6 @@ class KZApplySendVC: GYZBaseVC {
         lab.font = k12Font
         lab.textColor = kBlackFontColor
         lab.numberOfLines = 2
-        lab.text = "澳洲原装天然海藻油DHA帮助大脑发育增强记忆降低血糖全球妈妈的首选"
         
         return lab
     }()
@@ -229,7 +244,7 @@ class KZApplySendVC: GYZBaseVC {
         let lab = UILabel()
         lab.font = k12Font
         lab.textColor = kBlackFontColor
-        lab.text = "现有库存：6"
+        lab.text = "现有库存：0"
         
         return lab
     }()
@@ -262,7 +277,7 @@ class KZApplySendVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kRedFontColor
         lab.textAlignment = .right
-        lab.text = "运费：￥6.00"
+        lab.text = "运费：￥0.00"
         
         return lab
     }()
@@ -280,13 +295,32 @@ class KZApplySendVC: GYZBaseVC {
     }()
     /// 提交申请
     @objc func clickedSubmitBtn(){
-        showPayView()
+        
+        if selectAddressModel == nil {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择收货地址")
+            return
+        }
+        requestSendGoods()
+//        showPayView()
     }
     /// 选择地址
     @objc func onClickedSelectAddress(){
     
         let vc = KZMyAddressVC()
+        vc.isSelected = true
+        vc.resultBlock = {[weak self] (model) in
+            
+            self?.selectAddressModel = model
+            self?.requestFreightData()
+            self?.setInfo()
+        }
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func setInfo(){
+        addressLab.text = "地址：" + (selectAddressModel?.province_name)! + (selectAddressModel?.city_name)! + (selectAddressModel?.area_name)! + (selectAddressModel?.address)!
+        personLab.text = "收件人：" + (selectAddressModel?.true_name)!
+        phoneLab.text = "电话：" + (selectAddressModel?.mob_phone)!
     }
     
     func showPayView(){
@@ -304,4 +338,141 @@ class KZApplySendVC: GYZBaseVC {
         let vc = KZPosPayVC()
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    ///获取数据
+    func requestData(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("my_send&op=apply_send_info",parameters: ["goods_id":goodsId,"key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                guard let data = response["datas"].dictionaryObject else { return }
+                weakSelf?.dataModel = KZApplySendModel.init(dict: data)
+                weakSelf?.setData()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    func setData(){
+        if dataModel?.addressList != nil && dataModel?.addressList?.count > 0 {
+            selectAddressModel = dataModel?.addressList![0]
+            setInfo()
+        }
+        iconView.kf.setImage(with: URL.init(string: (dataModel?.goodsInfo?.image_url)!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+        nameLab.text = dataModel?.goodsInfo?.goods_name
+        kuCunLab.text = "现有库存：" + (dataModel?.stock)!
+        
+        freight = (dataModel?.freight)!
+        moneyLab.text = "运费：￥" + freight
+    }
+    /// 加号
+    @objc func didClickAddBtn(){
+        if selectAddressModel == nil {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择收货地址")
+            return
+        }
+        if totalNum == Int((dataModel?.stock)!) {
+            MBProgressHUD.showAutoDismissHUD(message: "库存不足")
+            return
+        }
+        totalNum += 1
+        modifyNumber()
+    }
+    
+    /// 减号
+    @objc func didClickMinusBtn(){
+        if selectAddressModel == nil {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择收货地址")
+            return
+        }
+        
+        if totalNum == 1 {
+            MBProgressHUD.showAutoDismissHUD(message: "最少发货数量为1")
+            return
+        }
+        totalNum -= 1
+        modifyNumber()
+    }
+    
+    
+    func modifyNumber(){
+        countLab.text = "\(totalNum)"
+        requestFreightData()
+    }
+    
+    ///获取运费数据
+    func requestFreightData(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("my_send&op=get_freight",parameters: ["goods_id":goodsId,"key": userDefaults.string(forKey: "key") ?? "","goods_num":"\(totalNum)","address_id": (selectAddressModel?.address_id)!],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.freight = response["datas"]["freight"].stringValue
+                weakSelf?.moneyLab.text = "运费：￥" + (weakSelf?.freight)!
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    ///申请发货
+    func requestSendGoods(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("my_send&op=apply_send",parameters: ["goods_id":goodsId,"key": userDefaults.string(forKey: "key") ?? "","goods_num":"\(totalNum)","address_id": (selectAddressModel?.address_id)!,"freight":freight],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.orderNo = response["datas"]["sendSn"].stringValue
+                
+                weakSelf?.showPayView()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
 }

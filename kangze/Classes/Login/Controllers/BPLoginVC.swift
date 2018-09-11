@@ -137,6 +137,7 @@ class BPLoginVC: GYZBaseVC {
     /// 注册
     @objc func onClickedRegister(){
         let forgetPwdVC = BPRegisterVC()
+        forgetPwdVC.isDaiRegister = false
         navigationController?.pushViewController(forgetPwdVC, animated: true)
     }
     /// 登录

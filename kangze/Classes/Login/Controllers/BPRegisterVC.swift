@@ -24,11 +24,12 @@ class BPRegisterVC: GYZBaseVC {
     var selectIDCardBgImgUrl: String = ""
     /// 身份证号
     var idCardNo: String = ""
+    /// 是否代注册
+    var isDaiRegister: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "注 册"
         self.view.backgroundColor = kWhiteColor
         
         setupUI()
@@ -36,6 +37,13 @@ class BPRegisterVC: GYZBaseVC {
         nameInputView.textFiled.isSecureTextEntry = false
         applyCodeInputView.textFiled.isSecureTextEntry = false
         idCardInputView.textFiled.isSecureTextEntry = false
+        
+        if isDaiRegister {
+            self.navigationItem.title = "代注册"
+            applyCodeInputView.textFiled.text = userDefaults.string(forKey: "phone")
+        }else{
+            self.navigationItem.title = "注 册"
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -433,15 +441,18 @@ class BPRegisterVC: GYZBaseVC {
             //            GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
-                let data = response["datas"]
+                if !(weakSelf?.isDaiRegister)! {///注册时保存数据，代注册时直接返回
+                    let data = response["datas"]
+                    
+                    userDefaults.set(true, forKey: kIsLoginTagKey)//是否登录标识
+                    userDefaults.set(data["userid"].stringValue, forKey: "userId")//用户ID
+                    userDefaults.set(weakSelf?.phoneInputView.textFiled.text!, forKey: "phone")//用户电话
+                    userDefaults.set(data["is_shehe"].stringValue, forKey: "is_shehe")//是否完成实名认证
+                    userDefaults.set(data["is_buydl"].stringValue, forKey: "is_buydl")//是否完成合伙人套餐购买认证   1.是     0.否
+                    userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
+                    userDefaults.set(data["key"].stringValue, forKey: "key")//key
+                }
                 
-                userDefaults.set(true, forKey: kIsLoginTagKey)//是否登录标识
-                userDefaults.set(data["userid"].stringValue, forKey: "userId")//用户ID
-                userDefaults.set(weakSelf?.phoneInputView.textFiled.text!, forKey: "phone")//用户电话
-                userDefaults.set(data["is_shehe"].stringValue, forKey: "is_shehe")//是否完成实名认证
-                userDefaults.set(data["is_buydl"].stringValue, forKey: "is_buydl")//是否完成合伙人套餐购买认证   1.是     0.否
-                userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
-                userDefaults.set(data["key"].stringValue, forKey: "key")//key
                 _ = weakSelf?.navigationController?.popViewController(animated: true)
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)

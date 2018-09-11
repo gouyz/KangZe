@@ -12,6 +12,8 @@ class KZMyVIPManagerVC: GYZBaseVC {
 
     let titleArr : [String] = ["客户管理","库存明细","生意数据"]
     var scrollPageView: ScrollPageView?
+    /// 用户信息
+    var dataModel: KZShouRuChildModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()

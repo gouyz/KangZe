@@ -14,6 +14,7 @@ private let historySendRecordCell = "historySendRecordCell"
 class KZHistorySendRecordVC: GYZBaseVC {
     
     var dataList:[KZHistorySendGoodsModel] = [KZHistorySendGoodsModel]()
+    var goodsId: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +58,7 @@ class KZHistorySendRecordVC: GYZBaseVC {
         weak var weakSelf = self
         showLoadingView()
         
-        GYZNetWork.requestNetwork("my_send&op=send_list",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],method : .post,  success: { (response) in
+        GYZNetWork.requestNetwork("my_send&op=send_list",parameters: ["key": userDefaults.string(forKey: "key") ?? "","goods_id": goodsId],method : .post,  success: { (response) in
             
             weakSelf?.hiddenLoadingView()
             GYZLog(response)

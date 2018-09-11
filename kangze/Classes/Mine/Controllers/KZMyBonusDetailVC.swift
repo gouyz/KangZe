@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let myBonusDetailCell = "myBonusDetailCell"
 
 class KZMyBonusDetailVC: GYZBaseVC {
+    
+    var dataList:[KZShouRuChildModel] = [KZShouRuChildModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +25,8 @@ class KZMyBonusDetailVC: GYZBaseVC {
             
             make.edges.equalTo(0)
         }
+        
+        requestDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -42,7 +47,50 @@ class KZMyBonusDetailVC: GYZBaseVC {
         return table
     }()
     
-    
+    ///获取奖金数据
+    func requestDatas(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_invite&op=invite_one_jj",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],method : .post,  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                guard let data = response["datas"]["list"].array else { return }
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZShouRuChildModel.init(dict: itemInfo)
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content: "您还没有下线会员")
+                }
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestDatas()
+            })
+        })
+    }
 }
 
 extension KZMyBonusDetailVC: UITableViewDelegate,UITableViewDataSource{
@@ -51,7 +99,7 @@ extension KZMyBonusDetailVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 12
+        return dataList.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -68,14 +116,15 @@ extension KZMyBonusDetailVC: UITableViewDelegate,UITableViewDataSource{
             cell.productLab.textColor = kBlueFontColor
             cell.productLab.text = "产品"
         }else{
+            let model = dataList[indexPath.row - 1]
             cell.nameLab.textColor = kBlackFontColor
-            cell.nameLab.text = "张三"
+            cell.nameLab.text = model.buyer_name
             cell.dateLab.textColor = kBlackFontColor
-            cell.dateLab.text = "2018-08-31"
+            cell.dateLab.text = model.payment_time?.getThumbImgUrl(size: "yyyy-MM-dd")
             cell.moneyLab.textColor = kBlackFontColor
-            cell.moneyLab.text = "￥20008"
+            cell.moneyLab.text = "￥" + model.goods_pay_price!
             cell.productLab.textColor = kBlackFontColor
-            cell.productLab.text = "合伙人套餐"
+            cell.productLab.text = model.goods_name
         }
         
         if indexPath.row % 2 == 0 {

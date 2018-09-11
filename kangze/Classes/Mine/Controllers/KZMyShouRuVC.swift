@@ -115,7 +115,7 @@ extension KZMyShouRuVC: UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if dataModel != nil {
-            return (dataModel?.detailList?.count)!
+            return (dataModel?.detailList?.count)! + 1
         }
         return 1
     }
@@ -160,7 +160,10 @@ extension KZMyShouRuVC: UITableViewDelegate,UITableViewDataSource{
         
         headerView.timeLab.addOnClickListener(target: self, action: #selector(onClickedSelectTime))
         
-        headerView.moneyLab.text = "零售收入：￥" + (dataModel?.total)!
+        headerView.timeLab.text = timeArr[selectType]
+        if dataModel != nil {
+            headerView.moneyLab.text = "零售收入：￥" + (dataModel?.total)!
+        }
         
         return headerView
     }

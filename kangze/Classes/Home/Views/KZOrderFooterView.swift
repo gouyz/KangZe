@@ -18,9 +18,21 @@ class KZOrderFooterView: UITableViewHeaderFooterView {
                 totalLab.text = "共\((model.goodList?.count)!)件商品  合计：￥\(model.goods_amount!)"
                 ///订单状态：0(已取消)10(默认):未付款;20:已付款;30:已发货;40:已收货;
                 let status: String = model.order_state!
-                if status == "10"{
+                if status == "0"{
                     deleteBtn.isHidden = false
-                }else if status == "20"{
+                    operatorBtn.isHidden = true
+                    operatorBtn.snp.updateConstraints({ (make) in
+                        make.width.equalTo(0)
+                        make.height.equalTo(0)
+                    })
+                }else if status == "10"{
+                    deleteBtn.isHidden = false
+                    operatorBtn.isHidden = false
+                    operatorBtn.snp.updateConstraints({ (make) in
+                        make.width.equalTo(70)
+                        make.height.equalTo(20)
+                    })
+                }else{
                     deleteBtn.isHidden = true
                     operatorBtn.isHidden = true
                 }
@@ -61,11 +73,14 @@ class KZOrderFooterView: UITableViewHeaderFooterView {
         deleteBtn.snp.makeConstraints { (make) in
             make.right.equalTo(operatorBtn.snp.left).offset(-20)
             make.top.equalTo(lineView.snp.bottom).offset(8)
-            make.size.equalTo(CGSize.init(width: 70, height: 20))
+            make.width.equalTo(70)
+            make.height.equalTo(20)
         }
         operatorBtn.snp.makeConstraints { (make) in
             make.right.equalTo(-kMargin)
-            make.top.size.equalTo(deleteBtn)
+            make.top.equalTo(deleteBtn)
+            make.width.equalTo(70)
+            make.height.equalTo(20)
         }
     }
     

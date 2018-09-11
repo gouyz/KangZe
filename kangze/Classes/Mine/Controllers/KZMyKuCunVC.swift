@@ -24,12 +24,17 @@ class KZMyKuCunVC: GYZBaseVC {
             make.edges.equalTo(0)
         }
         
-        requestKuCunDatas()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        requestKuCunDatas()
     }
     
     lazy var tableView : UITableView = {
@@ -61,7 +66,7 @@ class KZMyKuCunVC: GYZBaseVC {
             if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
                 guard let data = response["datas"]["stock_list"].array else { return }
-                
+                weakSelf?.dataList.removeAll()
                 for item in data{
                     guard let itemInfo = item.dictionaryObject else { return }
                     let model = KZMyKuCunModel.init(dict: itemInfo)
@@ -93,15 +98,17 @@ class KZMyKuCunVC: GYZBaseVC {
     }
     /// 申请发货
     @objc func clickedSendBtn(sender: UIButton){
-        
+        let tag = sender.tag
         let vc = KZApplySendVC()
+        vc.goodsId = dataList[tag].goods_id!
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 历史发货
     @objc func clickedHistoryBtn(sender: UIButton){
-//        let tag = sender.tag
+        let tag = sender.tag
         
         let vc = KZHistorySendRecordVC()
+        vc.goodsId = dataList[tag].goods_id!
         navigationController?.pushViewController(vc, animated: true)
     }
     

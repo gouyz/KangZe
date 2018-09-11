@@ -28,6 +28,19 @@ class KZHistorySendCell: UITableViewCell {
                 
                 if model.status == "2" && model.pay_status == "1"{
                     receivedBtn.isHidden = false
+                    receivedBtn.isEnabled = true
+                    receivedBtn.setTitle("确认收货", for: .normal)
+                    receivedBtn.setTitleColor(kWhiteColor, for: .normal)
+                    receivedBtn.backgroundColor = kBlueFontColor
+                    receivedBtn.snp.updateConstraints({ (make) in
+                        make.height.equalTo(20)
+                    })
+                }else if model.status == "3"{
+                    receivedBtn.isEnabled = true
+                    receivedBtn.setTitle("已收货", for: .normal)
+                    receivedBtn.setTitleColor(kBlueFontColor, for: .normal)
+                    receivedBtn.backgroundColor = kWhiteColor
+                    receivedBtn.isHidden = false
                     receivedBtn.snp.updateConstraints({ (make) in
                         make.height.equalTo(20)
                     })
@@ -177,7 +190,6 @@ class KZHistorySendCell: UITableViewCell {
         lab.font = k12Font
         lab.textColor = kBlackFontColor
         lab.numberOfLines = 2
-        lab.text = "澳洲原装天然海藻油DHA帮助大脑发育增强记忆降低血糖全球妈妈的首选"
         
         return lab
     }()

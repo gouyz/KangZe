@@ -84,7 +84,7 @@ class KZMyBonusCell: UITableViewCell {
         lab.font = k13Font
         lab.textColor = kBlueFontColor
         lab.textAlignment = .right
-        lab.text = "本月销售业绩：￥68888.00"
+        lab.text = "本月销售业绩：￥0.00"
         
         return lab
     }()
