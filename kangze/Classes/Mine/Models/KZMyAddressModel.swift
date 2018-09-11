@@ -25,11 +25,11 @@ class KZMyAddressModel: LHSBaseModel {
     /// 性别
     var sex : String?
     /// 省
-    var province_name : String?
+    var province_name : String? = ""
     /// 市
-    var city_name : String?
+    var city_name : String? = ""
     /// 区
-    var area_name : String?
+    var area_name : String? = ""
     /// 省id
     var province_id : String?
     /// 市id

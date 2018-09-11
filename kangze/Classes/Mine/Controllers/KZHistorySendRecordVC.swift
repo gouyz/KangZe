@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let historySendRecordCell = "historySendRecordCell"
 
 class KZHistorySendRecordVC: GYZBaseVC {
+    
+    var dataList:[KZHistorySendGoodsModel] = [KZHistorySendGoodsModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +24,7 @@ class KZHistorySendRecordVC: GYZBaseVC {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(0)
         }
+        requestDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -40,23 +44,92 @@ class KZHistorySendRecordVC: GYZBaseVC {
         table.rowHeight = UITableViewAutomaticDimension
         
         table.register(KZHistorySendCell.self, forCellReuseIdentifier: historySendRecordCell)
-        //        weak var weakSelf = self
-        //        ///添加下拉刷新
-        //        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
-        //            weakSelf?.refresh()
-        //        })
-        //        ///添加上拉加载更多
-        //        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
-        //            weakSelf?.loadMore()
-        //        })
+        
         
         return table
     }()
-    /// 商品详情
-    //    func goGoodsDetail(){
-    //        let vc = KZGoodsDetailVC()
-    //        navigationController?.pushViewController(vc, animated: true)
-    //    }
+    ///获取数据
+    func requestDatas(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("my_send&op=send_list",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],method : .post,  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["send_list"].array else { return }
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZHistorySendGoodsModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content: "暂无历史发货信息")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestDatas()
+                weakSelf?.hiddenEmptyView()
+            })
+        })
+    }
+    /// 确认收货
+    @objc func onClickedReceive(sender: UIButton){
+        requestReceiveGoods(index: sender.tag)
+    }
+    
+    ///确认收货
+    func requestReceiveGoods(index: Int){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("my_send&op=sure_get",parameters: ["key": userDefaults.string(forKey: "key") ?? "","id": dataList[index].id!],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                MBProgressHUD.showAutoDismissHUD(message: "确认收货成功")
+                weakSelf?.dataList[index].status = "3"
+                weakSelf?.tableView.reloadData()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
 }
 extension KZHistorySendRecordVC: UITableViewDelegate,UITableViewDataSource{
     
@@ -64,13 +137,17 @@ extension KZHistorySendRecordVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: historySendRecordCell) as! KZHistorySendCell
         
+        cell.dataModel = dataList[indexPath.row]
+        
+        cell.receivedBtn.tag = indexPath.row
+        cell.receivedBtn.addTarget(self, action: #selector(onClickedReceive(sender:)), for: .touchUpInside)
         
         cell.selectionStyle = .none
         return cell

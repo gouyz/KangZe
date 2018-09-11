@@ -9,6 +9,19 @@
 import UIKit
 
 class KZMyKuCunCell: UITableViewCell {
+    
+    /// 填充数据
+    var dataModel : KZMyKuCunModel?{
+        didSet{
+            if let model = dataModel {
+                
+                iconView.kf.setImage(with: URL.init(string: model.image_url!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                
+                nameLab.text = model.goods_name
+                numberLab.text = "X\(model.stock!)"
+            }
+        }
+    }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let myKuCunCell = "myKuCunCell"
 
 class KZMyKuCunVC: GYZBaseVC {
+    
+    var dataList: [KZMyKuCunModel] = [KZMyKuCunModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +23,8 @@ class KZMyKuCunVC: GYZBaseVC {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(0)
         }
+        
+        requestKuCunDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -34,23 +39,58 @@ class KZMyKuCunVC: GYZBaseVC {
         table.separatorColor = kGrayLineColor
         
         table.register(KZMyKuCunCell.self, forCellReuseIdentifier: myKuCunCell)
-        //        weak var weakSelf = self
-        //        ///添加下拉刷新
-        //        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
-        //            weakSelf?.refresh()
-        //        })
-        //        ///添加上拉加载更多
-        //        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
-        //            weakSelf?.loadMore()
-        //        })
+        
         
         return table
     }()
-    /// 商品详情
-//    func goGoodsDetail(){
-//        let vc = KZGoodsDetailVC()
-//        navigationController?.pushViewController(vc, animated: true)
-//    }
+    ///获取库存数据
+    func requestKuCunDatas(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("my_stock&op=stock_list",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],method : .post,  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["stock_list"].array else { return }
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZMyKuCunModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content: "暂无库存信息")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestKuCunDatas()
+                weakSelf?.hiddenEmptyView()
+            })
+        })
+    }
     /// 申请发货
     @objc func clickedSendBtn(sender: UIButton){
         
@@ -64,6 +104,13 @@ class KZMyKuCunVC: GYZBaseVC {
         let vc = KZHistorySendRecordVC()
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    /// 商品详情
+    func goGoodsDetail(index: Int){
+        let vc = KZGoodsDetailVC()
+        vc.goodsId = dataList[index].goods_id!
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 extension KZMyKuCunVC: UITableViewDelegate,UITableViewDataSource{
     
@@ -71,21 +118,14 @@ extension KZMyKuCunVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 12
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: myKuCunCell) as! KZMyKuCunCell
         
-        if indexPath.row == 2 {
-            let name: String = "合伙人套餐  澳洲原装天然海藻油DHA帮助大脑发育增强记忆降低血糖全球妈妈的首选"
-            let nameAttr : NSMutableAttributedString = NSMutableAttributedString(string: name)
-            nameAttr.addAttribute(NSAttributedStringKey.foregroundColor, value: kRedFontColor, range: NSMakeRange(0, 5))
-            cell.nameLab.attributedText = nameAttr
-        }else{
-            cell.nameLab.text = "澳洲原装天然海藻油DHA帮助大脑发育增强记忆降低血糖全球妈妈的首选"
-        }
+        cell.dataModel = dataList[indexPath.row]
         
         cell.sendBtn.tag = indexPath.row
         cell.sendBtn.addTarget(self, action: #selector(clickedSendBtn(sender:)), for: .touchUpInside)
@@ -106,7 +146,7 @@ extension KZMyKuCunVC: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-//        goGoodsDetail()
+        goGoodsDetail(index: indexPath.row)
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

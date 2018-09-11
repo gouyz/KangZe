@@ -12,7 +12,7 @@ import MBProgressHUD
 class KZApplyFriendsVC: GYZBaseVC {
     
     /// 生成二维码内容
-    let qrCodeConment: String = "测试一下"
+    var qrCodeConment: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,9 +21,7 @@ class KZApplyFriendsVC: GYZBaseVC {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_shared_black")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: #selector(clickedSharedBtn))
         
         setupUI()
-        
-//        logoImgView.image = qrCodeConment.generateQRCode(size: 200, logo: UIImage.init(named: "icon_logo"))
-        
+        logoImgView.image = qrCodeConment.generateQRCode(size: 200, logo: UIImage.init(named: "icon_logo"))
         requestApplyFriend()
     }
 
@@ -78,7 +76,7 @@ class KZApplyFriendsVC: GYZBaseVC {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlackFontColor
-        lab.text = "您的邀请链接："
+        lab.text = "您的邀请码："
         lab.textAlignment = .center
         
         return lab
@@ -91,6 +89,7 @@ class KZApplyFriendsVC: GYZBaseVC {
         lab.textAlignment = .center
         lab.backgroundColor = kWhiteColor
         lab.cornerRadius = kCornerRadius
+        lab.text = userDefaults.string(forKey: "phone")
         
         return lab
     }()
@@ -132,8 +131,9 @@ class KZApplyFriendsVC: GYZBaseVC {
             if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
                 let data = response["datas"]
-                weakSelf?.logoImgView.kf.setImage(with: URL.init(string: data["yqm"].stringValue), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
-                weakSelf?.codeLab.text = data["yqm_url"].stringValue
+                
+                weakSelf?.qrCodeConment = data["yqm_url"].stringValue
+                weakSelf?.logoImgView.image = weakSelf?.qrCodeConment.generateQRCode(size: 200, logo: UIImage.init(named: "icon_logo"))
                 
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
