@@ -9,6 +9,21 @@
 import UIKit
 
 class KZCartCell: UITableViewCell {
+    
+    /// 填充数据
+    var dataModel : KZCartGoodsModel?{
+        didSet{
+            if let model = dataModel {
+                
+                iconView.kf.setImage(with: URL.init(string: model.goods_image_url!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                
+                nameLab.text = model.goods_name
+                priceLab.text = "￥" + model.goods_price!
+                saleLab.text = "月销\(model.month_sell!)件"
+                countLab.text = model.goods_num
+            }
+        }
+    }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)

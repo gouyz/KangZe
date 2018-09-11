@@ -7,12 +7,25 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let submitOrderCell = "submitOrderCell"
 private let submitOrderNoteCell = "submitOrderNoteCell"
 private let submitOrderFooterView = "submitOrderFooterView"
 
 class KZSubmitOrderVC: GYZBaseVC {
+    
+    var dataModel: KZSubmitOrderModel?
+    /// 会员预存款余额
+    var memberMoney: String = "0"
+    /// 是否是购物车过来的
+    var isCart: String = "0"
+    /// 购物信息（商品/购物车id|购买数量）
+    var cartIds: String = ""
+    /// 商品总数
+    var totalNum: Int = 0
+    /// 备注
+    var noteText: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +46,7 @@ class KZSubmitOrderVC: GYZBaseVC {
             make.top.equalTo(view)
         }
         
+        requestOrderInfo()
     }
     
     override func didReceiveMemoryWarning() {
@@ -71,6 +85,7 @@ class KZSubmitOrderVC: GYZBaseVC {
     
     func showPayView(){
         let payView = KZSelectPayMethodView()
+        payView.yuEMoneyLab.text = "可用余额：￥\(memberMoney)"
         payView.selectPayTypeBlock = { [weak self](index) in
             
             payView.hide()
@@ -84,6 +99,40 @@ class KZSubmitOrderVC: GYZBaseVC {
         let vc = KZPosPayVC()
         navigationController?.pushViewController(vc, animated: true)
     }
+    /// 获取确认订单数据
+    func requestOrderInfo(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_buy&op=buy_step1", parameters: ["key": userDefaults.string(forKey: "key") ?? "","cart_id":cartIds,"ifcart":isCart],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+            
+                weakSelf?.memberMoney = response["datas"]["store_cart_list"]["available_predeposit"].stringValue
+                
+                guard let data = response["datas"]["store_cart_list"]["1"].dictionaryObject else { return }
+                weakSelf?.dataModel = KZSubmitOrderModel.init(dict: data)
+                
+                weakSelf?.tableView.reloadData()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    /// 监听UITextField输入变化
+    @objc func txtFieldDidChangeValue(textField: UITextField){
+        noteText = textField.text!
+    }
 }
 extension KZSubmitOrderVC: UITableViewDelegate,UITableViewDataSource{
     
@@ -94,7 +143,10 @@ extension KZSubmitOrderVC: UITableViewDelegate,UITableViewDataSource{
         if section == 1 {
             return 1
         }
-        return 6
+        if dataModel != nil {
+            return (dataModel?.goodList?.count)!
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -103,7 +155,8 @@ extension KZSubmitOrderVC: UITableViewDelegate,UITableViewDataSource{
             let cell = tableView.dequeueReusableCell(withIdentifier: submitOrderCell) as! KZOrderCell
             
             cell.contentView.backgroundColor = kWhiteColor
-            
+            let model = dataModel?.goodList![indexPath.row]
+            cell.dataModel = model
             
             cell.selectionStyle = .none
             return cell
@@ -111,6 +164,7 @@ extension KZSubmitOrderVC: UITableViewDelegate,UITableViewDataSource{
             let cell = tableView.dequeueReusableCell(withIdentifier: submitOrderNoteCell) as! GYZLabAndFieldCell
             
             cell.titleLab.text = "备注"
+            cell.textFiled.addTarget(self, action: #selector(txtFieldDidChangeValue(textField:)), for: .valueChanged)
             
             cell.selectionStyle = .none
             return cell
@@ -125,6 +179,10 @@ extension KZSubmitOrderVC: UITableViewDelegate,UITableViewDataSource{
         
         if section == 0 {
             let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: submitOrderFooterView) as! KZSubmitOrderFooterView
+            
+            if dataModel != nil{
+                footerView.totalLab.text = "共\(totalNum)件商品  合计：￥" + String(format:"%.2f",Double((dataModel?.store_goods_total)!)!)
+            }
             
             return footerView
         }

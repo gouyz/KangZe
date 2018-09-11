@@ -40,6 +40,8 @@ class KZGoodsModel: LHSBaseModel {
     var goos_type_str : String? = ""
     /// 是否为平台自营
     var is_own_shop : String? = ""
+    /// 库存
+    var goods_storage : String? = "0"
     
     /// 是否收藏
     var is_collect : String? = ""

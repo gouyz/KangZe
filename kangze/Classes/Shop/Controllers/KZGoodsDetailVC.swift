@@ -46,6 +46,9 @@ class KZGoodsDetailVC: GYZBaseVC {
         
         bottomView.favouriteBtn.addTarget(self, action: #selector(onClickedFavourite), for: .touchUpInside)
         
+        bottomView.cartBtn.addTarget(self, action: #selector(onClickedAddCart), for: .touchUpInside)
+        bottomView.shopBtn.addTarget(self, action: #selector(onClickedGoShop), for: .touchUpInside)
+        
         requestDetailDatas()
         
     }
@@ -61,7 +64,7 @@ class KZGoodsDetailVC: GYZBaseVC {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: imgName)?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: #selector(clickedBackBtn))
     }
     
-    lazy var headerView: KZGoodsDetailHeaderView = KZGoodsDetailHeaderView.init(frame: CGRect.init(x: 0, y: -headerViewH, width: kScreenWidth, height: headerViewH))
+    lazy var headerView: KZGoodsDetailHeaderView = KZGoodsDetailHeaderView.init(frame: CGRect.zero)
     
     /// 加载富文本 商品详情
     lazy var webView: WKWebView = {
@@ -76,7 +79,7 @@ class KZGoodsDetailVC: GYZBaseVC {
         
         webView.navigationDelegate = self
         
-        webView.scrollView.contentInset = UIEdgeInsets.init(top: headerViewH, left: 0, bottom: 0, right: 0)
+//        webView.scrollView.contentInset = UIEdgeInsets.init(top: headerViewH, left: 0, bottom: 0, right: 0)
         webView.scrollView.delegate = self
         
         webView.scrollView.addSubview(headerView)
@@ -141,16 +144,17 @@ class KZGoodsDetailVC: GYZBaseVC {
     }
     
     func setData(){
-        if dataModel?.goods_type != "2" {// 合伙人套餐
+        if dataModel?.goods_type != "2" {// 非合伙人套餐
             headerViewH = kScreenWidth * 0.75 + 110 + kTitleHeight * 2
-            webView.scrollView.contentInset = UIEdgeInsets.init(top: headerViewH, left: 0, bottom: 0, right: 0)
-            headerView.frame = CGRect.init(x: 0, y: -headerViewH, width: kScreenWidth, height: headerViewH)
             headerView.areasView.isHidden = true
             headerView.areasView.snp.updateConstraints { (make) in
                 make.height.equalTo(0)
             }
 
         }
+        
+        webView.scrollView.contentInset = UIEdgeInsets.init(top: headerViewH, left: 0, bottom: 0, right: 0)
+        headerView.frame = CGRect.init(x: 0, y: -headerViewH, width: kScreenWidth, height: headerViewH)
         
         headerView.iconView.kf.setImage(with: URL.init(string: (dataModel?.goods_image)!), placeholder: UIImage.init(named: "icon_shop_default"), options: nil, progressBlock: nil, completionHandler: nil)
         headerView.nameLab.text = dataModel?.goods_name
@@ -170,6 +174,7 @@ class KZGoodsDetailVC: GYZBaseVC {
             bottomView.favouriteBtn.setTitleColor(kBlueFontColor, for: .normal)
         }
     }
+    /// 收藏
     @objc func onClickedFavourite(){
         
         if !userDefaults.bool(forKey: kIsLoginTagKey) {
@@ -180,7 +185,17 @@ class KZGoodsDetailVC: GYZBaseVC {
         if dataModel?.is_collect == "0" {
             requestFavouriteGoods()
         }else{
-            requestCancleFavouriteGoods()
+            showCancleFavourite()
+        }
+    }
+    
+    func showCancleFavourite(){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: "取消收藏", message: "确定要取消收藏吗?", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
+            
+            if index != cancelIndex{
+                weakSelf?.requestCancleFavouriteGoods()
+            }
         }
     }
     
@@ -196,6 +211,23 @@ class KZGoodsDetailVC: GYZBaseVC {
     func goLogin(){
         let vc = BPLoginVC()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 去商城
+    @objc func onClickedGoShop(){
+        self.tabBarController?.selectedIndex = 1
+        navigationController?.popToRootViewController(animated: true)
+    }
+    /// 添加购物车
+    @objc func onClickedAddCart(){
+        if !userDefaults.bool(forKey: kIsLoginTagKey) {
+            showLogin()
+            return
+        }
+        if Int((dataModel?.goods_storage)!) > 0 {
+            requestAddCart()
+        }else{
+            MBProgressHUD.showAutoDismissHUD(message: "库存不足")
+        }
     }
     ///商品收藏
     func requestFavouriteGoods(){
@@ -245,6 +277,44 @@ class KZGoodsDetailVC: GYZBaseVC {
                 weakSelf?.dataModel?.is_collect = "0"
                 weakSelf?.bottomView.favouriteBtn.set(image: UIImage.init(named: "icon_favorite_rating"), title: "收藏", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
                 weakSelf?.bottomView.favouriteBtn.setTitleColor(kHeightGaryFontColor, for: .normal)
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    ///添加购物车
+    func requestAddCart(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        var dic: [String: String] = ["goods_id":goodsId,"key": userDefaults.string(forKey: "key") ?? "","quantity":"1"]
+        if dataModel?.goods_type == "2" {// 合伙人套餐
+            if selectProvinceModel == nil{
+                MBProgressHUD.showAutoDismissHUD(message: "请选择区域")
+                return
+            }
+            dic["provinceid"] = selectProvinceModel?.area_id!
+            dic["cityid"] = selectCityModel?.area_id!
+            dic["areaid"] = selectAreaModel?.area_id!
+        }
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_cart&op=cart_add",parameters: dic,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }

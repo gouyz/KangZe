@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let myShouRuCell = "myShouRuCell"
 private let myShouRuHeader = "myShouRuHeader"
@@ -14,6 +15,10 @@ private let myShouRuHeader = "myShouRuHeader"
 class KZMyShouRuVC: GYZBaseVC {
     
     let timeArr: [String] = ["当月","上个月","本季度","半年"]
+    let typeArr: [String] = ["1","2","3","4"]
+    var dataModel: KZShouRuModel?
+    /// 选择时间type
+    var selectType: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +29,7 @@ class KZMyShouRuVC: GYZBaseVC {
             
             make.edges.equalTo(0)
         }
+        requestDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -52,12 +58,52 @@ class KZMyShouRuVC: GYZBaseVC {
     func showSelectTime(){
         GYZAlertViewTools.alertViewTools.showSheet(title: "选择时间", message: nil, cancleTitle: "取消", titleArray: timeArr, viewController: self) { [weak self](index) in
             
-            if index == 0{//拍照
-//                self?.openCamera()
-            }else if index == 1 {//从相册选取
-//                self?.openPhotos()
+            if index != cancelIndex{
+                self?.selectType = index
+                
+                self?.requestDatas()
             }
         }
+    }
+    
+    ///获取收入数据
+    func requestDatas(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_invite&op=invite_one_ls",parameters: ["key": userDefaults.string(forKey: "key") ?? "","type":typeArr[selectType]],method : .post,  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                guard let data = response["datas"].dictionaryObject else { return }
+                
+                weakSelf?.dataModel = KZShouRuModel.init(dict: data)
+                if weakSelf?.dataModel?.is_have == "0"{
+                    MBProgressHUD.showAutoDismissHUD(message: (weakSelf?.dataModel?.msg)!)
+                }else{
+                    weakSelf?.tableView.reloadData()
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestDatas()
+            })
+        })
     }
     
 }
@@ -68,7 +114,10 @@ extension KZMyShouRuVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 12
+        if dataModel != nil {
+            return (dataModel?.detailList?.count)!
+        }
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -85,14 +134,15 @@ extension KZMyShouRuVC: UITableViewDelegate,UITableViewDataSource{
             cell.productLab.textColor = kBlueFontColor
             cell.productLab.text = "产品"
         }else{
+            let model = dataModel?.detailList![indexPath.row - 1]
             cell.nameLab.textColor = kBlackFontColor
-            cell.nameLab.text = "张三"
+            cell.nameLab.text = model?.buyer_name
             cell.dateLab.textColor = kBlackFontColor
-            cell.dateLab.text = "2018-08-31"
+            cell.dateLab.text = model?.payment_time?.getThumbImgUrl(size: "yyyy-MM-dd")
             cell.moneyLab.textColor = kBlackFontColor
-            cell.moneyLab.text = "￥20008"
+            cell.moneyLab.text = "￥" + (model?.goods_pay_price)!
             cell.productLab.textColor = kBlackFontColor
-            cell.productLab.text = "合伙人套餐"
+            cell.productLab.text = model?.goods_name
         }
         
         if indexPath.row % 2 == 0 {
@@ -109,6 +159,8 @@ extension KZMyShouRuVC: UITableViewDelegate,UITableViewDataSource{
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: myShouRuHeader) as! KZMyShouRuHeaderView
         
         headerView.timeLab.addOnClickListener(target: self, action: #selector(onClickedSelectTime))
+        
+        headerView.moneyLab.text = "零售收入：￥" + (dataModel?.total)!
         
         return headerView
     }

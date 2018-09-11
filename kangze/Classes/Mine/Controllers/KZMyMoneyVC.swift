@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class KZMyMoneyVC: GYZBaseVC {
 
@@ -21,7 +22,10 @@ class KZMyMoneyVC: GYZBaseVC {
         view.addSubview(headerView)
         setupUI()
         
+        requestYuEInfo()
         setScrollView()
+        
+    
     }
     
     override func didReceiveMemoryWarning() {
@@ -176,5 +180,32 @@ class KZMyMoneyVC: GYZBaseVC {
     @objc func onClickedCash(){
         let vc = KZCashVC()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    /// 获取余额数据
+    func requestYuEInfo(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_index&op=my_asset&fields=predepoit", parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.totalMoneyLab.text = response["datas"]["predepoit"].stringValue
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
 }

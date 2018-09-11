@@ -54,6 +54,9 @@
 		0A71F31C21411884001201C1 /* KZMyBankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A71F31B21411884001201C1 /* KZMyBankCell.swift */; };
 		0A71F31E21411D49001201C1 /* KZMyBonusDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A71F31D21411D49001201C1 /* KZMyBonusDetailVC.swift */; };
 		0A71F32021412194001201C1 /* KZMyVIPManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A71F31F21412194001201C1 /* KZMyVIPManagerVC.swift */; };
+		0A740EA221475B0300392AC1 /* KZCartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A740EA121475B0300392AC1 /* KZCartModel.swift */; };
+		0A740EA42147AF6900392AC1 /* KZSubmitOrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A740EA32147AF6900392AC1 /* KZSubmitOrderModel.swift */; };
+		0A740EA62147BB4700392AC1 /* KZShouRuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A740EA52147BB4700392AC1 /* KZShouRuModel.swift */; };
 		0A75CD9821351CCE009B87E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A75CD9721351CCE009B87E6 /* AppDelegate.swift */; };
 		0A75CD9A21351CCE009B87E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A75CD9921351CCE009B87E6 /* ViewController.swift */; };
 		0A75CD9D21351CCE009B87E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A75CD9B21351CCE009B87E6 /* Main.storyboard */; };
@@ -247,6 +250,9 @@
 		0A71F31B21411884001201C1 /* KZMyBankCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyBankCell.swift; sourceTree = "<group>"; };
 		0A71F31D21411D49001201C1 /* KZMyBonusDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyBonusDetailVC.swift; sourceTree = "<group>"; };
 		0A71F31F21412194001201C1 /* KZMyVIPManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyVIPManagerVC.swift; sourceTree = "<group>"; };
+		0A740EA121475B0300392AC1 /* KZCartModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCartModel.swift; sourceTree = "<group>"; };
+		0A740EA32147AF6900392AC1 /* KZSubmitOrderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZSubmitOrderModel.swift; sourceTree = "<group>"; };
+		0A740EA52147BB4700392AC1 /* KZShouRuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZShouRuModel.swift; sourceTree = "<group>"; };
 		0A75CD9421351CCE009B87E6 /* kangze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kangze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A75CD9721351CCE009B87E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A75CD9921351CCE009B87E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -646,6 +652,7 @@
 				0A155039214551D700023171 /* KZMyAddressModel.swift */,
 				0A16B8F42146BA6000AB79B2 /* KZMyKuCunModel.swift */,
 				0A16B8F62146BE9A00AB79B2 /* KZHistorySendGoodsModel.swift */,
+				0A740EA52147BB4700392AC1 /* KZShouRuModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -717,6 +724,8 @@
 		0A75CDE621351FCB009B87E6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0A740EA121475B0300392AC1 /* KZCartModel.swift */,
+				0A740EA32147AF6900392AC1 /* KZSubmitOrderModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1232,6 +1241,7 @@
 				0A75CE7E21351FCD009B87E6 /* GYZScanQrcodeVC.swift in Sources */,
 				0A8F32DF213F7F6D00980EDE /* KZMyKuCunCell.swift in Sources */,
 				0A87F20921421A9A002F0AB8 /* KZShengYiDataVC.swift in Sources */,
+				0A740EA42147AF6900392AC1 /* KZSubmitOrderModel.swift in Sources */,
 				0A75CE8621351FCD009B87E6 /* ScrollSegmentView.swift in Sources */,
 				0A75CE6E21351FCD009B87E6 /* HXTagAttribute.m in Sources */,
 				0A902C2B2139259F00149DE1 /* KZCompanyArticlesVC.swift in Sources */,
@@ -1306,6 +1316,7 @@
 				0A75CE6D21351FCD009B87E6 /* HXTagsCell.m in Sources */,
 				0A48FCB6214270C0000B5C1F /* KZGoodsParamsView.swift in Sources */,
 				0A494BE321401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift in Sources */,
+				0A740EA221475B0300392AC1 /* KZCartModel.swift in Sources */,
 				0A75CE6721351FCD009B87E6 /* GYZEmptyView.swift in Sources */,
 				0A71F31021410EEC001201C1 /* KZRechargeRecordVC.swift in Sources */,
 				0A715A5F213E82860006C01D /* KZPosPayVC.swift in Sources */,
@@ -1330,6 +1341,7 @@
 				0A75CE7A21351FCD009B87E6 /* ZCycleLayout.swift in Sources */,
 				0A75CE7421351FCD009B87E6 /* ToolBarView.swift in Sources */,
 				0A75CE4F21351FCC009B87E6 /* GYZImgAndTxtBtnView.swift in Sources */,
+				0A740EA62147BB4700392AC1 /* KZShouRuModel.swift in Sources */,
 				0A75CE5421351FCC009B87E6 /* GYZMainTabBarVC.swift in Sources */,
 				0A71F31221411224001201C1 /* KZCashVC.swift in Sources */,
 				0A75CE7621351FCD009B87E6 /* UsefulPickerView.swift in Sources */,
