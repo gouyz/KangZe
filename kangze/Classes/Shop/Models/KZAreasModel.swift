@@ -16,5 +16,5 @@ class KZAreasModel: LHSBaseModel {
     /// 名称
     var area_name : String?
     /// 是否被代理过   1，是    0，否
-    var is_used : String? = ""
+    var is_used : String? = "0"
 }

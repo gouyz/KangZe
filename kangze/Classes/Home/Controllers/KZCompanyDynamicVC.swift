@@ -66,6 +66,9 @@ class KZCompanyDynamicVC: GYZBaseVC {
     ///获取动态数据
     func requestDynamicDatas(){
         
+        if !GYZTool.checkNetWork() {
+            return
+        }
         weak var weakSelf = self
         createHUD(message: "加载中...")
         

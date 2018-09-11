@@ -13,8 +13,6 @@ private let myAddressCell = "myAddressCell"
 
 class KZMyAddressVC: GYZBaseVC {
     
-    /// 选择结果回调
-//    var resultBlock:((_ model: LHSReceiveAddressModel) -> Void)?
     var dataList: [KZMyAddressModel] = [KZMyAddressModel]()
 
     override func viewDidLoad() {
@@ -37,7 +35,6 @@ class KZMyAddressVC: GYZBaseVC {
                 make.top.equalTo(kTitleAndStateHeight)
             }
         }
-        
         requestAddressDatas()
     }
     
@@ -75,30 +72,44 @@ class KZMyAddressVC: GYZBaseVC {
     }()
     /// 添加新地址
     @objc func clickedSubmitBtn(){
-        goEditVC(isEdit: true)
+        goEditVC(isAdd: true,index: 0)
     }
     
     /// 删除地址
     @objc func onClickedDelBtn(sender: UIButton){
+        let tag = sender.tag
+        requestDeleteAddress(index: tag)
     }
     /// 编辑地址
     @objc func onClickedEditBtn(sender: UIButton){
         
-        goEditVC(isEdit: false)
+        let tag = sender.tag
+        goEditVC(isAdd: false,index: tag)
     }
     
     /// 编辑/新增地址
     ///
     /// - Parameter isEdit: 是增加还是编辑
-    func goEditVC(isEdit: Bool){
+    func goEditVC(isAdd: Bool,index: Int){
         let editVC = KZEditAddressVC()
-        editVC.isAdd = isEdit
-//        editVC.addressInfo = addressInfo
+        editVC.isAdd = isAdd
+        if !isAdd {
+            let model = dataList[index]
+            editVC.addressId = model.address_id!
+            editVC.addressModel = model
+        }
+        /// 回调刷新数据
+        editVC.resultBlock = {[weak self] in
+            self?.requestAddressDatas()
+        }
         navigationController?.pushViewController(editVC, animated: true)
     }
     
     ///获取我的地址数据
     func requestAddressDatas(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
         weak var weakSelf = self
         showLoadingView()
@@ -112,6 +123,7 @@ class KZMyAddressVC: GYZBaseVC {
                 
                 guard let data = response["datas"]["address_list"].array else { return }
                 
+                weakSelf?.dataList.removeAll()
                 for item in data{
                     guard let itemInfo = item.dictionaryObject else { return }
                     let model = KZMyAddressModel.init(dict: itemInfo)
@@ -141,6 +153,41 @@ class KZMyAddressVC: GYZBaseVC {
                 weakSelf?.requestAddressDatas()
             })
             weakSelf?.view.bringSubview(toFront: (weakSelf?.submitBtn)!)
+        })
+    }
+    
+    ///删除地址
+    func requestDeleteAddress(index: Int){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        GYZNetWork.requestNetwork("member_address&op=address_del",parameters: ["address_id":dataList[index].address_id!,"key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.dataList.remove(at: index)
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content:"暂无地址")
+                    weakSelf?.view.bringSubview(toFront: (weakSelf?.submitBtn)!)
+                }
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
         })
     }
 }

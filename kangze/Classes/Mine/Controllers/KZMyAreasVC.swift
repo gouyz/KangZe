@@ -49,6 +49,9 @@ class KZMyAreasVC: GYZBaseVC {
     
     ///获取区域数据
     func requestAreaDatas(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
         weak var weakSelf = self
         showLoadingView()

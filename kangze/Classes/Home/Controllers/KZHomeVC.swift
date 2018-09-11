@@ -63,6 +63,9 @@ class KZHomeVC: KZCommonNavBarVC {
     
     ///获取首页数据
     func requestHomeDatas(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
         weak var weakSelf = self
         createHUD(message: "加载中...")

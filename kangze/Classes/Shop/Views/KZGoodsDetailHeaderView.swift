@@ -269,7 +269,7 @@ class KZGoodsDetailHeaderView: UIView {
         lab.font = k15Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .right
-        lab.text = "江苏省常州市武进区"
+        lab.text = "选择区域"
         
         return lab
     }()

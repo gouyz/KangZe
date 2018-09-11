@@ -142,6 +142,7 @@ class GYZTool: NSObject {
         userDefaults.removeObject(forKey: "username")
         userDefaults.removeObject(forKey: "is_buydl")
         userDefaults.removeObject(forKey: "is_shehe")
+        userDefaults.removeObject(forKey: "phone")
     }
     
     /// 字典或数组转json字符串

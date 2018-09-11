@@ -118,6 +118,9 @@ class KZApplyFriendsVC: GYZBaseVC {
     
     /// 邀请好友
     func requestApplyFriend(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
         weak var weakSelf = self
         createHUD(message: "加载中...")

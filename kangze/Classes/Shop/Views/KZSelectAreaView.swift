@@ -12,10 +12,18 @@ private let selectAreaCell = "selectAreaCell"
 
 class KZSelectAreaView: UIView {
 
-    /// 数据源
-    var dataSource = [String]()
+    /// 选择结果回调
+    var resultBlock:((_ model: KZAreasModel) -> Void)?
     
-    let titleArr: [String] = ["生产日期","品牌","系类","型号","所含营养","是否进口","包装种类","适用阶段"]
+    /// 填充数据
+    var dataModels : [KZAreasModel]?{
+        didSet{
+            if dataModels != nil {
+                
+                tableView.reloadData()
+            }
+        }
+    }
     
     // MARK: 生命周期方法
     override init(frame:CGRect){
@@ -42,7 +50,6 @@ class KZSelectAreaView: UIView {
     func setupUI(){
         
         addSubview(bgView)
-        bgView.addOnClickListener(target: self, action: #selector(onBlankClicked))
         
         bgView.addSubview(tableView)
         
@@ -115,10 +122,6 @@ class KZSelectAreaView: UIView {
         removeAnimation()
     }
     
-    /// 点击bgView不消失
-    @objc func onBlankClicked(){
-        
-    }
     
     /// 点击空白取消
     @objc func onTapCancle(sender:UITapGestureRecognizer){
@@ -129,13 +132,23 @@ class KZSelectAreaView: UIView {
 }
 extension KZSelectAreaView : UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return titleArr.count
+        if dataModels != nil {
+            return dataModels!.count
+        }
+        return 0
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: selectAreaCell) as! GYZLabArrowCell
         
         cell.rightIconView.isHidden = true
-        cell.nameLab.text = titleArr[indexPath.row]
+        let model = dataModels![indexPath.row]
+        cell.nameLab.text = model.area_name
+        
+        if model.is_used == "0" {
+            cell.nameLab.textColor = kBlackFontColor
+        }else{
+            cell.nameLab.textColor = kGaryFontColor
+        }
         
         return cell
     }
@@ -146,6 +159,16 @@ extension KZSelectAreaView : UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
         return UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let model = dataModels![indexPath.row]
+        if model.is_used == "0" {
+            if resultBlock != nil{
+                resultBlock!(model)
+            }
+            hide()
+        }
     }
     
     ///MARK : UITableViewDelegate

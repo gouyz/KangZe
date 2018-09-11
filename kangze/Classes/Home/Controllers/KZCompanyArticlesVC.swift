@@ -48,6 +48,9 @@ class KZCompanyArticlesVC: GYZBaseVC {
     ///获取文章数据
     func requestArticleDatas(){
         
+        if !GYZTool.checkNetWork() {
+            return
+        }
         weak var weakSelf = self
         createHUD(message: "加载中...")
         

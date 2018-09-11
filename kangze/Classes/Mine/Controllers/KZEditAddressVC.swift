@@ -7,32 +7,75 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class KZEditAddressVC: GYZBaseVC {
     
+    /// 选择结果回调
+    var resultBlock:(() -> Void)?
     /// 是否新增地址
     var isAdd: Bool = false
-    /// 性别 0男 1女
-    var sex: String = "0"
+    ///  性别 1男 2女
+    var sex: String = "1"
+    
+    var selectProvinceModel: KZAreasModel?
+    var selectCityModel: KZAreasModel?
+    var selectAreaModel: KZAreasModel?
+    /// 编辑时传过来
+    var addressModel: KZMyAddressModel?
+    ///  0：添加地址 大于0： 编辑地址
+    var addressId: String = "0"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if isAdd {
-            self.navigationItem.title = "新增地址"
-        }else{
-            self.navigationItem.title = "编辑地址"
-        }
         
         self.view.backgroundColor = kWhiteColor
         setUpUI()
         
-        manCheckBtn.isSelected = true
+        setData()
+        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func setData(){
+        nameView.textFiled.isSecureTextEntry = false
+        addressView.textFiled.isSecureTextEntry = false
+        
+        if isAdd {
+            self.navigationItem.title = "新增地址"
+            manCheckBtn.isSelected = true
+        }else{
+            self.navigationItem.title = "编辑地址"
+            nameView.textFiled.text = addressModel?.true_name
+            sex = (addressModel?.sex)!
+            if sex == "1" {/// 先生
+                womanCheckBtn.isSelected = false
+                manCheckBtn.isSelected = true
+            } else {/// 女士
+                manCheckBtn.isSelected = false
+                womanCheckBtn.isSelected = true
+            }
+            phoneView.textFiled.text = addressModel?.mob_phone
+            
+            selectProvinceModel = KZAreasModel()
+            selectProvinceModel?.area_name = addressModel?.province_name
+            selectProvinceModel?.area_id = addressModel?.province_id
+            
+            selectCityModel = KZAreasModel()
+            selectCityModel?.area_name = addressModel?.city_name
+            selectCityModel?.area_id = addressModel?.city_id
+            
+            selectAreaModel = KZAreasModel()
+            selectAreaModel?.area_name = addressModel?.area_name
+            selectAreaModel?.area_id = addressModel?.area_id
+            areasLab.text = (selectProvinceModel?.area_name)! + (selectCityModel?.area_name)! + (selectAreaModel?.area_name)!
+            
+            addressView.textFiled.text = addressModel?.address
+        }
     }
     
     func setUpUI(){
@@ -252,7 +295,24 @@ class KZEditAddressVC: GYZBaseVC {
     }()
     /// 完成
     @objc func clickedSubmitBtn(){
+        if nameView.textFiled.text!.isEmpty {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入联系人")
+            return
+        }
+        if phoneView.textFiled.text!.isEmpty {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入手机号")
+            return
+        }
+        if selectProvinceModel == nil || selectCityModel == nil || selectAreaModel == nil {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择区域")
+            return
+        }
+        if addressView.textFiled.text!.isEmpty {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入地址")
+            return
+        }
         
+        requestAddAddress()
     }
     
     /// 选择先生/女士
@@ -264,16 +324,55 @@ class KZEditAddressVC: GYZBaseVC {
         btn.isSelected = !btn.isSelected
         
         if tag == 101 {/// 先生
-            sex = "0"
+            sex = "1"
             womanCheckBtn.isSelected = false
         } else {/// 女士
-            sex = "1"
+            sex = "2"
             manCheckBtn.isSelected = false
         }
     }
     /// 选择区域
     @objc func onClickedSelectArea(){
         let vc = KZSelectAreaVC()
+        vc.resultBlock = { [weak self] (provinceModel,cityModel,areaModel) in
+            
+            self?.selectProvinceModel = provinceModel
+            self?.selectCityModel = cityModel
+            self?.selectAreaModel = areaModel
+            
+            self?.areasLab.text = provinceModel.area_name! + cityModel.area_name! + areaModel.area_name!
+        }
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    ///编辑、添加地址
+    func requestAddAddress(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_address&op=address_add",parameters: ["address_id":addressId,"key": userDefaults.string(forKey: "key") ?? "","true_name": nameView.textFiled.text!,"mob_phone": phoneView.textFiled.text!,"address": addressView.textFiled.text!,"sex": sex,"province_id":(selectProvinceModel?.area_id)!,"city_id":(selectCityModel?.area_id)!,"area_id":(selectAreaModel?.area_id)!],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                if weakSelf?.resultBlock != nil{
+                    weakSelf?.resultBlock!()
+                }
+                weakSelf?.clickedBackBtn()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
 }

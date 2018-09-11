@@ -7,11 +7,24 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class KZSelectAreaVC: GYZBaseVC {
     
     /// 选择结果回调
     var resultBlock:((_ proviceModel: KZAreasModel,_ cityModel: KZAreasModel,_ areaModel: KZAreasModel) -> Void)?
+    
+    var provinceList: [KZAreasModel] = [KZAreasModel]()
+    var cityList: [KZAreasModel] = [KZAreasModel]()
+    var areaList: [KZAreasModel] = [KZAreasModel]()
+    ///area_id=0 获取所有一级地区（省和直辖市）
+    var areaId: String = "0"
+    ///如果不需要验证代理区域的话，可以为0
+    var goodsId: String = "0"
+    
+    var selectProvinceModel: KZAreasModel?
+    var selectCityModel: KZAreasModel?
+    var selectAreaModel: KZAreasModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +33,8 @@ class KZSelectAreaVC: GYZBaseVC {
         self.view.backgroundColor = kWhiteColor
         
         setupUI()
+        
+        requestGoodsDatas(type: "1")
     }
 
     override func didReceiveMemoryWarning() {
@@ -132,7 +147,7 @@ class KZSelectAreaVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .center
-        lab.text = "江苏省"
+        lab.text = "选择省"
         
         return lab
     }()
@@ -153,7 +168,7 @@ class KZSelectAreaVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .center
-        lab.text = "新北区"
+        lab.text = "选择区"
         
         return lab
     }()
@@ -174,7 +189,7 @@ class KZSelectAreaVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .center
-        lab.text = "常州市"
+        lab.text = "选择市"
         
         return lab
     }()
@@ -195,12 +210,133 @@ class KZSelectAreaVC: GYZBaseVC {
     /// 确认
     @objc func clickedSaveBtn(){
         
+        if selectProvinceModel == nil {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择省")
+            return
+        }
+        if selectCityModel == nil {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择市")
+            return
+        }
+        if selectAreaModel == nil {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择区")
+            return
+        }
+        if resultBlock != nil {
+            resultBlock!(selectProvinceModel!,selectCityModel!,selectAreaModel!)
+        }
+        clickedBackBtn()
     }
     
     /// 选择省市区
     @objc func onClickedSelect(sender: UITapGestureRecognizer){
         
+        let tag: Int = (sender.view?.tag)!
+        
+        switch tag {
+        case 101:
+            areaId = "0"
+            showAreaView(type: "1")
+        case 102:
+            if selectProvinceModel == nil {
+                MBProgressHUD.showAutoDismissHUD(message: "请先选择省")
+                return
+            }
+            areaId = (selectProvinceModel?.area_id)!
+            requestGoodsDatas(type: "2")
+        case 103:
+            if selectCityModel == nil {
+                MBProgressHUD.showAutoDismissHUD(message: "请先选择市")
+                return
+            }
+            areaId = (selectCityModel?.area_id)!
+            requestGoodsDatas(type: "3")
+        default:
+            break
+        }
+    
+    }
+    /// - Parameter type: 1.省2.市3.区
+    func showAreaView(type: String){
         let selectView = KZSelectAreaView()
+        
+        if type == "1"{
+            selectView.dataModels = provinceList
+        }else if type == "2"{
+            selectView.dataModels = cityList
+        }else if type == "3"{
+            selectView.dataModels = areaList
+        }
+        
+        selectView.resultBlock = {[weak self] (model) in
+            
+            if type == "1"{
+                self?.selectProvinceModel = model
+                self?.provinceLab.text = model.area_name
+            }else if type == "2"{
+                self?.selectCityModel = model
+                self?.cityLab.text = model.area_name
+            }else if type == "3"{
+                self?.selectAreaModel = model
+                self?.areaLab.text = model.area_name
+            }
+            
+        }
         selectView.show()
     }
+    
+    ///获取数据
+    ///
+    /// - Parameter type: 1.省2.市3.区
+    func requestGoodsDatas(type: String){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("area&op=area_list",parameters: ["area_id":areaId,"goods_id":goodsId],method : .get,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["area_list"].array else { return }
+                
+                
+                var areaArr: [KZAreasModel] = [KZAreasModel]()
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZAreasModel.init(dict: itemInfo)
+                    
+                    areaArr.append(model)
+                }
+                
+                if type == "1"{
+                    weakSelf?.provinceList.removeAll()
+                    weakSelf?.provinceList = areaArr
+                }else if type == "2"{
+                    weakSelf?.cityList.removeAll()
+                    weakSelf?.cityList = areaArr
+                    weakSelf?.showAreaView(type: "2")
+                }else if type == "3"{
+                    weakSelf?.areaList.removeAll()
+                    weakSelf?.areaList = areaArr
+                    weakSelf?.showAreaView(type: "3")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            
+        })
+    }
+
 }

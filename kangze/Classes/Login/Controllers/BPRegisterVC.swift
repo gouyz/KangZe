@@ -421,6 +421,9 @@ class BPRegisterVC: GYZBaseVC {
     
     /// 注册
     func requestRegister(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
         weak var weakSelf = self
         
@@ -434,12 +437,12 @@ class BPRegisterVC: GYZBaseVC {
                 
                 userDefaults.set(true, forKey: kIsLoginTagKey)//是否登录标识
                 userDefaults.set(data["userid"].stringValue, forKey: "userId")//用户ID
-//                userDefaults.set(data["username"].stringValue, forKey: "username")//用户电话
+                userDefaults.set(weakSelf?.phoneInputView.textFiled.text!, forKey: "phone")//用户电话
                 userDefaults.set(data["is_shehe"].stringValue, forKey: "is_shehe")//是否完成实名认证
                 userDefaults.set(data["is_buydl"].stringValue, forKey: "is_buydl")//是否完成合伙人套餐购买认证   1.是     0.否
                 userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
                 userDefaults.set(data["key"].stringValue, forKey: "key")//key
-                _ = weakSelf?.navigationController?.popToRootViewController(animated: true)
+                _ = weakSelf?.navigationController?.popViewController(animated: true)
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }
@@ -463,6 +466,10 @@ class BPRegisterVC: GYZBaseVC {
     
     ///获取验证码
     func requestCode(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
         weak var weakSelf = self
         createHUD(message: "获取中...")
@@ -501,6 +508,10 @@ class BPRegisterVC: GYZBaseVC {
     
     /// 上传头像
     func requestUpLoadImg(img : UIImage,isBgImg: Bool){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
         weak var weakSelf = self
         
         let imgParam: ImageFileUploadParam = ImageFileUploadParam()

@@ -20,6 +20,10 @@ class KZGoodsDetailVC: GYZBaseVC {
     
     var goodsId: String = ""
     var dataModel: KZGoodsModel?
+    
+    var selectProvinceModel: KZAreasModel?
+    var selectCityModel: KZAreasModel?
+    var selectAreaModel: KZAreasModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +43,8 @@ class KZGoodsDetailVC: GYZBaseVC {
         
         headerView.productView.addOnClickListener(target: self, action: #selector(onClickedProductView))
         headerView.areasView.addOnClickListener(target: self, action: #selector(onClickedAreasView))
+        
+        bottomView.favouriteBtn.addTarget(self, action: #selector(onClickedFavourite), for: .touchUpInside)
         
         requestDetailDatas()
         
@@ -91,11 +97,24 @@ class KZGoodsDetailVC: GYZBaseVC {
     @objc func onClickedAreasView(){
         
         let vc = KZSelectAreaVC()
+        vc.goodsId = (dataModel?.goods_id)!
+        vc.resultBlock = { [weak self] (provinceModel,cityModel,areaModel) in
+            
+            self?.selectProvinceModel = provinceModel
+            self?.selectCityModel = cityModel
+            self?.selectAreaModel = areaModel
+            
+            self?.headerView.areasLab.text = provinceModel.area_name! + cityModel.area_name! + areaModel.area_name!
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     
     ///获取详情数据
     func requestDetailDatas(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
         weak var weakSelf = self
         createHUD(message: "加载中...")
@@ -124,9 +143,15 @@ class KZGoodsDetailVC: GYZBaseVC {
     func setData(){
         if dataModel?.goods_type != "2" {// 合伙人套餐
             headerViewH = kScreenWidth * 0.75 + 110 + kTitleHeight * 2
-            headerView.frame = CGRect.init(x: 0, y: -headerViewH, width: kScreenWidth, height: headerViewH)
             webView.scrollView.contentInset = UIEdgeInsets.init(top: headerViewH, left: 0, bottom: 0, right: 0)
+            headerView.frame = CGRect.init(x: 0, y: -headerViewH, width: kScreenWidth, height: headerViewH)
+            headerView.areasView.isHidden = true
+            headerView.areasView.snp.updateConstraints { (make) in
+                make.height.equalTo(0)
+            }
+
         }
+        
         headerView.iconView.kf.setImage(with: URL.init(string: (dataModel?.goods_image)!), placeholder: UIImage.init(named: "icon_shop_default"), options: nil, progressBlock: nil, completionHandler: nil)
         headerView.nameLab.text = dataModel?.goods_name
         headerView.priceLab.text = "￥" + (dataModel?.goods_price)!
@@ -144,6 +169,91 @@ class KZGoodsDetailVC: GYZBaseVC {
             bottomView.favouriteBtn.set(image: UIImage.init(named: "icon_favorite_rating_selected"), title: "收藏", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
             bottomView.favouriteBtn.setTitleColor(kBlueFontColor, for: .normal)
         }
+    }
+    @objc func onClickedFavourite(){
+        
+        if !userDefaults.bool(forKey: kIsLoginTagKey) {
+            showLogin()
+            return
+        }
+        // 是否收藏
+        if dataModel?.is_collect == "0" {
+            requestFavouriteGoods()
+        }else{
+            requestCancleFavouriteGoods()
+        }
+    }
+    
+    func showLogin(){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: "提示", message: "请先登录", cancleTitle: nil, viewController: self, buttonTitles: "去登录") { (index) in
+            
+            if index != cancelIndex{
+                weakSelf?.goLogin()
+            }
+        }
+    }
+    func goLogin(){
+        let vc = BPLoginVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    ///商品收藏
+    func requestFavouriteGoods(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_favorites&op=favorites_add",parameters: ["goods_id":goodsId,"key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.dataModel?.is_collect = "1"
+                weakSelf?.bottomView.favouriteBtn.set(image: UIImage.init(named: "icon_favorite_rating_selected"), title: "收藏", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
+                weakSelf?.bottomView.favouriteBtn.setTitleColor(kBlueFontColor, for: .normal)
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    ///商品取消收藏
+    func requestCancleFavouriteGoods(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_favorites&op=favorites_del",parameters: ["fav_id":goodsId,"key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.dataModel?.is_collect = "0"
+                weakSelf?.bottomView.favouriteBtn.set(image: UIImage.init(named: "icon_favorite_rating"), title: "收藏", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
+                weakSelf?.bottomView.favouriteBtn.setTitleColor(kHeightGaryFontColor, for: .normal)
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
 }
 extension KZGoodsDetailVC : WKNavigationDelegate,UIScrollViewDelegate{

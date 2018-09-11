@@ -242,6 +242,9 @@ class KZForgetPwdVC: GYZBaseVC {
     
     /// 找回密码
     func requestUpdatePwd(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
         weak var weakSelf = self
         createHUD(message: "加载中...")

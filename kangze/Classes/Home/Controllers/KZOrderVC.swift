@@ -62,6 +62,10 @@ class KZOrderVC: GYZBaseVC {
     ///获取数据
     func requestOrderDatas(){
         
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
         weak var weakSelf = self
         showLoadingView()
         

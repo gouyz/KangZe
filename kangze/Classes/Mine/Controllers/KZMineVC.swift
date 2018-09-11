@@ -90,6 +90,10 @@ class KZMineVC: GYZBaseVC {
     
     /// 获取我的 数据
     func requestMineData(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
@@ -180,6 +184,10 @@ class KZMineVC: GYZBaseVC {
     
     /// 上传头像
     func requestUpdateHeaderImg(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
@@ -209,7 +217,7 @@ class KZMineVC: GYZBaseVC {
     
     /// 修改头像
     func requestUpdateUrl(url: String){
-        
+    
         weak var weakSelf = self
         
         GYZNetWork.requestNetwork("member&op=check_member_avatar", parameters: ["key": userDefaults.string(forKey: "key") ?? "","member_avatar":url],  success: { (response) in
