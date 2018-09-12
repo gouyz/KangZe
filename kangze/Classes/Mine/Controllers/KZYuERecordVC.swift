@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let yuERecordCell = "yuERecordCell"
 
 class KZYuERecordVC: GYZBaseVC {
+    
+    var dataList: [KZYuERecordModel] = [KZYuERecordModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +24,7 @@ class KZYuERecordVC: GYZBaseVC {
             
             make.edges.equalTo(0)
         }
-        
+        requestYuERecordDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -41,6 +44,55 @@ class KZYuERecordVC: GYZBaseVC {
         
         return table
     }()
+    
+    ///获取余额明细数据
+    func requestYuERecordDatas(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_invite&op=get_my_pdlog",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"].array else { return }
+                
+                weakSelf?.dataList.removeAll()
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZYuERecordModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content:"暂无余额明细")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            //第一次加载失败，显示加载错误页面
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestYuERecordDatas()
+            })
+        })
+    }
 }
 
 extension KZYuERecordVC: UITableViewDelegate,UITableViewDataSource{
@@ -49,7 +101,7 @@ extension KZYuERecordVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 12
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -57,6 +109,11 @@ extension KZYuERecordVC: UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: yuERecordCell) as! KZRecordCell
         
         cell.statusLab.isHidden = true
+        
+        let model = dataList[indexPath.row]
+        cell.titleLab.text = model.type
+        cell.dateLab.text = model.lg_add_time?.getDateTime(format: "yyyy_MM-dd HH:mm:ss")
+        cell.moneyLab.text = model.lg_av_amount
         
         cell.selectionStyle = .none
         return cell

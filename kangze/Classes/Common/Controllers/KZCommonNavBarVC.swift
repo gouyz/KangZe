@@ -30,6 +30,8 @@ class KZCommonNavBarVC: GYZBaseVC {
     /// 邀请码
     @objc func onClickedQrcode(){
         
+        let vc = KZApplyFriendsVC()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     lazy var navBarView: GYZSearchNavBarView = GYZSearchNavBarView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: kTitleHeight))

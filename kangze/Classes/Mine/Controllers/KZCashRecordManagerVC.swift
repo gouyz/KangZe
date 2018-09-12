@@ -12,8 +12,8 @@ class KZCashRecordManagerVC: GYZBaseVC {
 
     let titleArr : [String] = ["全部","待打款","已打款","已拒绝"]
     
-    //订单状态1待受理2已受理3已发货4已取消5已完成
-    let stateValue : [String] = ["-1","1","2","3"]
+    //状态值 0待打款 1已打款 2，已拒绝 99，全部记录
+    let stateValue : [String] = ["99","0","1","2"]
     var scrollPageView: ScrollPageView?
     
     override func viewDidLoad() {

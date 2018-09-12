@@ -7,13 +7,16 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let cashRecordCell = "cashRecordCell"
 
 class KZCashRecordVC: GYZBaseVC {
 
-    /// 提现状态
-    var status: String = "-1"
+    /// 状态值 0待打款 1已打款 2，已拒绝 99，全部记录
+    var status: String = "99"
+    var dataList: [KZCashRecordModel] = [KZCashRecordModel]()
+    var currPage : Int = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +26,7 @@ class KZCashRecordVC: GYZBaseVC {
             
             make.edges.equalTo(0)
         }
-        
+        requestRecordDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -41,9 +44,94 @@ class KZCashRecordVC: GYZBaseVC {
         
         table.register(KZRecordCell.self, forCellReuseIdentifier: cashRecordCell)
         
+        weak var weakSelf = self
+        ///添加下拉刷新
+        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
+            weakSelf?.refresh()
+        })
+        ///添加上拉加载更多
+        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
+            weakSelf?.loadMore()
+        })
         return table
     }()
     
+    ///获取提现记录数据
+    func requestRecordDatas(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_fund&op=pdcashlist",parameters: ["curpage":currPage,"page":kPageSize,"key": userDefaults.string(forKey: "key") ?? "","type": status],method : .get,  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            weakSelf?.closeRefresh()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["list"].array else { return }
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZCashRecordModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content: "暂无提现记录")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            weakSelf?.closeRefresh()
+            GYZLog(error)
+            
+            if weakSelf?.currPage == 1{//第一次加载失败，显示加载错误页面
+                weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                    weakSelf?.refresh()
+                    weakSelf?.hiddenEmptyView()
+                })
+            }
+        })
+    }
+    
+    
+    // MARK: - 上拉加载更多/下拉刷新
+    /// 下拉刷新
+    func refresh(){
+        currPage = 1
+        requestRecordDatas()
+    }
+    
+    /// 上拉加载更多
+    func loadMore(){
+        currPage += 1
+        requestRecordDatas()
+    }
+    
+    /// 关闭上拉/下拉刷新
+    func closeRefresh(){
+        if tableView.mj_header.isRefreshing{//下拉刷新
+            dataList.removeAll()
+            GYZTool.endRefresh(scorllView: tableView)
+        }else if tableView.mj_footer.isRefreshing{//上拉加载更多
+            GYZTool.endLoadMore(scorllView: tableView)
+        }
+    }
 }
 
 extension KZCashRecordVC: UITableViewDelegate,UITableViewDataSource{
@@ -52,12 +140,29 @@ extension KZCashRecordVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 18
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cashRecordCell) as! KZRecordCell
+        
+        let model = dataList[indexPath.row]
+        cell.titleLab.text = "提现"
+        cell.dateLab.text = model.pdc_add_time?.getDateTime(format: "yyyy-MM-dd HH:mm:ss")
+        cell.moneyLab.text = "+" + model.pdc_amount!
+        
+        ///提现状态0未打款 1已打款 2已拒绝
+        var cashStatus = ""
+        if model.pdc_payment_state == "0" {
+            cashStatus = "待打款"
+        }else if model.pdc_payment_state == "1" {
+            cashStatus = "已打款"
+        }else if model.pdc_payment_state == "2" {
+            cashStatus = "已拒绝"
+        }
+        
+        cell.statusLab.text = cashStatus
         
         cell.selectionStyle = .none
         return cell

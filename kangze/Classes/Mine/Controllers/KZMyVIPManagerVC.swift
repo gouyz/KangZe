@@ -119,8 +119,9 @@ class KZMyVIPManagerVC: GYZBaseVC {
     
     /// 用户头像 图片
     lazy var userHeaderView: UIImageView = {
-        let imgView = UIImageView.init(image: UIImage.init(named: "icon_header_default"))
+        let imgView = UIImageView()
         imgView.cornerRadius = 30
+        imgView.kf.setImage(with: URL.init(string: (dataModel?.member_avatar)!), placeholder: UIImage.init(named: "icon_header_default"), options: nil, progressBlock: nil, completionHandler: nil)
         
         return imgView
     }()
@@ -129,7 +130,7 @@ class KZMyVIPManagerVC: GYZBaseVC {
         lab.font = k15Font
         lab.textColor = kWhiteColor
         lab.textAlignment = .center
-        lab.text = "紫萱"
+        lab.text = dataModel?.buyer_name
         
         return lab
     }()
@@ -139,7 +140,7 @@ class KZMyVIPManagerVC: GYZBaseVC {
         lab.font = k12Font
         lab.textColor = kWhiteColor
         lab.textAlignment = .center
-        lab.text = "零售型会员"
+        lab.text = dataModel?.type_name
         
         return lab
     }()
@@ -149,7 +150,7 @@ class KZMyVIPManagerVC: GYZBaseVC {
         lab.font = k12Font
         lab.textColor = kWhiteColor
         lab.textAlignment = .center
-        lab.text = "15426587890"
+        lab.text = dataModel?.member_mobile
         
         return lab
     }()

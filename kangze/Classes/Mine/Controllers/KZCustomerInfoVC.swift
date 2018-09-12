@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class KZCustomerInfoVC: GYZBaseVC {
 
@@ -80,7 +81,7 @@ class KZCustomerInfoVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .center
-        lab.text = "7788"
+        lab.text = "0"
         
         return lab
     }()
@@ -100,8 +101,36 @@ class KZCustomerInfoVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .center
-        lab.text = "788"
+        lab.text = "0"
         
         return lab
     }()
+    
+    /// 获取客户管理数据
+    func requestCustomerData(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member&op=get_my_sub_member", parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                let data = response["datas"]
+                weakSelf?.saleNumberLab.text = data["ls_member"].stringValue
+                weakSelf?.daiLiNumberLab.text = data["dl_member"].stringValue
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
 }

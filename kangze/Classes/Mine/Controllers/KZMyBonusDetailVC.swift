@@ -147,6 +147,7 @@ extension KZMyBonusDetailVC: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let vc = KZMyVIPManagerVC()
+        vc.dataModel = dataList[indexPath.row - 1]
         navigationController?.pushViewController(vc, animated: true)
     }
     ///MARK : UITableViewDelegate

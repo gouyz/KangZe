@@ -50,4 +50,14 @@ class KZShouRuChildModel: LHSBaseModel {
     /// 会员id
     var member_id : String?
     
+    /// 头像的url
+    var member_avatar : String?
+    /// 手机号码
+    var member_mobile : String?
+    /// 会员类型
+    var type_name : String? = "0"
+    /// 是否完善信息 1.完善  0.没完善
+    var is_shehe : String?
+    /// 是否通过合伙人购买套餐认证 1.是  0.否
+    var is_buydl : String?
 }
