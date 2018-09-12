@@ -10,6 +10,9 @@ import UIKit
 
 class KZRechargeVC: GYZBaseVC {
     
+    /// 选择结果回调
+    var resultBlock:(() -> Void)?
+    
     ///修改价格时输入是否有小数点
     var isHaveDian: Bool = false
     ///修改价格时输入第一位是否是0

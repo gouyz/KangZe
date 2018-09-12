@@ -10,11 +10,18 @@ import UIKit
 import MBProgressHUD
 
 class KZCashVC: GYZBaseVC {
+    
+    /// 选择结果回调
+    var resultBlock:(() -> Void)?
 
     ///修改价格时输入是否有小数点
     var isHaveDian: Bool = false
     ///修改价格时输入第一位是否是0
     var isFirstZero: Bool = false
+    
+    var selectBankCardModel: KZBankModel?
+    /// 余额
+    var yuEMoney: String = "0"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +40,7 @@ class KZCashVC: GYZBaseVC {
         cashField.delegate = self
         
         bgBankView.isHidden = true
-        //        requestUserInfo()
+        requestYuEInfo()
         
     }
     
@@ -193,14 +200,13 @@ class KZCashVC: GYZBaseVC {
         return view
     }()
     /// 图标
-    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_bank_jianse"))
+    lazy var iconView: UIImageView = UIImageView()
     
     /// 银行名称
     lazy var nameLab : UILabel = {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlackFontColor
-        lab.text = "建设银行"
         
         return lab
     }()
@@ -210,7 +216,6 @@ class KZCashVC: GYZBaseVC {
         let lab = UILabel()
         lab.font = k12Font
         lab.textColor = kHeightGaryFontColor
-        lab.text = "尾号4578储蓄卡"
         
         return lab
     }()
@@ -265,7 +270,7 @@ class KZCashVC: GYZBaseVC {
         let lab = UILabel()
         lab.font = k13Font
         lab.textColor = kGaryFontColor
-        lab.text = "可用余额￥1000"
+        lab.text = "可用余额￥0"
         
         return lab
     }()
@@ -308,9 +313,40 @@ class KZCashVC: GYZBaseVC {
     /// 选择银行卡
     @objc func onClickedSelectBank(){
         let vc = KZMyBankVC()
+        vc.resultBlock = {[weak self] (model) in
+            self?.selectBankCardModel = model
+            
+            self?.setBankInfo()
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    func setBankInfo(){
+        if selectBankCardModel != nil {
+            bgBankView.isHidden = false
+            bgEmptyBankView.isHidden = true
+            
+            let name: String = (selectBankCardModel?.card_type)!
+            var imgName: String = ""
+            if name.contains("建设银行") {
+                imgName = "icon_bank_jianse"
+            }else if name.contains("农业银行") {
+                imgName = "icon_bank_nongye"
+            }else if name.contains("中国银行") {
+                imgName = "icon_bank_china"
+            }else if name.contains("交通银行") {
+                imgName = "icon_bank_jiaotong"
+            }
+            iconView.image = UIImage.init(named: imgName)
+            nameLab.text = name
+            numberLab.text = selectBankCardModel?.end_num
+            
+        }else{
+            bgBankView.isHidden = true
+            bgEmptyBankView.isHidden = false
+        }
+        
+    }
     
     /// 提现
     @objc func clickedSaveBtn(){
@@ -319,53 +355,58 @@ class KZCashVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "请输入提现金额")
             return
         }
-        //        if Double.init(cashField.text!) > Double.init((userInfo?.dealerCommissionBalance)!) {
-        //            MBProgressHUD.showAutoDismissHUD(message: "提现金额不能大于可提现金额")
-        //            return
-        //        }
+        if Double.init(cashField.text!) > Double.init(yuEMoney) {
+            MBProgressHUD.showAutoDismissHUD(message: "提现金额不能大于可提现金额")
+            return
+        }
         
-        //        if Double.init(cashField.text!) < kMinCashMoney {
-        //            MBProgressHUD.showAutoDismissHUD(message: "提现金额不能小于\(kMinCashMoney)元")
-        //            return
-        //        }
+        if Double.init(cashField.text!) < 100 {
+            MBProgressHUD.showAutoDismissHUD(message: "提现金额不能小于100元")
+            return
+        }
         
-        //        requestApplyCash()
+        if selectBankCardModel == nil {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择银行卡")
+            return
+        }
+        
+        requestApplyCash()
+        
     }
-    /// 佣金提现申请
-    //    func requestApplyCash(){
-    //
-    //        if !GYZTool.checkNetWork() {
-    //            return
-    //        }
-    //
-    //        weak var weakSelf = self
-    //        createHUD(message: "加载中...")
-    //
-    //        var params:[String: Any] = [String: Any]()
-    //        params["dealerNumber"] = userInfo?.dealerNumber
-    //        params["drawcashTotals"] = cashField.text!
-    //        params["approveStatus"] = "0"
-    //
-    //        GYZNetWork.requestNetwork("drawcash/drawcashApply.do", parameters: params,  success: { (response) in
-    //
-    //            weakSelf?.hud?.hide(animated: true)
-    //            GYZLog(response)
-    //
-    //            MBProgressHUD.showAutoDismissHUD(message: response["message"].stringValue)
-    //            if response["code"].intValue == kQuestSuccessTag{//请求成功
-    //
-    //                weakSelf?.clickedBackBtn()
-    //            }
-    //
-    //        }, failture: { (error) in
-    //            weakSelf?.hud?.hide(animated: true)
-    //            GYZLog(error)
-    //        })
-    //    }
+    // 佣金提现申请
+    func requestApplyCash(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("recharge&op=pd_cash_add",parameters: ["card_id":(selectBankCardModel?.id)!,"key": userDefaults.string(forKey: "key") ?? "","pdc_amount": cashField.text!],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                if weakSelf?.resultBlock != nil{
+                    weakSelf?.resultBlock!()
+                }
+                weakSelf?.clickedBackBtn()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
     /// 全部提现
     @objc func clickedAllCashBtn(){
         
-        cashField.text = "1000"
+        cashField.text = yuEMoney
     }
     
     /// 提现记录
@@ -373,6 +414,34 @@ class KZCashVC: GYZBaseVC {
         
         let recordVC = KZCashRecordManagerVC()
         navigationController?.pushViewController(recordVC, animated: true)
+    }
+    
+    /// 获取余额数据
+    func requestYuEInfo(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_index&op=my_asset&fields=predepoit", parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.yuEMoney = response["datas"]["predepoit"].stringValue
+                weakSelf?.cashMoneyLab.text = "可用余额￥" + (weakSelf?.yuEMoney)!
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
 }
 

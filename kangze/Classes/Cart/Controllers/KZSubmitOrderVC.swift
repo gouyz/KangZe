@@ -26,6 +26,13 @@ class KZSubmitOrderVC: GYZBaseVC {
     var totalNum: Int = 0
     /// 备注
     var noteText: String = ""
+    
+    //不知道干嘛，但是要带上
+    var offpayHash: String = ""
+    var offpayHashBatch: String = ""
+    var vatHash: String = ""
+    /// 支付编号
+    var paySN: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,6 +87,7 @@ class KZSubmitOrderVC: GYZBaseVC {
     }()
     /// 提交订单
     @objc func clickedSubmitBtn(){
+//        requestSubmitOrder()
         showPayView()
     }
     
@@ -96,8 +104,19 @@ class KZSubmitOrderVC: GYZBaseVC {
     /// 支付
     func dealPay(index: Int){
         
-        let vc = KZPosPayVC()
-        navigationController?.pushViewController(vc, animated: true)
+        switch index {
+        case 1://余额支付
+            requestPayData(type: "yck_pay")
+        case 2:// 支付宝支付
+            requestPayData(type: "alipay_native")
+        case 3://微信支付
+            break
+        case 4://pos支付
+            let vc = KZPosPayVC()
+            navigationController?.pushViewController(vc, animated: true)
+        default:
+            break
+        }
     }
     /// 获取确认订单数据
     func requestOrderInfo(){
@@ -115,6 +134,9 @@ class KZSubmitOrderVC: GYZBaseVC {
             if response["code"].intValue == kQuestSuccessTag{//请求成功
             
                 weakSelf?.memberMoney = response["datas"]["store_cart_list"]["available_predeposit"].stringValue
+                weakSelf?.vatHash = response["datas"]["vat_hash"].stringValue
+                weakSelf?.offpayHash = response["datas"]["address_api"]["offpay_hash"].stringValue
+                weakSelf?.offpayHashBatch = response["datas"]["address_api"]["offpay_hash_batch"].stringValue
                 
                 guard let data = response["datas"]["store_cart_list"]["1"].dictionaryObject else { return }
                 weakSelf?.dataModel = KZSubmitOrderModel.init(dict: data)
@@ -129,8 +151,69 @@ class KZSubmitOrderVC: GYZBaseVC {
             GYZLog(error)
         })
     }
-    /// 监听UITextField输入变化
-    @objc func txtFieldDidChangeValue(textField: UITextField){
+    ///提交订单
+    func requestSubmitOrder(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_buy&op=buy_step2",parameters: ["vat_hash":vatHash,"offpay_hash":offpayHash,"offpay_hash_batch":offpayHashBatch,"key": userDefaults.string(forKey: "key") ?? "","cart_id":cartIds,"ifcart":isCart,"pay_name":" online","pay_message":"1|" + noteText ],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.paySN = response["datas"]["pay_sn"].stringValue
+
+                weakSelf?.showPayView()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    /// 获取支付参数
+    func requestPayData(type: String){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_payment&op=pay_new", parameters: ["key": userDefaults.string(forKey: "key") ?? "","payment_code":type,"pay_sn":paySN],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                if type == "alipay_native"{// 支付宝
+                    let payInfo: String = response["datas"].stringValue
+                }else if type == "yck_pay"{// 余额支付
+                    weakSelf?.clickedBackBtn()
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    /// 输入框内容改变
+    @objc func textFieldTextChange(textField: UITextField){
         noteText = textField.text!
     }
 }
@@ -164,7 +247,7 @@ extension KZSubmitOrderVC: UITableViewDelegate,UITableViewDataSource{
             let cell = tableView.dequeueReusableCell(withIdentifier: submitOrderNoteCell) as! GYZLabAndFieldCell
             
             cell.titleLab.text = "备注"
-            cell.textFiled.addTarget(self, action: #selector(txtFieldDidChangeValue(textField:)), for: .valueChanged)
+            cell.textFiled.addTarget(self, action: #selector(textFieldTextChange(textField:)), for: .editingChanged)
             
             cell.selectionStyle = .none
             return cell
@@ -212,3 +295,13 @@ extension KZSubmitOrderVC: UITableViewDelegate,UITableViewDataSource{
         return 0.00001
     }
 }
+
+//extension KZSubmitOrderVC : UITextFieldDelegate{
+//
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//
+//        noteText = textField.text!
+//        return true
+//    }
+//}
+

@@ -9,6 +9,28 @@
 import UIKit
 
 class KZMyBankCell: UITableViewCell {
+    /// 填充数据
+    var dataModel : KZBankModel?{
+        didSet{
+            if let model = dataModel {
+                
+                let name: String = model.card_type!
+                var imgName: String = ""
+                if name.contains("建设银行") {
+                    imgName = "icon_bank_jianse"
+                }else if name.contains("农业银行") {
+                    imgName = "icon_bank_nongye"
+                }else if name.contains("中国银行") {
+                    imgName = "icon_bank_china"
+                }else if name.contains("交通银行") {
+                    imgName = "icon_bank_jiaotong"
+                }
+                iconView.image = UIImage.init(named: imgName)
+                nameLab.text = model.card_type
+                numberLab.text = model.end_num
+            }
+        }
+    }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)

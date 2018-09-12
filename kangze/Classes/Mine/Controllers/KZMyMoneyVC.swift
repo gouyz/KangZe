@@ -174,11 +174,17 @@ class KZMyMoneyVC: GYZBaseVC {
     /// 充值
     @objc func onClickedRecharge(){
         let vc = KZRechargeVC()
+        vc.resultBlock = {[weak self] () in
+            self?.requestYuEInfo()
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 提现
     @objc func onClickedCash(){
         let vc = KZCashVC()
+        vc.resultBlock = {[weak self] () in
+            self?.requestYuEInfo()
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     

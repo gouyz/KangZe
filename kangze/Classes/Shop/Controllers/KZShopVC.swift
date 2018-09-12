@@ -13,7 +13,6 @@ private let shopCell = "homeCell"
 
 class KZShopVC: KZCommonNavBarVC {
     
-    var currPage : Int = 1
     var dataList: [KZGoodsModel] = [KZGoodsModel]()
 
     override func viewDidLoad() {
@@ -38,15 +37,7 @@ class KZShopVC: KZCommonNavBarVC {
         table.separatorColor = kGrayLineColor
         
         table.register(KZShopCell.self, forCellReuseIdentifier: shopCell)
-        weak var weakSelf = self
-        ///添加下拉刷新
-        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
-            weakSelf?.refresh()
-        })
-        ///添加上拉加载更多
-        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
-            weakSelf?.loadMore()
-        })
+        
         return table
     }()
     
@@ -60,10 +51,9 @@ class KZShopVC: KZCommonNavBarVC {
         weak var weakSelf = self
         showLoadingView()
         
-        GYZNetWork.requestNetwork("goods&op=goods_list",parameters: ["curpage":currPage,"page":kPageSize],method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork("goods&op=goods_list",parameters: nil,method : .get,  success: { (response) in
             
             weakSelf?.hiddenLoadingView()
-            weakSelf?.closeRefresh()
             GYZLog(response)
             
             if response["code"].intValue == kQuestSuccessTag{//请求成功
@@ -91,41 +81,15 @@ class KZShopVC: KZCommonNavBarVC {
         }, failture: { (error) in
             
             weakSelf?.hiddenLoadingView()
-            weakSelf?.closeRefresh()
             GYZLog(error)
             
-            if weakSelf?.currPage == 1{//第一次加载失败，显示加载错误页面
-                weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
-                    weakSelf?.refresh()
-                    weakSelf?.hiddenEmptyView()
-                })
-            }
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestGoodsDatas()
+                weakSelf?.hiddenEmptyView()
+            })
         })
     }
     
-    
-    // MARK: - 上拉加载更多/下拉刷新
-    /// 下拉刷新
-    func refresh(){
-        currPage = 1
-        requestGoodsDatas()
-    }
-    
-    /// 上拉加载更多
-    func loadMore(){
-        currPage += 1
-        requestGoodsDatas()
-    }
-    
-    /// 关闭上拉/下拉刷新
-    func closeRefresh(){
-        if tableView.mj_header.isRefreshing{//下拉刷新
-            dataList.removeAll()
-            GYZTool.endRefresh(scorllView: tableView)
-        }else if tableView.mj_footer.isRefreshing{//上拉加载更多
-            GYZTool.endLoadMore(scorllView: tableView)
-        }
-    }
     /// 商品详情
     func goGoodsDetail(index: Int){
         let vc = KZGoodsDetailVC()

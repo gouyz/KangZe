@@ -10,6 +10,9 @@ import UIKit
 import MBProgressHUD
 
 class KZCustomerInfoVC: GYZBaseVC {
+    
+    /// 会员id
+    var memberId: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,7 +118,7 @@ class KZCustomerInfoVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("member&op=get_my_sub_member", parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+        GYZNetWork.requestNetwork("member&op=get_my_sub_member", parameters: ["key": userDefaults.string(forKey: "key") ?? "","member_id":memberId],  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)

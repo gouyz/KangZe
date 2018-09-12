@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface GYZCheckTool : NSObject
-
+/// 检验银行卡
 + (BOOL) IsBankCard:(NSString *)cardNumber;
+/// 根据银行卡号判断银行名称
++ (NSString *)getBankName:(NSString*) cardId;
 @end

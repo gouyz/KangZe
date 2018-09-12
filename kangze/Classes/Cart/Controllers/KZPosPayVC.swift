@@ -37,11 +37,14 @@ class KZPosPayVC: GYZBaseVC {
         
         scrollView.addSubview(contentView)
         
-        contentView.addSubview(nameView)
-        contentView.addSubview(numberView)
+        contentView.addSubview(nameDesLab)
+        contentView.addSubview(nameLab)
+        contentView.addSubview(numberDesLab)
+        contentView.addSubview(numberLab)
         contentView.addSubview(lineView)
         contentView.addSubview(lineView1)
-        contentView.addSubview(totalView)
+        contentView.addSubview(totalDesLab)
+        contentView.addSubview(totalLab)
         contentView.addSubview(lineView2)
         contentView.addSubview(desLab)
         contentView.addSubview(addPhotosView)
@@ -67,36 +70,51 @@ class KZPosPayVC: GYZBaseVC {
             // 必须要比scroll的高度大一，这样才能在scroll没有填充满的时候，保持可以拖动
             make.height.greaterThanOrEqualTo(scrollView).offset(1)
         }
-        nameView.snp.makeConstraints { (make) in
-            make.top.left.right.equalTo(contentView)
+        nameDesLab.snp.makeConstraints { (make) in
+            make.top.equalTo(contentView)
+            make.left.equalTo(kMargin)
             make.height.equalTo(50)
+            make.width.equalTo(80)
+        }
+        nameLab.snp.makeConstraints { (make) in
+            make.top.height.equalTo(nameDesLab)
+            make.left.equalTo(nameDesLab.snp.right)
+            make.right.equalTo(-kMargin)
         }
         lineView.snp.makeConstraints { (make) in
-            make.left.right.equalTo(nameView)
-            make.top.equalTo(nameView.snp.bottom)
+            make.left.right.equalTo(contentView)
+            make.top.equalTo(nameDesLab.snp.bottom)
             make.height.equalTo(klineWidth)
         }
-        numberView.snp.makeConstraints { (make) in
-            make.left.right.height.equalTo(nameView)
+        numberDesLab.snp.makeConstraints { (make) in
+            make.left.right.height.equalTo(nameDesLab)
             make.top.equalTo(lineView.snp.bottom)
+        }
+        numberLab.snp.makeConstraints { (make) in
+            make.left.right.height.equalTo(nameLab)
+            make.top.equalTo(numberDesLab)
         }
         lineView1.snp.makeConstraints { (make) in
             make.left.right.height.equalTo(lineView)
-            make.top.equalTo(numberView.snp.bottom)
+            make.top.equalTo(numberDesLab.snp.bottom)
         }
-        totalView.snp.makeConstraints { (make) in
-            make.left.right.height.equalTo(nameView)
+        totalDesLab.snp.makeConstraints { (make) in
+            make.left.right.height.equalTo(nameDesLab)
             make.top.equalTo(lineView1.snp.bottom)
+        }
+        totalLab.snp.makeConstraints { (make) in
+            make.left.right.height.equalTo(nameLab)
+            make.top.equalTo(totalDesLab)
         }
         lineView2.snp.makeConstraints { (make) in
             make.left.right.height.equalTo(lineView)
-            make.top.equalTo(totalView.snp.bottom)
+            make.top.equalTo(totalDesLab.snp.bottom)
         }
         desLab.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
             make.right.equalTo(-kMargin)
             make.top.equalTo(lineView2.snp.bottom)
-            make.height.equalTo(nameView)
+            make.height.equalTo(nameDesLab)
         }
         addPhotosView.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
@@ -111,12 +129,25 @@ class KZPosPayVC: GYZBaseVC {
     }
     
     /// scrollView
-    var scrollView: UIScrollView = UIScrollView()
+    lazy var scrollView: UIScrollView = UIScrollView()
     /// 内容View
-    var contentView: UIView = UIView()
+    lazy var contentView: UIView = UIView()
     /// 商品名称
-    lazy var nameView : GYZLabAndFieldView = {
-        let lab = GYZLabAndFieldView.init(desName: "商品名称：", placeHolder: "请输入商品名称", isPhone: false)
+    lazy var nameDesLab : UILabel = {
+        let lab = UILabel()
+        lab.textColor = kBlackFontColor
+        lab.font = k15Font
+        lab.text = "商品名称："
+        
+        return lab
+    }()
+    /// 商品名称
+    lazy var nameLab : UILabel = {
+        let lab = UILabel()
+        lab.textColor = kBlackFontColor
+        lab.font = k12Font
+        lab.numberOfLines = 2
+        
         
         return lab
     }()
@@ -128,8 +159,20 @@ class KZPosPayVC: GYZBaseVC {
         return line
     }()
     /// 商品数量
-    lazy var numberView : GYZLabAndFieldView = {
-        let lab = GYZLabAndFieldView.init(desName: "商品数量：", placeHolder: "请输入商品数量", isPhone: false)
+    lazy var numberDesLab : UILabel = {
+        let lab = UILabel()
+        lab.textColor = kBlackFontColor
+        lab.font = k15Font
+        lab.text = "商品数量："
+        
+        return lab
+    }()
+    /// 商品数量
+    lazy var numberLab : UILabel = {
+        let lab = UILabel()
+        lab.textColor = kBlackFontColor
+        lab.font = k15Font
+        
         
         return lab
     }()
@@ -141,8 +184,20 @@ class KZPosPayVC: GYZBaseVC {
         return line
     }()
     /// 商品总额
-    lazy var totalView : GYZLabAndFieldView = {
-        let lab = GYZLabAndFieldView.init(desName: "商品总额：", placeHolder: "请输入商品总额", isPhone: false)
+    lazy var totalDesLab : UILabel = {
+        let lab = UILabel()
+        lab.textColor = kBlackFontColor
+        lab.font = k15Font
+        lab.text = "商品总额："
+        
+        return lab
+    }()
+    /// 商品总额
+    lazy var totalLab : UILabel = {
+        let lab = UILabel()
+        lab.textColor = kBlackFontColor
+        lab.font = k15Font
+        
         
         return lab
     }()
