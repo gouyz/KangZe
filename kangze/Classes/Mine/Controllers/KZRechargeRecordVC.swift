@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let rechargeRecordCell = "rechargeRecordCell"
 
 class KZRechargeRecordVC: GYZBaseVC {
+    
+    var dataList: [KZRechargeRecordModel] = [KZRechargeRecordModel]()
+    var currPage : Int = 1
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +25,7 @@ class KZRechargeRecordVC: GYZBaseVC {
             
             make.edges.equalTo(0)
         }
-        
+        requestRecordDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -39,8 +43,94 @@ class KZRechargeRecordVC: GYZBaseVC {
         
         table.register(KZRecordCell.self, forCellReuseIdentifier: rechargeRecordCell)
         
+        weak var weakSelf = self
+        ///添加下拉刷新
+        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
+            weakSelf?.refresh()
+        })
+        ///添加上拉加载更多
+        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
+            weakSelf?.loadMore()
+        })
         return table
     }()
+    
+    ///获取充值记录数据
+    func requestRecordDatas(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_fund&op=pdrechargelist2",parameters: ["curpage":currPage,"page":kPageSize,"key": userDefaults.string(forKey: "key") ?? ""],method : .get,  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            weakSelf?.closeRefresh()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["list"].array else { return }
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZRechargeRecordModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content: "暂无充值记录")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            weakSelf?.closeRefresh()
+            GYZLog(error)
+            
+            if weakSelf?.currPage == 1{//第一次加载失败，显示加载错误页面
+                weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                    weakSelf?.refresh()
+                    weakSelf?.hiddenEmptyView()
+                })
+            }
+        })
+    }
+    
+    
+    // MARK: - 上拉加载更多/下拉刷新
+    /// 下拉刷新
+    func refresh(){
+        currPage = 1
+        requestRecordDatas()
+    }
+    
+    /// 上拉加载更多
+    func loadMore(){
+        currPage += 1
+        requestRecordDatas()
+    }
+    
+    /// 关闭上拉/下拉刷新
+    func closeRefresh(){
+        if tableView.mj_header.isRefreshing{//下拉刷新
+            dataList.removeAll()
+            GYZTool.endRefresh(scorllView: tableView)
+        }else if tableView.mj_footer.isRefreshing{//上拉加载更多
+            GYZTool.endLoadMore(scorllView: tableView)
+        }
+    }
 }
 
 extension KZRechargeRecordVC: UITableViewDelegate,UITableViewDataSource{
@@ -49,7 +139,7 @@ extension KZRechargeRecordVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 12
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -57,8 +147,10 @@ extension KZRechargeRecordVC: UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: rechargeRecordCell) as! KZRecordCell
         
         cell.statusLab.isHidden = true
+        let model = dataList[indexPath.row]
         cell.titleLab.text = "充值"
-        cell.moneyLab.text = "+￥1000"
+        cell.moneyLab.text = "+" + model.pdr_amount!
+        cell.dateLab.text = model.pdr_add_time_text
         
         cell.selectionStyle = .none
         return cell
