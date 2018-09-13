@@ -40,6 +40,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        
+        return dealPayResult(url: url)
+    }
+    // NOTE: 9.0以后使用新API接口
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        
+        return dealPayResult(url: url)
+    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -73,5 +82,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.sharedManager().enableAutoToolbar = false
     }
 
+    ///支付宝/微信回调
+    func dealPayResult(url: URL) -> Bool{
+        
+        var result: Bool = true
+        if url.host == "safepay" {// 支付宝
+            //跳转支付宝钱包进行支付，处理支付结果
+            AlipaySDK.defaultService().processOrder(withPaymentResult: url, standbyCallback: { (resultDic) in
+                GYZLog(resultDic)
+                if let alipayjson = resultDic {
+                    /// 支付后回调
+                    AliPayManager.shared.showResult(result: alipayjson as! [String: Any])
+                }
+                
+            })
+            
+            //授权回调
+            AlipaySDK.defaultService().processAuth_V2Result(url, standbyCallback: { (resultDic) in
+                GYZLog(resultDic)
+                if let alipayjson = resultDic {
+                    /// 支付后回调
+                    AliPayManager.shared.showAuth_V2Result(result: alipayjson as! [String : Any])
+                }
+            })
+        }else{//微信
+            result = WXApi.handleOpen(url, delegate:WXApiManager.shared)
+        }
+        
+        return result
+    }
 }
 

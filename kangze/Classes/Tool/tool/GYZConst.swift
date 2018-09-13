@@ -98,7 +98,7 @@ let kJPushRefreshData = "kJPushRefreshData"
 ///支付宝回调数据 通知名称
 let kAliPaySuccessResult = "aliPaySuccessResult"
 /// 支付宝回调Scheme
-let kAliPayScheme = "LazyHuiUserAlipayAPI"
+let kAliPayScheme = "KangZeAlipayAPI"
 
 /// 存储选择小区信息的key
 let COMMUNITY_SELECTED = "community_selected"

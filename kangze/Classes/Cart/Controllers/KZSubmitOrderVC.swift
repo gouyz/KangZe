@@ -8,6 +8,7 @@
 
 import UIKit
 import MBProgressHUD
+import SwiftyJSON
 
 private let submitOrderCell = "submitOrderCell"
 private let submitOrderNoteCell = "submitOrderNoteCell"
@@ -50,7 +51,11 @@ class KZSubmitOrderVC: GYZBaseVC {
         tableView.snp.makeConstraints { (make) in
             make.left.right.equalTo(view)
             make.bottom.equalTo(submitBtn.snp.top)
-            make.top.equalTo(view)
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view)
+            }else{
+                make.top.equalTo(kTitleAndStateHeight)
+            }
         }
         
         requestOrderInfo()
@@ -87,8 +92,8 @@ class KZSubmitOrderVC: GYZBaseVC {
     }()
     /// 提交订单
     @objc func clickedSubmitBtn(){
-//        requestSubmitOrder()
-        showPayView()
+        requestSubmitOrder()
+//        showPayView()
     }
     
     func showPayView(){
@@ -106,7 +111,7 @@ class KZSubmitOrderVC: GYZBaseVC {
         
         switch index {
         case 1://余额支付
-            requestPayData(type: "yck_pay")
+            requestPayData(type: "yck")
         case 2:// 支付宝支付
             requestPayData(type: "alipay_native")
         case 3://微信支付
@@ -133,7 +138,7 @@ class KZSubmitOrderVC: GYZBaseVC {
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
             
-                weakSelf?.memberMoney = response["datas"]["store_cart_list"]["available_predeposit"].stringValue
+                weakSelf?.memberMoney = response["datas"]["available_predeposit"].stringValue
                 weakSelf?.vatHash = response["datas"]["vat_hash"].stringValue
                 weakSelf?.offpayHash = response["datas"]["address_api"]["offpay_hash"].stringValue
                 weakSelf?.offpayHashBatch = response["datas"]["address_api"]["offpay_hash_batch"].stringValue
@@ -191,15 +196,16 @@ class KZSubmitOrderVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("member_payment&op=pay_new", parameters: ["key": userDefaults.string(forKey: "key") ?? "","payment_code":type,"pay_sn":paySN],  success: { (response) in
+        GYZNetWork.requestNetwork("member_payment&op=pay_new", parameters: ["key": userDefaults.string(forKey: "key") ?? "","payment_code":type,"pay_sn":paySN],method : .get,   success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
                 if type == "alipay_native"{// 支付宝
-                    let payInfo: String = response["datas"].stringValue
-                }else if type == "yck_pay"{// 余额支付
+                    let payInfo: String = response["datas"]["signStr"].stringValue
+                    weakSelf?.goAliPay(orderInfo: payInfo)
+                }else if type == "yck"{// 余额支付
                     weakSelf?.clickedBackBtn()
                 }
                 
@@ -210,6 +216,33 @@ class KZSubmitOrderVC: GYZBaseVC {
         }, failture: { (error) in
             weakSelf?.hud?.hide(animated: true)
             GYZLog(error)
+        })
+    }
+    
+    /// 微信支付
+    func goWeChatPay(data: JSON){
+        let req = PayReq()
+        req.timeStamp = data["timestamp"].uInt32Value
+        req.partnerId = data["partnerid"].stringValue
+        req.package = data["package"].stringValue
+        req.nonceStr = data["noncestr"].stringValue
+        req.sign = data["sign"].stringValue
+        req.prepayId = data["prepayid"].stringValue
+        
+        WXApiManager.shared.payAlertController(self, request: req, paySuccess: { [weak self]  in
+            
+            self?.clickedBackBtn()
+        }) {
+            
+        }
+    }
+    /// 支付宝支付
+    func goAliPay(orderInfo: String){
+        
+        AliPayManager.shared.requestAliPay(orderInfo, paySuccess: { [weak self]  in
+            
+            self?.clickedBackBtn()
+            }, payFail: {
         })
     }
     /// 输入框内容改变

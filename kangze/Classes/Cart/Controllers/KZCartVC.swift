@@ -60,6 +60,11 @@ class KZCartVC: GYZBaseVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        cartModel = nil
+        totalMoney = 0.0
+        totalNum = 0
+        setBottomData()
+        tableView.reloadData()
         requestCartDatas()
     }
     

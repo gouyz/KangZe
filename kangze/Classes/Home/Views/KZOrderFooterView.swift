@@ -109,7 +109,6 @@ class KZOrderFooterView: UITableViewHeaderFooterView {
         btn.borderColor = kBlueFontColor
         btn.cornerRadius = kCornerRadius
         btn.borderWidth = klineWidth
-        btn.addTarget(self, action: #selector(clickedDeleteBtn), for: .touchUpInside)
         
         return btn
     }()
@@ -121,16 +120,7 @@ class KZOrderFooterView: UITableViewHeaderFooterView {
         btn.setTitleColor(kWhiteColor, for: .normal)
         btn.setTitle("去结算", for: .normal)
         btn.cornerRadius = kCornerRadius
-        btn.addTarget(self, action: #selector(clickedOperateBtn(btn:)), for: .touchUpInside)
         
         return btn
     }()
-    /// 去结算
-    @objc func clickedOperateBtn(btn: UIButton){
-        
-    }
-    /// 删除订单
-    @objc func clickedDeleteBtn(){
-        
-    }
 }

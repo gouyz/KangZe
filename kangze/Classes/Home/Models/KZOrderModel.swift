@@ -29,6 +29,8 @@ class KZOrderModel: LHSBaseModel {
     var state_desc : String?
     /// 付款方式
     var payment_name : String?
+    /// 支付订单编号
+    var pay_sn : String?
     
     /// 商品列表
     var goodList: [KZGoodsModel]?

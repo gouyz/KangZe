@@ -27,7 +27,7 @@
 //#endif
 
 //Alipay
-//#import <AlipaySDK/AlipaySDK.h>
+#import <AlipaySDK/AlipaySDK.h>
 
 /// 微信支付
 #import "WXApi.h"

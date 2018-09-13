@@ -38,6 +38,20 @@
 		0A715A5B213E55270006C01D /* KZSubmitOrderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A715A5A213E55270006C01D /* KZSubmitOrderFooterView.swift */; };
 		0A715A5D213E709F0006C01D /* KZSelectPayMethodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A715A5C213E709F0006C01D /* KZSelectPayMethodView.swift */; };
 		0A715A5F213E82860006C01D /* KZPosPayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A715A5E213E82860006C01D /* KZPosPayVC.swift */; };
+		0A717DDD2149ED160062420D /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0A717DDA2149ED150062420D /* AlipaySDK.bundle */; };
+		0A717DDE2149ED160062420D /* AliPayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A717DDB2149ED150062420D /* AliPayManager.swift */; };
+		0A717DDF2149ED160062420D /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DDC2149ED150062420D /* AlipaySDK.framework */; };
+		0A717DE12149ED6A0062420D /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DE02149ED6A0062420D /* libc++.tbd */; };
+		0A717DE32149ED740062420D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DE22149ED730062420D /* libz.tbd */; };
+		0A717DE52149ED7D0062420D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DE42149ED7D0062420D /* SystemConfiguration.framework */; };
+		0A717DE72149ED8D0062420D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DE62149ED8D0062420D /* CoreTelephony.framework */; };
+		0A717DE92149ED990062420D /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DE82149ED990062420D /* CoreText.framework */; };
+		0A717DEB2149EDA40062420D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DEA2149EDA40062420D /* QuartzCore.framework */; };
+		0A717DED2149EDB20062420D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DEC2149EDB20062420D /* CoreGraphics.framework */; };
+		0A717DEF2149EDBF0062420D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DEE2149EDBF0062420D /* UIKit.framework */; };
+		0A717DF12149EDC80062420D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DF02149EDC80062420D /* Foundation.framework */; };
+		0A717DF32149EDD00062420D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DF22149EDD00062420D /* CFNetwork.framework */; };
+		0A717DF52149EDDB0062420D /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A717DF42149EDDB0062420D /* CoreMotion.framework */; };
 		0A71F2FE2140BF4E001201C1 /* KZMyMoneyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A71F2FD2140BF4E001201C1 /* KZMyMoneyVC.swift */; };
 		0A71F3002140CBB0001201C1 /* KZMyShouRuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A71F2FF2140CBB0001201C1 /* KZMyShouRuVC.swift */; };
 		0A71F3022140CD14001201C1 /* KZMyShouRuHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A71F3012140CD14001201C1 /* KZMyShouRuHeaderView.swift */; };
@@ -240,6 +254,20 @@
 		0A715A5A213E55270006C01D /* KZSubmitOrderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZSubmitOrderFooterView.swift; sourceTree = "<group>"; };
 		0A715A5C213E709F0006C01D /* KZSelectPayMethodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZSelectPayMethodView.swift; sourceTree = "<group>"; };
 		0A715A5E213E82860006C01D /* KZPosPayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZPosPayVC.swift; sourceTree = "<group>"; };
+		0A717DDA2149ED150062420D /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
+		0A717DDB2149ED150062420D /* AliPayManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AliPayManager.swift; sourceTree = "<group>"; };
+		0A717DDC2149ED150062420D /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
+		0A717DE02149ED6A0062420D /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		0A717DE22149ED730062420D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		0A717DE42149ED7D0062420D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		0A717DE62149ED8D0062420D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		0A717DE82149ED990062420D /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		0A717DEA2149EDA40062420D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		0A717DEC2149EDB20062420D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		0A717DEE2149EDBF0062420D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		0A717DF02149EDC80062420D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		0A717DF22149EDD00062420D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		0A717DF42149EDDB0062420D /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		0A71F2FD2140BF4E001201C1 /* KZMyMoneyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyMoneyVC.swift; sourceTree = "<group>"; };
 		0A71F2FF2140CBB0001201C1 /* KZMyShouRuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyShouRuVC.swift; sourceTree = "<group>"; };
 		0A71F3012140CD14001201C1 /* KZMyShouRuHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyShouRuHeaderView.swift; sourceTree = "<group>"; };
@@ -413,7 +441,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A717DF52149EDDB0062420D /* CoreMotion.framework in Frameworks */,
+				0A717DF32149EDD00062420D /* CFNetwork.framework in Frameworks */,
+				0A717DF12149EDC80062420D /* Foundation.framework in Frameworks */,
+				0A717DEF2149EDBF0062420D /* UIKit.framework in Frameworks */,
+				0A717DED2149EDB20062420D /* CoreGraphics.framework in Frameworks */,
+				0A717DEB2149EDA40062420D /* QuartzCore.framework in Frameworks */,
+				0A717DE92149ED990062420D /* CoreText.framework in Frameworks */,
+				0A717DE72149ED8D0062420D /* CoreTelephony.framework in Frameworks */,
+				0A717DE52149ED7D0062420D /* SystemConfiguration.framework in Frameworks */,
+				0A717DE32149ED740062420D /* libz.tbd in Frameworks */,
+				0A717DE12149ED6A0062420D /* libc++.tbd in Frameworks */,
 				6917935A83D5DB7F5B41C00B /* Pods_kangze.framework in Frameworks */,
+				0A717DDF2149ED160062420D /* AlipaySDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,6 +474,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A717DD92149ED150062420D /* AliPay */ = {
+			isa = PBXGroup;
+			children = (
+				0A717DDA2149ED150062420D /* AlipaySDK.bundle */,
+				0A717DDB2149ED150062420D /* AliPayManager.swift */,
+				0A717DDC2149ED150062420D /* AlipaySDK.framework */,
+			);
+			path = AliPay;
+			sourceTree = "<group>";
+		};
 		0A75CD8B21351CCE009B87E6 = {
 			isa = PBXGroup;
 			children = (
@@ -869,6 +919,7 @@
 		0A75CE0B21351FCC009B87E6 /* 3rdLib */ = {
 			isa = PBXGroup;
 			children = (
+				0A717DD92149ED150062420D /* AliPay */,
 				0A75CE0C21351FCC009B87E6 /* TagsView */,
 				0A75CE1721351FCC009B87E6 /* PickerView */,
 				0A75CE2021351FCC009B87E6 /* ZCycleView */,
@@ -999,6 +1050,17 @@
 		405C503E173391734455178C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A717DF42149EDDB0062420D /* CoreMotion.framework */,
+				0A717DF22149EDD00062420D /* CFNetwork.framework */,
+				0A717DF02149EDC80062420D /* Foundation.framework */,
+				0A717DEE2149EDBF0062420D /* UIKit.framework */,
+				0A717DEC2149EDB20062420D /* CoreGraphics.framework */,
+				0A717DEA2149EDA40062420D /* QuartzCore.framework */,
+				0A717DE82149ED990062420D /* CoreText.framework */,
+				0A717DE62149ED8D0062420D /* CoreTelephony.framework */,
+				0A717DE42149ED7D0062420D /* SystemConfiguration.framework */,
+				0A717DE22149ED730062420D /* libz.tbd */,
+				0A717DE02149ED6A0062420D /* libc++.tbd */,
 				72D4A869173070C112BEA179 /* Pods_kangze.framework */,
 			);
 			name = Frameworks;
@@ -1123,6 +1185,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A717DDD2149ED160062420D /* AlipaySDK.bundle in Resources */,
 				0A75CE5221351FCC009B87E6 /* mineMenuData.plist in Resources */,
 				0A75CDA221351CD0009B87E6 /* LaunchScreen.storyboard in Resources */,
 				0A75CE7221351FCD009B87E6 /* Province.plist in Resources */,
@@ -1339,6 +1402,7 @@
 				0A75CE6D21351FCD009B87E6 /* HXTagsCell.m in Sources */,
 				0A48FCB6214270C0000B5C1F /* KZGoodsParamsView.swift in Sources */,
 				0A494BE321401D8C00F4E28C /* KZConfirmHeHuoRenVC.swift in Sources */,
+				0A717DDE2149ED160062420D /* AliPayManager.swift in Sources */,
 				0A740EA221475B0300392AC1 /* KZCartModel.swift in Sources */,
 				0A75CE6721351FCD009B87E6 /* GYZEmptyView.swift in Sources */,
 				0A71F31021410EEC001201C1 /* KZRechargeRecordVC.swift in Sources */,
@@ -1560,6 +1624,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 99YWG4PDCT;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AliPay",
+				);
 				INFOPLIST_FILE = kangze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1580,6 +1648,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 99YWG4PDCT;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AliPay",
+				);
 				INFOPLIST_FILE = kangze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
