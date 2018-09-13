@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setKeyboardManage()
         
         //微信注册
-        //        WXApi.registerApp(kWeChatAppID)
+        WXApi.registerApp(kWeChatAppID)
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = kWhiteColor

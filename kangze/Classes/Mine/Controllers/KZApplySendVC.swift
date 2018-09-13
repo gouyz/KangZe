@@ -8,6 +8,7 @@
 
 import UIKit
 import MBProgressHUD
+import SwiftyJSON
 
 class KZApplySendVC: GYZBaseVC {
     
@@ -22,6 +23,8 @@ class KZApplySendVC: GYZBaseVC {
     var freight: String = "0.00"
     /// 订单编号
     var orderNo: String = ""
+    /// 余额
+    var yuEMoney: String = "0"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +37,7 @@ class KZApplySendVC: GYZBaseVC {
         addIconView.addOnClickListener(target: self, action: #selector(didClickAddBtn))
         minusIconView.addOnClickListener(target: self, action: #selector(didClickMinusBtn))
         requestData()
+        requestYuEInfo()
     }
 
     override func didReceiveMemoryWarning() {
@@ -325,6 +329,7 @@ class KZApplySendVC: GYZBaseVC {
     
     func showPayView(){
         let payView = KZSelectPayMethodView()
+        payView.yuEMoneyLab.text = "可用余额：￥\(yuEMoney)"
         payView.selectPayTypeBlock = { [weak self](index) in
             
             payView.hide()
@@ -335,8 +340,103 @@ class KZApplySendVC: GYZBaseVC {
     /// 支付
     func dealPay(index: Int){
         
-        let vc = KZPosPayVC()
-        navigationController?.pushViewController(vc, animated: true)
+        switch index {
+        case 1://余额支付
+            requestPayData(type: "yck")
+        case 2:// 支付宝支付
+            requestPayData(type: "alipay_native")
+        case 3://微信支付
+            break
+        case 4://pos支付
+            let vc = KZRechargePosPayVC()
+            vc.paySN = orderNo
+            vc.isRecharge = false
+            navigationController?.pushViewController(vc, animated: true)
+        default:
+            break
+        }
+    }
+    
+    /// 获取支付参数
+    func requestPayData(type: String){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_payment&op=pay_send", parameters: ["key": userDefaults.string(forKey: "key") ?? "","payment_code":type,"pay_sn":orderNo],method : .get,   success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                if type == "alipay_native"{// 支付宝
+                    let payInfo: String = response["datas"]["signStr"].stringValue
+                    weakSelf?.goAliPay(orderInfo: payInfo)
+                }else if type == "yck"{// 余额支付
+                    weakSelf?.clickedBackBtn()
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    /// 微信支付
+    func goWeChatPay(data: JSON){
+        let req = PayReq()
+        req.timeStamp = data["timestamp"].uInt32Value
+        req.partnerId = data["partnerid"].stringValue
+        req.package = data["package"].stringValue
+        req.nonceStr = data["noncestr"].stringValue
+        req.sign = data["sign"].stringValue
+        req.prepayId = data["prepayid"].stringValue
+        
+        WXApiManager.shared.payAlertController(self, request: req, paySuccess: { [weak self]  in
+            
+            self?.clickedBackBtn()
+        }) {
+            
+        }
+    }
+    /// 支付宝支付
+    func goAliPay(orderInfo: String){
+        
+        AliPayManager.shared.requestAliPay(orderInfo, paySuccess: { [weak self]  in
+            
+            self?.clickedBackBtn()
+            }, payFail: {
+        })
+    }
+    
+    /// 获取余额数据
+    func requestYuEInfo(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        GYZNetWork.requestNetwork("member_index&op=my_asset&fields=predepoit", parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.yuEMoney = response["datas"]["predepoit"].stringValue
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            GYZLog(error)
+        })
     }
     
     ///获取数据

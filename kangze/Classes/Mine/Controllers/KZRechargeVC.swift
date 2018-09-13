@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MBProgressHUD
+import SwiftyJSON
 
 class KZRechargeVC: GYZBaseVC {
     
@@ -17,6 +19,9 @@ class KZRechargeVC: GYZBaseVC {
     var isHaveDian: Bool = false
     ///修改价格时输入第一位是否是0
     var isFirstZero: Bool = false
+    
+    /// 订单支付编号
+    var paySN: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -146,7 +151,42 @@ class KZRechargeVC: GYZBaseVC {
     }()
     /// 下一步
     @objc func clickedNextBtn(){
-        showPayView()
+        if (moneyField.text?.isEmpty)! {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入充值金额")
+            return
+        }
+        
+        requestRecharge()
+    }
+    
+    // 充值
+    func requestRecharge(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("recharge",parameters: ["pdr_amount":moneyField.text!,"key": userDefaults.string(forKey: "key") ?? "","client": "ios"],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.paySN = response["datas"]["pay_sn"].stringValue
+                
+                weakSelf?.showPayView()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
     
     func showPayView(){
@@ -166,8 +206,77 @@ class KZRechargeVC: GYZBaseVC {
     /// 支付
     func dealPay(index: Int){
         
-        let vc = KZPosPayVC()
-        navigationController?.pushViewController(vc, animated: true)
+        switch index {
+        case 1://余额支付
+            break
+        case 2:// 支付宝支付
+            requestPayData(type: "alipay_native")
+        case 3://微信支付
+            break
+        case 4://pos支付
+            let vc = KZRechargePosPayVC()
+            vc.paySN = paySN
+            navigationController?.pushViewController(vc, animated: true)
+        default:
+            break
+        }
+    }
+    
+    /// 获取支付参数
+    func requestPayData(type: String){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_payment_recharge&op=pd_pay", parameters: ["key": userDefaults.string(forKey: "key") ?? "","payment_code":type,"pay_sn":paySN],method : .get,   success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                if type == "alipay_native"{// 支付宝
+                    let payInfo: String = response["datas"]["signStr"].stringValue
+                    weakSelf?.goAliPay(orderInfo: payInfo)
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    /// 微信支付
+    func goWeChatPay(data: JSON){
+        let req = PayReq()
+        req.timeStamp = data["timestamp"].uInt32Value
+        req.partnerId = data["partnerid"].stringValue
+        req.package = data["package"].stringValue
+        req.nonceStr = data["noncestr"].stringValue
+        req.sign = data["sign"].stringValue
+        req.prepayId = data["prepayid"].stringValue
+        
+        WXApiManager.shared.payAlertController(self, request: req, paySuccess: { [weak self]  in
+            
+            self?.clickedBackBtn()
+        }) {
+            
+        }
+    }
+    /// 支付宝支付
+    func goAliPay(orderInfo: String){
+        
+        AliPayManager.shared.requestAliPay(orderInfo, paySuccess: { [weak self]  in
+            
+            self?.clickedBackBtn()
+            }, payFail: {
+        })
     }
     ///充值记录
     @objc func onClickedRecord(){

@@ -9,6 +9,37 @@
 import UIKit
 
 class KZFriendCircleCell: UITableViewCell {
+    
+    /// 填充数据
+    var dataModel : KZFriendCircleModel?{
+        didSet{
+            if let model = dataModel {
+                
+                userImgView.kf.setImage(with: URL.init(string: model.headpic!), placeholder: UIImage.init(named: "icon_header_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                nameLab.text = model.member_name
+                contentLab.text = model.content
+                
+                if model.imageList?.count > 0{
+                    imgViews.selectImgUrls = model.imageList
+                    let rowIndex = ceil(CGFloat.init((imgViews.selectImgUrls?.count)!) / CGFloat.init(imgViews.perRowItemCount))//向上取整
+                    
+                    imgViews.snp.updateConstraints({ (make) in
+                        
+                        make.height.equalTo(imgViews.imgHight * rowIndex + kMargin * (rowIndex - 1))
+                    })
+                }else{
+                    imgViews.isHidden = false
+                    imgViews.snp.updateConstraints({ (make) in
+                        
+                        make.height.equalTo(0)
+                    })
+                }
+
+                
+                timeLab.text = model.add_time
+            }
+        }
+    }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -84,7 +115,6 @@ class KZFriendCircleCell: UITableViewCell {
         let lab = UILabel()
         lab.textColor = kBlackFontColor
         lab.font = k15Font
-        lab.text = "小胖子"
         
         return lab
     }()
@@ -94,7 +124,6 @@ class KZFriendCircleCell: UITableViewCell {
         lab.textColor = kHeightGaryFontColor
         lab.font = k13Font
         lab.numberOfLines = 0
-        lab.text = "益生菌对我们的好处人所共知，益生菌对我们的好处人所共知，益生菌对我们的好处人所共知，益生菌对我们的好处人所共知，益生菌对我们的好处人所共知"
         
         return lab
     }()

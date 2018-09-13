@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let friendCircleCell = "friendCircleCell"
 
 class KZFriendCircleVC: GYZBaseVC {
+    
+    var currPage : Int = 1
+    var dataList: [KZFriendCircleModel] = [KZFriendCircleModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +29,7 @@ class KZFriendCircleVC: GYZBaseVC {
             make.edges.equalTo(0)
         }
         
+        requestDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -46,12 +51,106 @@ class KZFriendCircleVC: GYZBaseVC {
         table.rowHeight = UITableViewAutomaticDimension
         
         table.register(KZFriendCircleCell.self, forCellReuseIdentifier: friendCircleCell)
-        
+        weak var weakSelf = self
+        ///添加下拉刷新
+        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
+            weakSelf?.refresh()
+        })
+        //        ///添加上拉加载更多
+        //        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
+        //            weakSelf?.loadMore()
+        //        })
         return table
     }()
+    
+    ///获取数据
+    func requestDatas(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("friend_message&op=message_list",parameters: [/*"curpage":currPage,"page":kPageSize,*/"key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            weakSelf?.closeRefresh()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["list"].array else { return }
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZFriendCircleModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content: "暂无信息")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            weakSelf?.closeRefresh()
+            GYZLog(error)
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestDatas()
+                weakSelf?.hiddenEmptyView()
+            })
+            //            if weakSelf?.currPage == 1{//第一次加载失败，显示加载错误页面
+            //                weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+            //                    weakSelf?.refresh()
+            //                    weakSelf?.hiddenEmptyView()
+            //                })
+            //            }
+        })
+    }
+    
+    
+    // MARK: - 上拉加载更多/下拉刷新
+    /// 下拉刷新
+    func refresh(){
+        currPage = 1
+        requestDatas()
+    }
+    
+    //    /// 上拉加载更多
+    //    func loadMore(){
+    //        currPage += 1
+    //        requestDatas()
+    //    }
+    
+    /// 关闭上拉/下拉刷新
+    func closeRefresh(){
+        if tableView.mj_header.isRefreshing{//下拉刷新
+            dataList.removeAll()
+            GYZTool.endRefresh(scorllView: tableView)
+        }
+        //        else if tableView.mj_footer.isRefreshing{//上拉加载更多
+        //            GYZTool.endLoadMore(scorllView: tableView)
+        //        }
+    }
     /// add
     @objc func onClickedAdd(){
         let vc = KZPublicFriendCircleVC()
+        vc.resultBlock = {[weak self] () in
+            self?.dataList.removeAll()
+            self?.tableView.reloadData()
+            self?.refresh()
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -62,21 +161,14 @@ extension KZFriendCircleVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: friendCircleCell) as! KZFriendCircleCell
         
-        cell.imgViews.selectImgUrls = ["icon_goods_default","icon_goods_default","icon_goods_default"]
-        let rowIndex = ceil(CGFloat.init((cell.imgViews.selectImgUrls?.count)!) / CGFloat.init(cell.imgViews.perRowItemCount))//向上取整
-        
-        //        cell.imgViews.isHidden = false
-        cell.imgViews.snp.updateConstraints({ (make) in
-            
-            make.height.equalTo(cell.imgViews.imgHight * rowIndex + kMargin * (rowIndex - 1))
-        })
+        cell.dataModel = dataList[indexPath.row]
         
         cell.selectionStyle = .none
         return cell

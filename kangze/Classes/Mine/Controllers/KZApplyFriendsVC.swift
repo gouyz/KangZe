@@ -95,6 +95,10 @@ class KZApplyFriendsVC: GYZBaseVC {
     }()
     /// 分享
     @objc func clickedSharedBtn(){
+        if qrCodeConment.isEmpty {
+            MBProgressHUD.showAutoDismissHUD(message: "您还不是代理型会员，无法邀请他人")
+            return
+        }
         showShareView()
     }
     
@@ -109,10 +113,20 @@ class KZApplyFriendsVC: GYZBaseVC {
         mmShareSheet.callBack = { [weak self](handler) ->() in
             
             if handler != "cancel" {// 取消
-                
+                self?.weChatShared(tag: handler)
             }
         }
         mmShareSheet.present()
+    }
+    /// 微信分享
+    func weChatShared(tag: String){
+        //发送给好友还是朋友圈（默认好友）
+        var scene = WXSceneSession
+        if tag == kWXMomentShared {//朋友圈
+            scene = WXSceneTimeline
+        }
+        
+        WXApiManager.shared.sendLinkURL(qrCodeConment, title: "邀请好友", description: "邀请好友", thumbImage: UIImage.init(named: "icon_logo")!, scene: scene,sender: self)
     }
     
     /// 邀请好友

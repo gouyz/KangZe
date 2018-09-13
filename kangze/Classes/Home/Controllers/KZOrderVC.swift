@@ -178,8 +178,51 @@ class KZOrderVC: GYZBaseVC {
         showPayView(tag: tag)
     }
     /// 删除订单
-    @objc func clickedDeleteBtn(){
+    @objc func clickedDeleteBtn(btn: UIButton){
+        let tag = btn.tag
+        showDeleteOrder(tag: tag)
+    }
+    func showDeleteOrder(tag: Int){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: "删除订单", message: "确定要删除该订单吗?", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
+            
+            if index != cancelIndex{
+                weakSelf?.requestDeleteOrder(index: tag)
+            }
+        }
+    }
+    /// 删除订单
+    func requestDeleteOrder(index : Int){
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_order&op=order_delete", parameters: ["key": userDefaults.string(forKey: "key") ?? "","order_id":dataList[index].order_id!],   success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.dataList.remove(at: index)
+                weakSelf?.tableView.reloadData()
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content: "暂无订单信息")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
     
     func showPayView(tag: Int){
@@ -204,6 +247,13 @@ class KZOrderVC: GYZBaseVC {
             break
         case 4://pos支付
             let vc = KZPosPayVC()
+            vc.paySN = dataList[tag].pay_sn!
+            vc.resultBlock = {[weak self] () in
+                
+                self?.dataList.removeAll()
+                self?.tableView.reloadData()
+                self?.requestOrderDatas()
+            }
             navigationController?.pushViewController(vc, animated: true)
         default:
             break
@@ -229,6 +279,7 @@ class KZOrderVC: GYZBaseVC {
                     let payInfo: String = response["datas"]["signStr"].stringValue
                     weakSelf?.goAliPay(orderInfo: payInfo,index:index)
                 }else if type == "yck"{// 余额支付
+                    weakSelf?.requestYuEInfo()
                     weakSelf?.dealPayBack(index: index,status: "20")
                 }
                 
@@ -324,7 +375,7 @@ extension KZOrderVC: UITableViewDelegate,UITableViewDataSource{
         footerView.operatorBtn.addTarget(self, action: #selector(clickedOperateBtn(btn:)), for: .touchUpInside)
         
         footerView.deleteBtn.tag = section
-        footerView.deleteBtn.addTarget(self, action: #selector(clickedDeleteBtn), for: .touchUpInside)
+        footerView.deleteBtn.addTarget(self, action: #selector(clickedDeleteBtn(btn:)), for: .touchUpInside)
         
         return footerView
     }

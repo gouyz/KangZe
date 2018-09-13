@@ -118,6 +118,7 @@ class KZSubmitOrderVC: GYZBaseVC {
             break
         case 4://pos支付
             let vc = KZPosPayVC()
+            vc.paySN = paySN
             navigationController?.pushViewController(vc, animated: true)
         default:
             break

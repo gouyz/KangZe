@@ -16,7 +16,6 @@ class KZHomeVC: KZCommonNavBarVC {
     var dataModel: KZHomeModel?
     let titleArr: [String] = ["本周热销","合伙人套餐","续货套餐"]
     let iconArr: [String] = ["icon_home_hot_sale","icon_home_hehuo","icon_home_xuhuo"]
-    var goodsList: [KZGoodsModel] = [KZGoodsModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,6 +130,13 @@ class KZHomeVC: KZCommonNavBarVC {
         let vc = KZMessageVC()
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    /// 商品详情
+    func goGoodsDetail(index: Int){
+        let vc = KZGoodsDetailVC()
+        vc.goodsId = (dataModel?.goodList![index].goods_id)!
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 extension KZHomeVC: UITableViewDelegate,UITableViewDataSource{
     
@@ -164,6 +170,10 @@ extension KZHomeVC: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
         return UIView()
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        goGoodsDetail(index: indexPath.row)
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

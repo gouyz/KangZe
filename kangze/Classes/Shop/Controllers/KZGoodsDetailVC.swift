@@ -48,6 +48,7 @@ class KZGoodsDetailVC: GYZBaseVC {
         
         bottomView.cartBtn.addTarget(self, action: #selector(onClickedAddCart), for: .touchUpInside)
         bottomView.shopBtn.addTarget(self, action: #selector(onClickedGoShop), for: .touchUpInside)
+        bottomView.buyBtn.addTarget(self, action: #selector(onClickedBuyGoods), for: .touchUpInside)
         
         requestDetailDatas()
         
@@ -189,6 +190,50 @@ class KZGoodsDetailVC: GYZBaseVC {
         }
     }
     
+    /// 立即购买
+    @objc func onClickedBuyGoods(){
+        
+        if !userDefaults.bool(forKey: kIsLoginTagKey) {
+            showLogin()
+            return
+        }
+        /// 普通商品 ：都可以买（不限制）
+        /// 合伙人商品  :实名认证
+        /// 续货型套餐 :购买了合伙人套餐+实名认证
+        if dataModel?.goods_type == "2" {//合伙人套餐
+            if dataModel?.member!["is_shehe"] == "0"{
+                showProfile()
+                return
+            }
+        }else if dataModel?.goods_type == "3" {//续货型套餐
+            if dataModel?.member!["is_buydl"] == "0" || dataModel?.member!["is_shehe"] == "0"{
+                showProfile()
+                return
+            }
+        }
+        
+        let vc = KZSubmitOrderVC()
+        vc.cartIds = (dataModel?.goods_id)! + "|1"
+        vc.totalNum = 1
+        navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    /// 显示完善个人信息
+    func showProfile(){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: "完善个人信息", message: "请前往个人中心完善个人信息", cancleTitle: "取消", viewController: self, buttonTitles: "前往") { (index) in
+            
+            if index != cancelIndex{
+                weakSelf?.goConfirmProfile()
+            }
+        }
+    }
+    /// 完善个人信息
+    func goConfirmProfile(){
+        let vc = KZConfirmHeHuoRenVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func showCancleFavourite(){
         weak var weakSelf = self
         GYZAlertViewTools.alertViewTools.showAlert(title: "取消收藏", message: "确定要取消收藏吗?", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
@@ -222,6 +267,20 @@ class KZGoodsDetailVC: GYZBaseVC {
         if !userDefaults.bool(forKey: kIsLoginTagKey) {
             showLogin()
             return
+        }
+        /// 普通商品 ：都可以买（不限制）
+        /// 合伙人商品  :实名认证
+        /// 续货型套餐 :购买了合伙人套餐+实名认证
+        if dataModel?.goods_type == "2" {//合伙人套餐
+            if dataModel?.member!["is_shehe"] == "0"{
+                showProfile()
+                return
+            }
+        }else if dataModel?.goods_type == "3" {//续货型套餐
+            if dataModel?.member!["is_buydl"] == "0" || dataModel?.member!["is_shehe"] == "0"{
+                showProfile()
+                return
+            }
         }
         if Int((dataModel?.goods_storage)!) > 0 {
             requestAddCart()

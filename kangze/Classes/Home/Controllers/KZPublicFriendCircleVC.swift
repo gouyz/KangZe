@@ -12,14 +12,19 @@ import DKImagePickerController
 
 class KZPublicFriendCircleVC: GYZBaseVC {
     
+    /// 选择结果回调
+    var resultBlock:(() -> Void)?
+    
     ///txtView 提示文字
     let placeHolder = "这一刻的想法..."
     /// 选择的图片
     var selectImgs: [UIImage] = []
     /// 最大选择图片数量
-    var maxImgCount: Int = 9
+    var maxImgCount: Int = 6
     // 内容
     var content: String = ""
+    // 上传图URL 多个图片用英文逗号隔开
+    var imgsUrl: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -153,9 +158,86 @@ class KZPublicFriendCircleVC: GYZBaseVC {
     
     /// 发表
     @objc func onClickRightBtn(){
-        
+        if content.isEmpty {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入内容")
+            return
+        }
+        createHUD(message: "加载中...")
+        if selectImgs.count > 0 {
+            for (index,item) in selectImgs.enumerated(){
+                requestUpdateImg(img: item, fileName: "friendCircle\(index).png",index:index)
+            }
+        }else{
+            requestPublicCircle()
+        }
     }
     
+    /// 上传凭证
+    func requestUpdateImg(img: UIImage,fileName: String,index: Int){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        let imgParam: ImageFileUploadParam = ImageFileUploadParam()
+        imgParam.name = "image"
+        imgParam.fileName = fileName
+        imgParam.mimeType = "image/png"
+        imgParam.data = UIImageJPEGRepresentation(img, 0.5)
+        
+        GYZNetWork.uploadImageRequest("upload&op=friend_message_upload", uploadParam: [imgParam], success: { (response) in
+            
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.imgsUrl += response["datas"]["img"].stringValue + ","
+                if index + 1 == weakSelf?.selectImgs.count{// 所有图片上传完成
+                    weakSelf?.requestPublicCircle()
+                }
+                
+            }else{
+                weakSelf?.hud?.hide(animated: true)
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    /// 发表朋友圈
+    func requestPublicCircle(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        if imgsUrl.count > 0 {
+            imgsUrl = imgsUrl.subString(start: 0, length: imgsUrl.count - 1)
+        }
+        
+        GYZNetWork.requestNetwork("friend_message&op=add_message", parameters: ["key": userDefaults.string(forKey: "key") ?? "","content":content,"image":imgsUrl],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                if weakSelf?.resultBlock != nil{
+                    weakSelf?.resultBlock!()
+                }
+                weakSelf?.clickedBackBtn()
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["msg"].stringValue)
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
 }
 
 extension KZPublicFriendCircleVC : UIImagePickerControllerDelegate,UINavigationControllerDelegate

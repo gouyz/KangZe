@@ -108,7 +108,7 @@ let APPID = "1387703257"
 /// 极光推送AppKey
 let kJPushAppKey = "62f70fe9bed6d366b2c740a8"
 /// 微信APPID
-let kWeChatAppID = "wx91a992eb1ae1737e"
+let kWeChatAppID = "wx8daa8b13e25c9b0a"
 
 
 /// 无网络提示
@@ -213,15 +213,16 @@ let kSharedCards = [
             "title": "微信朋友圈",
             "icon": "icon_wechat_circle",
             "handler": kWXMomentShared
-        ],[
-            "title": "QQ好友",
-            "icon": "icon_qq",
-            "handler": kQQFriendShared
-        ],[
-            "title": "QQ空间",
-            "icon": "icon_qzone",
-            "handler": kQZoneShared
         ]
+//        ,[
+//            "title": "QQ好友",
+//            "icon": "icon_qq",
+//            "handler": kQQFriendShared
+//        ],[
+//            "title": "QQ空间",
+//            "icon": "icon_qzone",
+//            "handler": kQZoneShared
+//        ]
     ]
 ]
 

@@ -1,8 +1,8 @@
 //
-//  KZPosPayVC.swift
+//  KZRechargePosPayVC.swift
 //  kangze
-//  pos机核单
-//  Created by gouyz on 2018/9/4.
+//  充值 POS 支付凭证
+//  Created by gouyz on 2018/9/13.
 //  Copyright © 2018年 gyz. All rights reserved.
 //
 
@@ -10,10 +10,7 @@ import UIKit
 import MBProgressHUD
 import DKImagePickerController
 
-class KZPosPayVC: GYZBaseVC {
-    
-    /// 选择结果回调
-    var resultBlock:(() -> Void)?
+class KZRechargePosPayVC: GYZBaseVC {
     
     /// 选择的图片
     var selectImgs: [UIImage] = []
@@ -21,16 +18,21 @@ class KZPosPayVC: GYZBaseVC {
     var maxImgCount: Int = 1
     /// 订单支付编号
     var paySN: String = ""
+    /// 加密的充值编号
+    var pay_sn_encode: String = ""
     
-    var dataModel: KZPosDataModel?
-
+    /// 是否是充值
+    var isRecharge: Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.navigationItem.title = "pos机核单"
         self.view.backgroundColor = kWhiteColor
         setUpUI()
-        
+        if !isRecharge {
+            totalDesLab.text = "支付运费："
+        }
         requestPosInfo()
     }
     
@@ -47,10 +49,7 @@ class KZPosPayVC: GYZBaseVC {
         
         contentView.addSubview(nameDesLab)
         contentView.addSubview(nameLab)
-        contentView.addSubview(numberDesLab)
-        contentView.addSubview(numberLab)
         contentView.addSubview(lineView)
-        contentView.addSubview(lineView1)
         contentView.addSubview(totalDesLab)
         contentView.addSubview(totalLab)
         contentView.addSubview(lineView2)
@@ -94,21 +93,9 @@ class KZPosPayVC: GYZBaseVC {
             make.top.equalTo(nameDesLab.snp.bottom)
             make.height.equalTo(klineWidth)
         }
-        numberDesLab.snp.makeConstraints { (make) in
-            make.left.right.height.equalTo(nameDesLab)
-            make.top.equalTo(lineView.snp.bottom)
-        }
-        numberLab.snp.makeConstraints { (make) in
-            make.left.right.height.equalTo(nameLab)
-            make.top.equalTo(numberDesLab)
-        }
-        lineView1.snp.makeConstraints { (make) in
-            make.left.right.height.equalTo(lineView)
-            make.top.equalTo(numberDesLab.snp.bottom)
-        }
         totalDesLab.snp.makeConstraints { (make) in
             make.left.right.height.equalTo(nameDesLab)
-            make.top.equalTo(lineView1.snp.bottom)
+            make.top.equalTo(lineView.snp.bottom)
         }
         totalLab.snp.makeConstraints { (make) in
             make.left.right.height.equalTo(nameLab)
@@ -140,21 +127,20 @@ class KZPosPayVC: GYZBaseVC {
     lazy var scrollView: UIScrollView = UIScrollView()
     /// 内容View
     lazy var contentView: UIView = UIView()
-    /// 商品名称
+    /// 订单编号
     lazy var nameDesLab : UILabel = {
         let lab = UILabel()
         lab.textColor = kBlackFontColor
         lab.font = k15Font
-        lab.text = "商品名称："
+        lab.text = "订单编号："
         
         return lab
     }()
-    /// 商品名称
+    /// 订单编号
     lazy var nameLab : UILabel = {
         let lab = UILabel()
         lab.textColor = kBlackFontColor
-        lab.font = k12Font
-        lab.numberOfLines = 2
+        lab.font = k15Font
         
         
         return lab
@@ -166,41 +152,16 @@ class KZPosPayVC: GYZBaseVC {
         
         return line
     }()
-    /// 商品数量
-    lazy var numberDesLab : UILabel = {
-        let lab = UILabel()
-        lab.textColor = kBlackFontColor
-        lab.font = k15Font
-        lab.text = "商品数量："
-        
-        return lab
-    }()
-    /// 商品数量
-    lazy var numberLab : UILabel = {
-        let lab = UILabel()
-        lab.textColor = kBlackFontColor
-        lab.font = k15Font
-        
-        
-        return lab
-    }()
-    /// 线
-    lazy var lineView1: UIView = {
-        let line = UIView()
-        line.backgroundColor = kGrayLineColor
-        
-        return line
-    }()
-    /// 商品总额
+    /// 订单总额
     lazy var totalDesLab : UILabel = {
         let lab = UILabel()
         lab.textColor = kBlackFontColor
         lab.font = k15Font
-        lab.text = "商品总额："
+        lab.text = "账户充值："
         
         return lab
     }()
-    /// 商品总额
+    /// 订单总额
     lazy var totalLab : UILabel = {
         let lab = UILabel()
         lab.textColor = kBlackFontColor
@@ -257,16 +218,22 @@ class KZPosPayVC: GYZBaseVC {
         
         weak var weakSelf = self
         createHUD(message: "加载中...")
+        var method: String = "member_payment_recharge&op=pay_send"
+        if isRecharge{
+            method = "member_payment_recharge&op=pd_pay"
+        }
         
-        GYZNetWork.requestNetwork("member_payment&op=pay_new", parameters: ["key": userDefaults.string(forKey: "key") ?? "","pay_sn":paySN,"is_html":"1","payment_code":" pos"],method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork(method, parameters: ["key": userDefaults.string(forKey: "key") ?? "","pay_sn":paySN,"is_html":"1","payment_code":" pos"],method : .get,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
-                guard let data = response["datas"].dictionaryObject else { return }
-                weakSelf?.dataModel = KZPosDataModel.init(dict: data)
-                weakSelf?.setData()
+                let data = response["datas"]
+                weakSelf?.paySN = data["pay_sn"].stringValue
+                weakSelf?.pay_sn_encode = data["pay_sn_encode"].stringValue
+                weakSelf?.totalLab.text = "￥" + data["total"].stringValue
+                weakSelf?.nameLab.text = weakSelf?.paySN
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }
@@ -275,20 +242,6 @@ class KZPosPayVC: GYZBaseVC {
             weakSelf?.hud?.hide(animated: true)
             GYZLog(error)
         })
-    }
-    
-    func setData(){
-        var goodsName: String = ""
-        var num: Int = 0
-        for item in (dataModel?.goodList)! {
-            goodsName += item.goods_name! + ","
-            num += Int(item.goods_num!)!
-        }
-        if goodsName.count > 0 {
-            nameLab.text = goodsName.subString(start: 0, length: goodsName.count - 1)
-        }
-        numberLab.text = "\(num)"
-        totalLab.text = "￥" + (dataModel?.total)!
     }
     
     /// 上传凭证
@@ -330,13 +283,17 @@ class KZPosPayVC: GYZBaseVC {
         }
         
         weak var weakSelf = self
+        var method: String = "member_payment_recharge&op=pay_send"
+        if isRecharge{
+            method = "member_payment_recharge&op=pd_pay"
+        }
         
-        GYZNetWork.requestNetwork("member_payment&op=pay_new", parameters: ["key": userDefaults.string(forKey: "key") ?? "","pay_sn":paySN,"pas_sn_encode":(dataModel?.pas_sn_encode)!,"payment_code":" pos","pos_pay_img":url],method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork(method, parameters: ["key": userDefaults.string(forKey: "key") ?? "","pay_sn":paySN,"pay_sn_encode":pay_sn_encode,"payment_code":" pos","pos_pay_img":url],method : .get,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
-                weakSelf?.dealResult()
+                weakSelf?.clickedBackBtn()
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"].stringValue)
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
@@ -346,14 +303,6 @@ class KZPosPayVC: GYZBaseVC {
             weakSelf?.hud?.hide(animated: true)
             GYZLog(error)
         })
-    }
-    
-    func dealResult(){
-        if resultBlock != nil{
-            resultBlock!()
-        }else{
-            _ = navigationController?.popToRootViewController(animated: true)
-        }
     }
     
     ///打开相机
@@ -408,7 +357,7 @@ class KZPosPayVC: GYZBaseVC {
     
 }
 
-extension KZPosPayVC : UIImagePickerControllerDelegate,UINavigationControllerDelegate
+extension KZRechargePosPayVC : UIImagePickerControllerDelegate,UINavigationControllerDelegate
 {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
@@ -451,7 +400,7 @@ extension KZPosPayVC : UIImagePickerControllerDelegate,UINavigationControllerDel
     }
 }
 
-extension KZPosPayVC :LHSAddPhotoViewDelegate
+extension KZRechargePosPayVC :LHSAddPhotoViewDelegate
 {
     ///MARK LHSAddPhotoViewDelegate
     ///添加图片
@@ -472,3 +421,4 @@ extension KZPosPayVC :LHSAddPhotoViewDelegate
         resetAddImgView()
     }
 }
+
