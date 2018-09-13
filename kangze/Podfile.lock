@@ -10,6 +10,7 @@ PODS:
   - Kingfisher (4.2.0)
   - MBProgressHUD (1.0.0)
   - MJRefresh (3.1.15)
+  - PYSearch (0.8.6)
   - SKPhotoBrowser (4.1.1)
   - SnapKit (4.0.0)
   - SwiftyJSON (3.1.4)
@@ -23,6 +24,7 @@ DEPENDENCIES:
   - Kingfisher (~> 4.2.0)
   - MBProgressHUD (~> 1.0.0)
   - MJRefresh
+  - PYSearch
   - SKPhotoBrowser
   - SnapKit (~> 4.0.0)
   - SwiftyJSON
@@ -37,6 +39,7 @@ SPEC REPOS:
     - Kingfisher
     - MBProgressHUD
     - MJRefresh
+    - PYSearch
     - SKPhotoBrowser
     - SnapKit
     - SwiftyJSON
@@ -50,11 +53,12 @@ SPEC CHECKSUMS:
   Kingfisher: 9ee7e788d8ba07c3f21ce0d43f33cec310a4f781
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   MJRefresh: 9af70f5f9327a2cf87f0fb5929f35fcc2fa638ea
+  PYSearch: df20532006885d1c45c8f18dc41ca172e05e755a
   SKPhotoBrowser: aa02de50f56d80fac23f543e40847af6b360e4b3
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   WechatOpenSDK: 0ee07a8d492299d3e47372a33da5af26524a7576
 
-PODFILE CHECKSUM: 80f29ebdc4821f9b84ec24f3e0a474ccc73b2e12
+PODFILE CHECKSUM: 9d57cf1c532f7fe0f18c87d3cc3f831e6bc9b62d
 
 COCOAPODS: 1.5.3
