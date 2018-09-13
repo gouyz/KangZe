@@ -7,10 +7,17 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let myBankCell = "myBankCell"
 
 class KZMyBankVC: GYZBaseVC {
+    
+    /// 选择结果回调
+    var resultBlock:((_ model: KZBankModel) -> Void)?
+    
+    var dataList:[KZBankModel] = [KZBankModel]()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +28,7 @@ class KZMyBankVC: GYZBaseVC {
         
         setUpUI()
         emptyViewBg.isHidden = true
-//        tableView.isHidden = true
+        requestBankCardDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -106,6 +113,9 @@ class KZMyBankVC: GYZBaseVC {
     /// 添加银行卡
     @objc func onClickedAdd(){
         let vc = KZAddBankCardVC()
+        vc.resultBlock = {[weak self] () in
+            self?.requestBankCardDatas()
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 懒加载UITableView
@@ -120,6 +130,55 @@ class KZMyBankVC: GYZBaseVC {
         return table
     }()
     
+    ///获取银行卡数据
+    func requestBankCardDatas(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_card&op=card_list",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"]["card_list"].array else { return }
+                
+                weakSelf?.dataList.removeAll()
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = KZBankModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.emptyViewBg.isHidden = true
+                    weakSelf?.tableView.isHidden = false
+                    weakSelf?.tableView.reloadData()
+                }else{
+                    ///显示空页面
+                    weakSelf?.emptyViewBg.isHidden = false
+                    weakSelf?.tableView.isHidden = true
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            ///显示空页面
+            weakSelf?.emptyViewBg.isHidden = false
+            weakSelf?.tableView.isHidden = true
+        })
+    }
 }
 
 extension KZMyBankVC: UITableViewDelegate,UITableViewDataSource{
@@ -128,13 +187,14 @@ extension KZMyBankVC: UITableViewDelegate,UITableViewDataSource{
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 18
+        return dataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: myBankCell) as! KZMyBankCell
         
+        cell.dataModel = dataList[indexPath.row]
         cell.selectionStyle = .none
         return cell
     }
@@ -145,6 +205,12 @@ extension KZMyBankVC: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
         return UIView()
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if resultBlock != nil{
+            resultBlock!(dataList[indexPath.row])
+        }
+        clickedBackBtn()
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

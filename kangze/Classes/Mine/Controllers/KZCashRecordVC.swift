@@ -44,15 +44,6 @@ class KZCashRecordVC: GYZBaseVC {
         
         table.register(KZRecordCell.self, forCellReuseIdentifier: cashRecordCell)
         
-        weak var weakSelf = self
-        ///添加下拉刷新
-        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
-            weakSelf?.refresh()
-        })
-        ///添加上拉加载更多
-        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
-            weakSelf?.loadMore()
-        })
         return table
     }()
     
@@ -66,10 +57,9 @@ class KZCashRecordVC: GYZBaseVC {
         weak var weakSelf = self
         showLoadingView()
         
-        GYZNetWork.requestNetwork("member_fund&op=pdcashlist",parameters: ["curpage":currPage,"page":kPageSize,"key": userDefaults.string(forKey: "key") ?? "","type": status],method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork("member_fund&op=pdcashlist",parameters: ["key": userDefaults.string(forKey: "key") ?? "","type": status],method : .get,  success: { (response) in
             
             weakSelf?.hiddenLoadingView()
-            weakSelf?.closeRefresh()
             GYZLog(response)
             
             if response["code"].intValue == kQuestSuccessTag{//请求成功
@@ -97,41 +87,15 @@ class KZCashRecordVC: GYZBaseVC {
         }, failture: { (error) in
             
             weakSelf?.hiddenLoadingView()
-            weakSelf?.closeRefresh()
             GYZLog(error)
             
-            if weakSelf?.currPage == 1{//第一次加载失败，显示加载错误页面
-                weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
-                    weakSelf?.refresh()
-                    weakSelf?.hiddenEmptyView()
-                })
-            }
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestRecordDatas()
+                weakSelf?.hiddenEmptyView()
+            })
         })
     }
-    
-    
-    // MARK: - 上拉加载更多/下拉刷新
-    /// 下拉刷新
-    func refresh(){
-        currPage = 1
-        requestRecordDatas()
-    }
-    
-    /// 上拉加载更多
-    func loadMore(){
-        currPage += 1
-        requestRecordDatas()
-    }
-    
-    /// 关闭上拉/下拉刷新
-    func closeRefresh(){
-        if tableView.mj_header.isRefreshing{//下拉刷新
-            dataList.removeAll()
-            GYZTool.endRefresh(scorllView: tableView)
-        }else if tableView.mj_footer.isRefreshing{//上拉加载更多
-            GYZTool.endLoadMore(scorllView: tableView)
-        }
-    }
+   
 }
 
 extension KZCashRecordVC: UITableViewDelegate,UITableViewDataSource{

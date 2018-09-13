@@ -10,6 +10,11 @@ import UIKit
 import MBProgressHUD
 
 class KZAddBankCardVC: GYZBaseVC {
+    /// 选择结果回调
+    var resultBlock:(() -> Void)?
+    
+    /// 只能是指定的4个银行
+    var isNeedBank: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +86,7 @@ class KZAddBankCardVC: GYZBaseVC {
         }
         noteLab.snp.makeConstraints { (make) in
             make.left.right.equalTo(saveBtn)
-            make.height.equalTo(30)
+            make.height.equalTo(kTitleHeight)
             make.top.equalTo(lineView2.snp.bottom)
         }
         saveBtn.snp.makeConstraints { (make) in
@@ -91,6 +96,7 @@ class KZAddBankCardVC: GYZBaseVC {
             make.height.equalTo(kUIButtonHeight)
         }
         
+        cardNoField.delegate = self
     }
     
     override func didReceiveMemoryWarning() {
@@ -170,14 +176,13 @@ class KZAddBankCardVC: GYZBaseVC {
     }()
     
     /// 图标
-    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_bank_jianse"))
+    lazy var iconView: UIImageView = UIImageView()
     
     /// 银行名称
     lazy var bankNameLab : UILabel = {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlackFontColor
-        lab.text = "建设银行"
         
         return lab
     }()
@@ -192,6 +197,7 @@ class KZAddBankCardVC: GYZBaseVC {
         let lab = UILabel()
         lab.font = k13Font
         lab.textColor = kRedFontColor
+        lab.numberOfLines = 2
         lab.text = "目前仅支持建设银行、农业银行、中国银行、交通银行"
         
         return lab
@@ -212,20 +218,97 @@ class KZAddBankCardVC: GYZBaseVC {
     /// 确定
     @objc func clickedSaveBtn(){
         
+        //除去前后空格,防止只输入空格的情况
+        let content = personField.text?.trimmingCharacters(in: .whitespaces)
+        if (content?.isEmpty)! {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入持卡人姓名")
+            return
+        }
         if (cardNoField.text?.isEmpty)! {
             MBProgressHUD.showAutoDismissHUD(message: "请输入银行卡号")
             return
         }
-        if !GYZCheckTool.isBankCard(cardNoField.text!){
-            MBProgressHUD.showAutoDismissHUD(message: "请输入正确的银行卡号")
+//        if !GYZCheckTool.isBankCard(cardNoField.text!){
+//            MBProgressHUD.showAutoDismissHUD(message: "请输入正确的银行卡号")
+//            return
+//        }
+        if (bankNameLab.text?.isEmpty)! {
+            MBProgressHUD.showAutoDismissHUD(message: "请绑定指定银行的银行卡")
             return
         }
-        //除去前后空格,防止只输入空格的情况
-        //        let content = contentField.text?.trimmingCharacters(in: .whitespaces)
-        //        if (content?.isEmpty)! {
-        //            MBProgressHUD.showAutoDismissHUD(message: "请输入银行卡开户行")
-        //            return
-        //        }
+        requestAddBankCard()
+    }
+    
+    ///添加银行卡
+    func requestAddBankCard(){
         
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("member_card&op=add_card",parameters: ["card_name":personField.text!,"key": userDefaults.string(forKey: "key") ?? "","card_type": bankNameLab.text!,"card_num": cardNoField.text!],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                if weakSelf?.resultBlock != nil{
+                    weakSelf?.resultBlock!()
+                }
+                weakSelf?.clickedBackBtn()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    func setBankData(){
+        let name = GYZCheckTool.getBankName(cardNoField.text)
+        var imgName: String = ""
+        if (name?.contains("建设银行"))! || (name?.contains("农业银行"))! || (name?.contains("中国银行"))! || (name?.contains("交通银行"))!{
+            isNeedBank = true
+            bankNameLab.text = name
+            
+            if (name?.contains("建设银行"))! {
+                imgName = "icon_bank_jianse"
+            }else if (name?.contains("农业银行"))! {
+                imgName = "icon_bank_nongye"
+            }else if (name?.contains("中国银行"))! {
+                imgName = "icon_bank_china"
+            }else if (name?.contains("交通银行"))! {
+                imgName = "icon_bank_jiaotong"
+            }
+            
+        }else{
+            MBProgressHUD.showAutoDismissHUD(message: "请绑定指定银行的银行卡")
+            isNeedBank = false
+            bankNameLab.text = ""
+        }
+        iconView.image = UIImage.init(named: imgName)
+    }
+}
+extension KZAddBankCardVC : UITextFieldDelegate{
+    //编辑结束
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.text?.count < 1 || textField.text?.count > 19 {
+            bankNameLab.text = ""
+            iconView.image = nil
+        }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if cardNoField.text?.count == 8 {
+            setBankData()
+        }
+        return true
     }
 }

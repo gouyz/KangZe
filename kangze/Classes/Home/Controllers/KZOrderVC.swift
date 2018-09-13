@@ -16,7 +16,7 @@ private let orderFooter = "orderFooter"
 class KZOrderVC: GYZBaseVC {
     
     var orderStatus: String = ""
-    var currPage : Int = 1
+//    var currPage : Int = 1
     var dataList: [KZOrderModel] = [KZOrderModel]()
 
     override func viewDidLoad() {
@@ -46,16 +46,16 @@ class KZOrderVC: GYZBaseVC {
         table.register(KZOrderCell.self, forCellReuseIdentifier: orderCell)
         table.register(KZOrderHeaderView.self, forHeaderFooterViewReuseIdentifier: orderHeader)
         table.register(KZOrderFooterView.self, forHeaderFooterViewReuseIdentifier: orderFooter)
-        
-        weak var weakSelf = self
-        ///添加下拉刷新
-        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
-            weakSelf?.refresh()
-        })
-        ///添加上拉加载更多
-        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
-            weakSelf?.loadMore()
-        })
+//
+//        weak var weakSelf = self
+//        ///添加下拉刷新
+//        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
+//            weakSelf?.refresh()
+//        })
+//        ///添加上拉加载更多
+//        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
+//            weakSelf?.loadMore()
+//        })
         return table
     }()
     
@@ -69,10 +69,10 @@ class KZOrderVC: GYZBaseVC {
         weak var weakSelf = self
         showLoadingView()
         
-        GYZNetWork.requestNetwork("member_order&op=order_list",parameters: ["curpage":currPage,"page":kPageSize,"key": userDefaults.string(forKey: "key") ?? "","state_type": orderStatus],method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork("member_order&op=order_list",parameters: [/*"curpage":currPage,"page":kPageSize,*/"key": userDefaults.string(forKey: "key") ?? "","state_type": orderStatus],method : .get,  success: { (response) in
             
             weakSelf?.hiddenLoadingView()
-            weakSelf?.closeRefresh()
+//            weakSelf?.closeRefresh()
             GYZLog(response)
             
             if response["code"].intValue == kQuestSuccessTag{//请求成功
@@ -91,10 +91,7 @@ class KZOrderVC: GYZBaseVC {
                     weakSelf?.tableView.reloadData()
                 }else{
                     ///显示空页面
-                    weakSelf?.showEmptyView(content: "暂无订单信息，请点击刷新", reload: {
-                        weakSelf?.refresh()
-                        weakSelf?.hiddenEmptyView()
-                    })
+                    weakSelf?.showEmptyView(content: "暂无订单信息")
                 }
                 
             }else{
@@ -104,41 +101,44 @@ class KZOrderVC: GYZBaseVC {
         }, failture: { (error) in
             
             weakSelf?.hiddenLoadingView()
-            weakSelf?.closeRefresh()
+//            weakSelf?.closeRefresh()
             GYZLog(error)
-            
-            if weakSelf?.currPage == 1{//第一次加载失败，显示加载错误页面
-                weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
-                    weakSelf?.refresh()
-                    weakSelf?.hiddenEmptyView()
-                })
-            }
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestOrderDatas()
+                weakSelf?.hiddenEmptyView()
+            })
+//            if weakSelf?.currPage == 1{//第一次加载失败，显示加载错误页面
+//                weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+//                    weakSelf?.refresh()
+//                    weakSelf?.hiddenEmptyView()
+//                })
+//            }
         })
     }
     
     
     // MARK: - 上拉加载更多/下拉刷新
     /// 下拉刷新
-    func refresh(){
-        currPage = 1
-        requestOrderDatas()
-    }
-    
-    /// 上拉加载更多
-    func loadMore(){
-        currPage += 1
-        requestOrderDatas()
-    }
-    
-    /// 关闭上拉/下拉刷新
-    func closeRefresh(){
-        if tableView.mj_header.isRefreshing{//下拉刷新
-            dataList.removeAll()
-            GYZTool.endRefresh(scorllView: tableView)
-        }else if tableView.mj_footer.isRefreshing{//上拉加载更多
-            GYZTool.endLoadMore(scorllView: tableView)
-        }
-    }
+//    func refresh(){
+//        currPage = 1
+//        requestOrderDatas()
+//    }
+//
+//    /// 上拉加载更多
+//    func loadMore(){
+//        currPage += 1
+//        requestOrderDatas()
+//    }
+//
+//    /// 关闭上拉/下拉刷新
+//    func closeRefresh(){
+//        if tableView.mj_header.isRefreshing{//下拉刷新
+//            dataList.removeAll()
+//            GYZTool.endRefresh(scorllView: tableView)
+//        }else if tableView.mj_footer.isRefreshing{//上拉加载更多
+//            GYZTool.endLoadMore(scorllView: tableView)
+//        }
+//    }
     
 }
 
