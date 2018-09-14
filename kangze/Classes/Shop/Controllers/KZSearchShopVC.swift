@@ -1,29 +1,30 @@
 //
-//  KZShopVC.swift
+//  KZSearchShopVC.swift
 //  kangze
-//  商城
-//  Created by gouyz on 2018/8/28.
+//  搜索商品
+//  Created by gouyz on 2018/9/14.
 //  Copyright © 2018年 gyz. All rights reserved.
 //
 
 import UIKit
 import MBProgressHUD
 
-private let shopCell = "shopCell"
+private let shopSearchCell = "shopSearchCell"
 
-class KZShopVC: KZCommonNavBarVC {
-    
+class KZSearchShopVC: GYZBaseVC {
+
     var dataList: [KZGoodsModel] = [KZGoodsModel]()
+    
+    var searchContent: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.navigationItem.title = "搜索商品"
         view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(0)
         }
-        navBarView.isUserInteractionEnabled = true
-        navBarView.searchBtn.addTarget(self, action: #selector(clickedSearchBtn), for: .touchUpInside)
         
         requestGoodsDatas()
     }
@@ -39,7 +40,7 @@ class KZShopVC: KZCommonNavBarVC {
         table.delegate = self
         table.separatorColor = kGrayLineColor
         
-        table.register(KZShopCell.self, forCellReuseIdentifier: shopCell)
+        table.register(KZShopCell.self, forCellReuseIdentifier: shopSearchCell)
         
         return table
     }()
@@ -54,7 +55,7 @@ class KZShopVC: KZCommonNavBarVC {
         weak var weakSelf = self
         showLoadingView()
         
-        GYZNetWork.requestNetwork("goods&op=goods_list",parameters: nil,method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork("goods&op=goods_list",parameters: ["keyword": searchContent],method : .get,  success: { (response) in
             
             weakSelf?.hiddenLoadingView()
             GYZLog(response)
@@ -100,7 +101,7 @@ class KZShopVC: KZCommonNavBarVC {
         navigationController?.pushViewController(vc, animated: true)
     }
 }
-extension KZShopVC: UITableViewDelegate,UITableViewDataSource{
+extension KZSearchShopVC: UITableViewDelegate,UITableViewDataSource{
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -111,7 +112,7 @@ extension KZShopVC: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: shopCell) as! KZShopCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: shopSearchCell) as! KZShopCell
         
         cell.dataModel = dataList[indexPath.row]
         

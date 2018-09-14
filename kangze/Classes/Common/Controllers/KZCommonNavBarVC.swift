@@ -15,6 +15,7 @@ class KZCommonNavBarVC: GYZBaseVC {
         super.viewDidLoad()
 
         self.navigationItem.titleView = navBarView
+        
         let btn = UIButton(type: .custom)
         btn.titleLabel?.font = k10Font
         btn.setTitleColor(kBlackFontColor, for: .normal)
@@ -42,18 +43,19 @@ class KZCommonNavBarVC: GYZBaseVC {
     @objc func clickedSearchBtn(){
         let searchVC: PYSearchViewController = PYSearchViewController.init(hotSearches: [], searchBarPlaceholder: "输入您要搜索的内容") { (searchViewController, searchBar, searchText) in
             
-//            let searchVC = TASearchHomeVC()
-//            searchViewController?.navigationController?.pushViewController(searchVC, animated: true)
+            let searchVC = KZSearchShopVC()
+            searchVC.searchContent = searchText!
+            searchViewController?.navigationController?.pushViewController(searchVC, animated: true)
         }
         searchVC.hotSearchStyle = .borderTag
         searchVC.searchHistoryStyle = .borderTag
-        searchVC.searchSuggestionHidden = true
+//        searchVC.searchSuggestionHidden = true
         
         let searchNav = GYZBaseNavigationVC(rootViewController:searchVC)
         //        searchNav.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: kBlackColor, NSAttributedStringKey.font: k18Font]
         //
-        searchNav.navigationBar.barTintColor = kWhiteColor
-        searchNav.navigationBar.tintColor = kBlackColor
+        let cancelButton: UIButton = searchVC.cancelButton.customView as! UIButton
+        cancelButton.setTitleColor(kBlackFontColor, for: .normal)
         self.present(searchNav, animated: true, completion: nil)
         
     }
