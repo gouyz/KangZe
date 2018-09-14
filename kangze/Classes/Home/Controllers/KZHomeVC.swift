@@ -30,6 +30,8 @@ class KZHomeVC: KZCommonNavBarVC {
         headerView.operatorBlock = {[weak self] (tag) in
             self?.dealOperator(index: tag)
         }
+        navBarView.searchBtn.addTarget(self, action: #selector(clickedSearchBtn), for: .touchUpInside)
+        
         requestHomeDatas()
     }
     

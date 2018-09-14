@@ -22,6 +22,8 @@ class KZShopVC: KZCommonNavBarVC {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(0)
         }
+        navBarView.searchBtn.addTarget(self, action: #selector(clickedSearchBtn), for: .touchUpInside)
+        
         requestGoodsDatas()
     }
     

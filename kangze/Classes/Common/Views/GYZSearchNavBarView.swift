@@ -46,7 +46,6 @@ class GYZSearchNavBarView: UIView {
         btn.titleLabel?.font = k13Font
         btn.setTitleColor(kBlackFontColor, for: .normal)
         btn.backgroundColor = kWhiteColor
-        btn.addTarget(self, action: #selector(clickedSearchBtn), for: .touchUpInside)
         return btn
     }()
     /// 分割线
@@ -56,9 +55,5 @@ class GYZSearchNavBarView: UIView {
         return line
     }()
     
-    ///搜索
-    @objc func clickedSearchBtn(){
-        
-        
-    }
+    
 }

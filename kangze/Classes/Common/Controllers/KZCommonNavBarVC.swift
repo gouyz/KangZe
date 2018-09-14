@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PYSearch
 
 class KZCommonNavBarVC: GYZBaseVC {
 
@@ -21,6 +22,7 @@ class KZCommonNavBarVC: GYZBaseVC {
         btn.addTarget(self, action: #selector(onClickedQrcode), for: .touchUpInside)
         btn.set(image: UIImage.init(named: "icon_qrcode"), title: "邀请码", titlePosition: .bottom, additionalSpacing: 1, state: .normal)
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: btn)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,4 +37,24 @@ class KZCommonNavBarVC: GYZBaseVC {
     }
     
     lazy var navBarView: GYZSearchNavBarView = GYZSearchNavBarView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: kTitleHeight))
+    
+    ///搜索
+    @objc func clickedSearchBtn(){
+        let searchVC: PYSearchViewController = PYSearchViewController.init(hotSearches: [], searchBarPlaceholder: "输入您要搜索的内容") { (searchViewController, searchBar, searchText) in
+            
+//            let searchVC = TASearchHomeVC()
+//            searchViewController?.navigationController?.pushViewController(searchVC, animated: true)
+        }
+        searchVC.hotSearchStyle = .borderTag
+        searchVC.searchHistoryStyle = .borderTag
+        searchVC.searchSuggestionHidden = true
+        
+        let searchNav = GYZBaseNavigationVC(rootViewController:searchVC)
+        //        searchNav.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: kBlackColor, NSAttributedStringKey.font: k18Font]
+        //
+        searchNav.navigationBar.barTintColor = kWhiteColor
+        searchNav.navigationBar.tintColor = kBlackColor
+        self.present(searchNav, animated: true, completion: nil)
+        
+    }
 }
