@@ -16,6 +16,10 @@ class GYZSearchNavBarView: UIView {
         
         setupUI()
     }
+    /// 在iOS11 NavBar自定义titleview里有个button,点击事件不触发了.的解决办法如下：
+    override var intrinsicContentSize: CGSize {
+        return UILayoutFittingExpandedSize
+    }
     
     
     required init?(coder aDecoder: NSCoder) {
