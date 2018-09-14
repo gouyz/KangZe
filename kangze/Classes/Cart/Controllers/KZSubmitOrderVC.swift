@@ -34,6 +34,11 @@ class KZSubmitOrderVC: GYZBaseVC {
     var vatHash: String = ""
     /// 支付编号
     var paySN: String = ""
+    
+    /// 立即购买时，合伙人套餐要传地址
+    var selectProvinceModel: KZAreasModel?
+    var selectCityModel: KZAreasModel?
+    var selectAreaModel: KZAreasModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,7 +138,19 @@ class KZSubmitOrderVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("member_buy&op=buy_step1", parameters: ["key": userDefaults.string(forKey: "key") ?? "","cart_id":cartIds,"ifcart":isCart],  success: { (response) in
+        var dic: [String: String] = ["key": userDefaults.string(forKey: "key") ?? "","cart_id":cartIds,"ifcart":isCart]
+        
+        if selectProvinceModel != nil {
+            dic["provinceid"] = selectProvinceModel?.area_id!
+            dic["cityid"] = selectCityModel?.area_id!
+            dic["areaid"] = selectAreaModel?.area_id!
+        }else{
+            dic["provinceid"] = ""
+            dic["cityid"] = ""
+            dic["areaid"] = ""
+        }
+        
+        GYZNetWork.requestNetwork("member_buy&op=buy_step1", parameters: dic,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)

@@ -212,9 +212,23 @@ class KZGoodsDetailVC: GYZBaseVC {
             }
         }
         
+        if dataModel?.goods_type == "2" {// 合伙人套餐
+            if selectProvinceModel == nil{
+                MBProgressHUD.showAutoDismissHUD(message: "请选择区域")
+                return
+            }
+        }
+        
         let vc = KZSubmitOrderVC()
         vc.cartIds = (dataModel?.goods_id)! + "|1"
         vc.totalNum = 1
+        
+        if selectProvinceModel != nil {
+            vc.selectProvinceModel = selectProvinceModel
+            vc.selectCityModel = selectCityModel
+            vc.selectAreaModel = selectAreaModel
+        }
+        
         navigationController?.pushViewController(vc, animated: true)
         
     }
