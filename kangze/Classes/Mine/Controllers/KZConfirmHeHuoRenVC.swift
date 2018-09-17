@@ -15,6 +15,8 @@ class KZConfirmHeHuoRenVC: GYZBaseVC {
     var isConfirmUserInfo: Bool = false
     /// 是否购买认证
     var isConfirmBuy: Bool = false
+    
+    var goodsId: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +25,8 @@ class KZConfirmHeHuoRenVC: GYZBaseVC {
         self.view.backgroundColor = kWhiteColor
         
         setupUI()
+        
+        requestGetGoodsId()
         
     }
 
@@ -189,7 +193,35 @@ class KZConfirmHeHuoRenVC: GYZBaseVC {
             return
         }
         let vc = KZGoodsDetailVC()
+        vc.goodsId = goodsId
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    /// 获取代理型套餐商品id
+    func requestGetGoodsId(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("goods&op=get_hhr_goods_id",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],  success: { (response) in
+            
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.goodsId = response["datas"]["goods_id"].stringValue
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            GYZLog(error)
+        })
     }
     
     ///查看当前用户是否完善了信息
