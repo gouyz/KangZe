@@ -11,7 +11,7 @@ import UIKit
 @objcMembers
 class KZGoodsModel: LHSBaseModel {
     /// id
-    var goods_id : String?
+    var goods_id : String? = ""
     /// 商品名称
     var goods_name : String?
     /// 商品价格

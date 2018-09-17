@@ -32,6 +32,8 @@ class KZSubmitOrderVC: GYZBaseVC {
     var offpayHash: String = ""
     var offpayHashBatch: String = ""
     var vatHash: String = ""
+    /// 区域关联id
+    var areaListId: String = ""
     /// 支付编号
     var paySN: String = ""
     
@@ -158,6 +160,7 @@ class KZSubmitOrderVC: GYZBaseVC {
             
                 weakSelf?.memberMoney = response["datas"]["available_predeposit"].stringValue
                 weakSelf?.vatHash = response["datas"]["vat_hash"].stringValue
+                weakSelf?.areaListId = response["datas"]["area_list"].stringValue
                 weakSelf?.offpayHash = response["datas"]["address_api"]["offpay_hash"].stringValue
                 weakSelf?.offpayHashBatch = response["datas"]["address_api"]["offpay_hash_batch"].stringValue
                 
@@ -184,7 +187,7 @@ class KZSubmitOrderVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("member_buy&op=buy_step2",parameters: ["vat_hash":vatHash,"offpay_hash":offpayHash,"offpay_hash_batch":offpayHashBatch,"key": userDefaults.string(forKey: "key") ?? "","cart_id":cartIds,"ifcart":isCart,"pay_name":" online","pay_message":"1|" + noteText ],  success: { (response) in
+        GYZNetWork.requestNetwork("member_buy&op=buy_step2",parameters: ["vat_hash":vatHash,"offpay_hash":offpayHash,"offpay_hash_batch":offpayHashBatch,"key": userDefaults.string(forKey: "key") ?? "","cart_id":cartIds,"ifcart":isCart,"pay_name":" online","pay_message":"1|" + noteText,"area_list":areaListId ],  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
