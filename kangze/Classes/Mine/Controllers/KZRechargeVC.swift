@@ -151,6 +151,8 @@ class KZRechargeVC: GYZBaseVC {
     }()
     /// 下一步
     @objc func clickedNextBtn(){
+        moneyField.resignFirstResponder()
+        
         if (moneyField.text?.isEmpty)! {
             MBProgressHUD.showAutoDismissHUD(message: "请输入充值金额")
             return

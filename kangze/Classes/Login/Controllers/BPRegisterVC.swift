@@ -366,6 +366,10 @@ class BPRegisterVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "请输入验证码")
             return
         }
+        if codeInputView.textFiled.text! != codeStr {
+            MBProgressHUD.showAutoDismissHUD(message: "验证码不正确")
+            return
+        }
 
         if pwdInputView.textFiled.text!.isEmpty {
             MBProgressHUD.showAutoDismissHUD(message: "请输入密码")
@@ -421,10 +425,10 @@ class BPRegisterVC: GYZBaseVC {
     /// 获取验证码
     @objc func clickedCodeBtn(btn: UIButton){
         hiddenKeyBoard()
-        codeBtn.startSMSWithDuration(duration: 60)
-//        if validPhoneNO() {
-//            requestCode()
-//        }
+//        codeBtn.startSMSWithDuration(duration: 60)
+        if validPhoneNO() {
+            requestCode()
+        }
     }
     
     /// 注册
@@ -452,8 +456,8 @@ class BPRegisterVC: GYZBaseVC {
                     userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
                     userDefaults.set(data["key"].stringValue, forKey: "key")//key
                 }
-                
-                _ = weakSelf?.navigationController?.popViewController(animated: true)
+                KeyWindow.rootViewController = GYZMainTabBarVC()
+//                _ = weakSelf?.navigationController?.popViewController(animated: true)
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }
@@ -485,15 +489,18 @@ class BPRegisterVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "获取中...")
         
-        GYZNetWork.requestNetwork("app/generateCode.do", parameters: ["phone":phoneInputView.textFiled.text!],  success: { (response) in
+        GYZNetWork.requestNetwork("connect&op=get_sms_captcha", parameters: ["phone":phoneInputView.textFiled.text!,"type": "1"],method :.get,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
-                weakSelf?.codeBtn.startSMSWithDuration(duration: 60)
+                
+                let data = response["datas"]
+                weakSelf?.codeStr = data["captcha"].stringValue
+                weakSelf?.codeBtn.startSMSWithDuration(duration: data["sms_time"].intValue)
                 
             }else{
-                MBProgressHUD.showAutoDismissHUD(message: response["message"].stringValue)
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }
             
         }, failture: { (error) in

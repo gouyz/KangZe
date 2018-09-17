@@ -318,6 +318,8 @@ class KZGoodsDetailVC: GYZBaseVC {
             GYZLog(response)
             
             if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                MBProgressHUD.showAutoDismissHUD(message: "收藏成功")
                 weakSelf?.dataModel?.is_collect = "1"
                 weakSelf?.bottomView.favouriteBtn.set(image: UIImage.init(named: "icon_favorite_rating_selected"), title: "收藏", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
                 weakSelf?.bottomView.favouriteBtn.setTitleColor(kBlueFontColor, for: .normal)

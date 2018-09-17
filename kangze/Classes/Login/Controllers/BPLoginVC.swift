@@ -207,7 +207,8 @@ class BPLoginVC: GYZBaseVC {
                 userDefaults.set(weakSelf?.phoneInputView.textFiled.text!, forKey: "phone")//用户电话
                 userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
                 userDefaults.set(data["key"].stringValue, forKey: "key")//key
-                _ = weakSelf?.navigationController?.popViewController(animated: true)
+                KeyWindow.rootViewController = GYZMainTabBarVC()
+//                _ = weakSelf?.navigationController?.popViewController(animated: true)
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }

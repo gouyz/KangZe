@@ -182,6 +182,7 @@ class KZGoodsDetailHeaderView: UIView {
         let btn = UIButton.init(type: .custom)
         btn.titleLabel?.font = k10Font
         btn.setTitleColor(kGaryFontColor, for: .normal)
+        btn.isHidden = true
         return btn
     }()
     /// 单价
