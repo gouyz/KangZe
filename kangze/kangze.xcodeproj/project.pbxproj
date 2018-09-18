@@ -1640,7 +1640,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Nanjing KangZe Biological Technology Co., Ltd. (KW89F3SR66)";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = KW89F3SR66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AliPay",
@@ -1666,7 +1666,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Nanjing KangZe Biological Technology Co., Ltd. (KW89F3SR66)";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = KW89F3SR66;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AliPay",
