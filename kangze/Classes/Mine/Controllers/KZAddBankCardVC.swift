@@ -228,10 +228,10 @@ class KZAddBankCardVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "请输入银行卡号")
             return
         }
-//        if !GYZCheckTool.isBankCard(cardNoField.text!){
-//            MBProgressHUD.showAutoDismissHUD(message: "请输入正确的银行卡号")
-//            return
-//        }
+        if !GYZCheckTool.isBankCard(cardNoField.text!){
+            MBProgressHUD.showAutoDismissHUD(message: "请输入正确的银行卡号")
+            return
+        }
         if (bankNameLab.text?.isEmpty)! {
             MBProgressHUD.showAutoDismissHUD(message: "请绑定指定银行的银行卡")
             return
