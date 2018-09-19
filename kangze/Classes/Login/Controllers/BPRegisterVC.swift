@@ -363,11 +363,11 @@ class BPRegisterVC: GYZBaseVC {
             return
         }
         if codeInputView.textFiled.text!.isEmpty {
-            MBProgressHUD.showAutoDismissHUD(message: "请输入验证码")
+            MBProgressHUD.showAutoDismissHUD(message: "请输入验证码",isBottom:false)
             return
         }
         if codeInputView.textFiled.text! != codeStr {
-            MBProgressHUD.showAutoDismissHUD(message: "验证码不正确")
+            MBProgressHUD.showAutoDismissHUD(message: "验证码不正确",isBottom:false)
             return
         }
 

@@ -365,4 +365,17 @@ extension String {
         let en = self.index(st, offsetBy:len)
         return String(self[st ..< en])
     }
+    /// 处理富文本图片大小
+    func dealFuTextImgSize()->String{
+        if self.isEmpty {
+            return ""
+        }
+        let head = "<head>" +
+            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, " +
+            "user-scalable=no\"> " +
+            "<style>img{max-width: 100%; width:auto; height:auto;}</style>" +
+        "</head>"
+        
+        return "<html>" + head + "<body>" + self + "</body></html>"
+    }
 }
