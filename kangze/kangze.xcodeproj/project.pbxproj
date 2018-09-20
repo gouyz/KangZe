@@ -172,6 +172,14 @@
 		0A75CEA02135467B009B87E6 /* KZCommonNavBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A75CE9F2135467B009B87E6 /* KZCommonNavBarVC.swift */; };
 		0A75CEA22135472A009B87E6 /* GYZSearchNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A75CEA12135472A009B87E6 /* GYZSearchNavBarView.swift */; };
 		0A78E7BF21379BE1008F2F34 /* KZGoodDetailBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A78E7BE21379BE0008F2F34 /* KZGoodDetailBottomView.swift */; };
+		0A7A0F9021532D8100C599B2 /* GYZTencentShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7A0F8F21532D8100C599B2 /* GYZTencentShare.swift */; };
+		0A7A0F922153324C00C599B2 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7A0F912153324C00C599B2 /* ImageIO.framework */; };
+		0A7A0F942153326400C599B2 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7A0F932153326400C599B2 /* libstdc++.tbd */; };
+		0A7A0F962153327500C599B2 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7A0F952153327500C599B2 /* libsqlite3.tbd */; };
+		0A7A0F982153328500C599B2 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7A0F972153328500C599B2 /* libiconv.tbd */; };
+		0A7A0F9A215332A100C599B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7A0F99215332A100C599B2 /* Security.framework */; };
+		0A7A0F9C215332B600C599B2 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7A0F9B215332B600C599B2 /* libsqlite3.0.tbd */; };
+		0A7A0F9E21533A9E00C599B2 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7A0F9D21533A9D00C599B2 /* TencentOpenAPI.framework */; };
 		0A7A9E702148EB24005DF8DA /* KZKuCunDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7A9E6F2148EB24005DF8DA /* KZKuCunDetailModel.swift */; };
 		0A7A9E72214905AB005DF8DA /* KZYuERecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7A9E71214905AB005DF8DA /* KZYuERecordModel.swift */; };
 		0A7A9E7421490873005DF8DA /* KZRechargeRecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7A9E7321490873005DF8DA /* KZRechargeRecordModel.swift */; };
@@ -405,6 +413,15 @@
 		0A75CE9F2135467B009B87E6 /* KZCommonNavBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCommonNavBarVC.swift; sourceTree = "<group>"; };
 		0A75CEA12135472A009B87E6 /* GYZSearchNavBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GYZSearchNavBarView.swift; sourceTree = "<group>"; };
 		0A78E7BE21379BE0008F2F34 /* KZGoodDetailBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodDetailBottomView.swift; sourceTree = "<group>"; };
+		0A7A0F8C2153295E00C599B2 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TencentOpenAPI.framework; path = "../../../../Android-project/demo/open_sdk_for_lite_V3.3.3.0_svn35045_#34_201805231028/TencentOpenAPI.framework"; sourceTree = "<group>"; };
+		0A7A0F8F21532D8100C599B2 /* GYZTencentShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GYZTencentShare.swift; sourceTree = "<group>"; };
+		0A7A0F912153324C00C599B2 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		0A7A0F932153326400C599B2 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		0A7A0F952153327500C599B2 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		0A7A0F972153328500C599B2 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		0A7A0F99215332A100C599B2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		0A7A0F9B215332B600C599B2 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		0A7A0F9D21533A9D00C599B2 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		0A7A9E6F2148EB24005DF8DA /* KZKuCunDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZKuCunDetailModel.swift; sourceTree = "<group>"; };
 		0A7A9E71214905AB005DF8DA /* KZYuERecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZYuERecordModel.swift; sourceTree = "<group>"; };
 		0A7A9E7321490873005DF8DA /* KZRechargeRecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZRechargeRecordModel.swift; sourceTree = "<group>"; };
@@ -449,6 +466,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A7A0F9C215332B600C599B2 /* libsqlite3.0.tbd in Frameworks */,
+				0A7A0F9A215332A100C599B2 /* Security.framework in Frameworks */,
+				0A7A0F982153328500C599B2 /* libiconv.tbd in Frameworks */,
+				0A7A0F962153327500C599B2 /* libsqlite3.tbd in Frameworks */,
+				0A7A0F942153326400C599B2 /* libstdc++.tbd in Frameworks */,
+				0A7A0F9E21533A9E00C599B2 /* TencentOpenAPI.framework in Frameworks */,
+				0A7A0F922153324C00C599B2 /* ImageIO.framework in Frameworks */,
 				0A717DF52149EDDB0062420D /* CoreMotion.framework in Frameworks */,
 				0A717DF32149EDD00062420D /* CFNetwork.framework in Frameworks */,
 				0A717DF12149EDC80062420D /* Foundation.framework in Frameworks */,
@@ -931,6 +955,7 @@
 		0A75CE0B21351FCC009B87E6 /* 3rdLib */ = {
 			isa = PBXGroup;
 			children = (
+				0A7A0F8E21532D4E00C599B2 /* QQ */,
 				0A717DD92149ED150062420D /* AliPay */,
 				0A75CE0C21351FCC009B87E6 /* TagsView */,
 				0A75CE1721351FCC009B87E6 /* PickerView */,
@@ -1059,9 +1084,25 @@
 			path = tool;
 			sourceTree = "<group>";
 		};
+		0A7A0F8E21532D4E00C599B2 /* QQ */ = {
+			isa = PBXGroup;
+			children = (
+				0A7A0F9D21533A9D00C599B2 /* TencentOpenAPI.framework */,
+				0A7A0F8F21532D8100C599B2 /* GYZTencentShare.swift */,
+			);
+			path = QQ;
+			sourceTree = "<group>";
+		};
 		405C503E173391734455178C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A7A0F9B215332B600C599B2 /* libsqlite3.0.tbd */,
+				0A7A0F99215332A100C599B2 /* Security.framework */,
+				0A7A0F972153328500C599B2 /* libiconv.tbd */,
+				0A7A0F952153327500C599B2 /* libsqlite3.tbd */,
+				0A7A0F932153326400C599B2 /* libstdc++.tbd */,
+				0A7A0F912153324C00C599B2 /* ImageIO.framework */,
+				0A7A0F8C2153295E00C599B2 /* TencentOpenAPI.framework */,
 				0A717DF42149EDDB0062420D /* CoreMotion.framework */,
 				0A717DF22149EDD00062420D /* CFNetwork.framework */,
 				0A717DF02149EDC80062420D /* Foundation.framework */,
@@ -1336,6 +1377,7 @@
 				0A71F3062140D691001201C1 /* KZMyBonusVC.swift in Sources */,
 				0A7C9B2C213D0E8D00E04E81 /* KZMessageVC.swift in Sources */,
 				0A8F32F1213FCEE700980EDE /* KZMyAreasVC.swift in Sources */,
+				0A7A0F9021532D8100C599B2 /* GYZTencentShare.swift in Sources */,
 				0A715A57213E0CFC0006C01D /* KZSubmitOrderVC.swift in Sources */,
 				0A75CE5921351FCC009B87E6 /* LHSUserInfoModel.swift in Sources */,
 				0A75CE7E21351FCD009B87E6 /* GYZScanQrcodeVC.swift in Sources */,
@@ -1644,6 +1686,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AliPay",
+					"$(PROJECT_DIR)/Classes/Tool/3rdLib/QQ",
 				);
 				INFOPLIST_FILE = kangze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1670,6 +1713,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AliPay",
+					"$(PROJECT_DIR)/Classes/Tool/3rdLib/QQ",
 				);
 				INFOPLIST_FILE = kangze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

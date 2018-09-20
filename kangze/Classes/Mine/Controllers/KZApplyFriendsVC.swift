@@ -113,7 +113,11 @@ class KZApplyFriendsVC: GYZBaseVC {
         mmShareSheet.callBack = { [weak self](handler) ->() in
             
             if handler != "cancel" {// 取消
-                self?.weChatShared(tag: handler)
+                if handler == kWXFriendShared || handler == kWXMomentShared{/// 微信分享
+                    self?.weChatShared(tag: handler)
+                }else{// QQ
+                    self?.qqShared(tag: handler)
+                }
             }
         }
         mmShareSheet.present()
@@ -127,6 +131,18 @@ class KZApplyFriendsVC: GYZBaseVC {
         }
         
         WXApiManager.shared.sendLinkURL(qrCodeConment, title: "邀请好友", description: "邀请好友", thumbImage: UIImage.init(named: "icon_logo")!, scene: scene,sender: self)
+    }
+    /// qq 分享
+    func qqShared(tag: String){
+        //发送给好友还是QQ空间（默认好友）
+        var scene: GYZTencentFlag = .QQ
+        if tag == kQZoneShared {//QQ空间
+            scene = .QZone
+        }
+        let imgData = UIImageJPEGRepresentation(UIImage.init(named: "icon_logo")!, 0.6)
+        GYZTencentShare.shared.shareNews(URL.init(string: qrCodeConment)!, preUrl: nil, preImage: imgData, title: "邀请好友", description: "邀请好友", flag: scene) { (success, description) in
+            
+        }
     }
     
     /// 邀请好友

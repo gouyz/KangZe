@@ -31,3 +31,7 @@
 
 /// 微信支付
 #import "WXApi.h"
+/// qq
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterfaceObject.h>
+#import <TencentOpenAPI/QQApiInterface.h>

@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //微信注册
         WXApi.registerApp(kWeChatAppID)
+        GYZTencentShare.shared.registeApp(kQQAppID)
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = kWhiteColor
@@ -105,6 +106,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     AliPayManager.shared.showAuth_V2Result(result: alipayjson as! [String : Any])
                 }
             })
+        }else if url.host == "qzapp" || url.host == "response_from_qq" {// QQ授权登录或QQ 分享
+            
+            result = GYZTencentShare.shared.handle(url)
         }else{//微信
             result = WXApi.handleOpen(url, delegate:WXApiManager.shared)
         }
