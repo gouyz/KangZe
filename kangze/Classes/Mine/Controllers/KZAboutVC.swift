@@ -79,7 +79,7 @@ class KZAboutVC: GYZBaseVC {
         lab.borderColor = kBlackFontColor
         lab.borderWidth = klineWidth
         lab.cornerRadius = kCornerRadius
-        lab.text = "检测到最新版本"
+        lab.text = "已是新版本"
         
         return lab
     }()

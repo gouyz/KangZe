@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class KZCompanyDynamicManagerVC: GYZBaseVC {
     
@@ -21,6 +22,7 @@ class KZCompanyDynamicManagerVC: GYZBaseVC {
         view.addSubview(bannerImgView)
         
         setScrollView()
+        requestTopImgUrl()
     }
     
     override func didReceiveMemoryWarning() {
@@ -68,4 +70,29 @@ class KZCompanyDynamicManagerVC: GYZBaseVC {
         
         return imgView
     }()
+    
+    ///获取公司介绍图片数据
+    func requestTopImgUrl(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        weak var weakSelf = self
+        GYZNetWork.requestNetwork("article&op=get_top_pic",parameters: nil,  success: { (response) in
+            
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                let imgUrl = response["datas"]["top_pic"].stringValue
+                weakSelf?.bannerImgView.kf.setImage(with: URL.init(string: imgUrl), placeholder: UIImage.init(named: "icon_company_banner"), options: nil, progressBlock: nil, completionHandler: nil)
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            GYZLog(error)
+        })
+    }
 }

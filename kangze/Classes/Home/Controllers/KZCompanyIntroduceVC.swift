@@ -19,6 +19,8 @@ class KZCompanyIntroduceVC: GYZBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = kWhiteColor
+        
         view.addSubview(webView)
         webView.snp.makeConstraints { (make) in
             make.edges.equalTo(0)
@@ -81,7 +83,7 @@ class KZCompanyIntroduceVC: GYZBaseVC {
             
             webView.load(URLRequest.init(url: URL.init(string: url)!))
         }else{
-            webView.loadHTMLString(url, baseURL: nil)
+            webView.loadHTMLString(url.dealFuTextImgSize(), baseURL: nil)
         }
     }
 }

@@ -202,12 +202,12 @@ class KZGoodsDetailVC: GYZBaseVC {
         /// 续货型套餐 :购买了合伙人套餐+实名认证
         if dataModel?.goods_type == "2" {//合伙人套餐
             if dataModel?.member!["is_shehe"] == "0"{
-                showProfile()
+                showProfile(isDetail: true)
                 return
             }
         }else if dataModel?.goods_type == "3" {//续货型套餐
             if dataModel?.member!["is_buydl"] == "0" || dataModel?.member!["is_shehe"] == "0"{
-                showProfile()
+                showProfile(isDetail: false)
                 return
             }
         }
@@ -233,18 +233,31 @@ class KZGoodsDetailVC: GYZBaseVC {
         
     }
     /// 显示完善个人信息
-    func showProfile(){
+    func showProfile(isDetail: Bool){
         weak var weakSelf = self
         GYZAlertViewTools.alertViewTools.showAlert(title: "完善个人信息", message: "请前往个人中心完善个人信息", cancleTitle: "取消", viewController: self, buttonTitles: "前往") { (index) in
             
             if index != cancelIndex{
-                weakSelf?.goConfirmProfile()
+                if isDetail{
+                    self.goRealNameConfirm()
+                }else{
+                    weakSelf?.goConfirmProfile()
+                }
             }
         }
     }
     /// 完善个人信息
     func goConfirmProfile(){
         let vc = KZConfirmHeHuoRenVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 实名认证
+    func goRealNameConfirm(){
+        let vc = KZRealNameConfirmVC()
+        vc.resultBlock = { [weak self] in
+            self?.dataModel?.member!["is_shehe"] = "1"
+            
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -287,12 +300,12 @@ class KZGoodsDetailVC: GYZBaseVC {
         /// 续货型套餐 :购买了合伙人套餐+实名认证
         if dataModel?.goods_type == "2" {//合伙人套餐
             if dataModel?.member!["is_shehe"] == "0"{
-                showProfile()
+                showProfile(isDetail: true)
                 return
             }
         }else if dataModel?.goods_type == "3" {//续货型套餐
             if dataModel?.member!["is_buydl"] == "0" || dataModel?.member!["is_shehe"] == "0"{
-                showProfile()
+                showProfile(isDetail: false)
                 return
             }
         }

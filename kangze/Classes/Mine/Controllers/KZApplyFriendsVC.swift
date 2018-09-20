@@ -134,6 +134,11 @@ class KZApplyFriendsVC: GYZBaseVC {
     }
     /// qq 分享
     func qqShared(tag: String){
+        
+        if !GYZTencentShare.shared.isQQInstall() {
+            GYZAlertViewTools.alertViewTools.showAlert(title: "温馨提示", message: "QQ未安装", cancleTitle: nil, viewController: self, buttonTitles: "确定")
+            return
+        }
         //发送给好友还是QQ空间（默认好友）
         var scene: GYZTencentFlag = .QQ
         if tag == kQZoneShared {//QQ空间

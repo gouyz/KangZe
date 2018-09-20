@@ -11,6 +11,9 @@ import MBProgressHUD
 
 class KZRealNameConfirmVC: GYZBaseVC {
     
+    /// 选择结果回调
+    var resultBlock:(() -> Void)?
+    
     /// 选择身份证正面图片
     var selectIDCardImg: UIImage?
     /// 选择身份证反面图片
@@ -296,6 +299,9 @@ class KZRealNameConfirmVC: GYZBaseVC {
             GYZLog(response)
             
             if response["code"].intValue == kQuestSuccessTag{//请求成功
+                if weakSelf?.resultBlock != nil{
+                    weakSelf?.resultBlock!()
+                }
                 weakSelf?.clickedBackBtn()
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
