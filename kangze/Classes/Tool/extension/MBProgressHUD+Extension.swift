@@ -35,8 +35,8 @@ extension MBProgressHUD{
     /// - Parameters:
     ///   - message: 要显示的文字
     ///   - toView: 要添加的View
-    static func showAutoDismissHUD(message : String,toView : UIView? = nil){
-        MBProgressHUD.showMessageHUD(message: message, time: 2.0, model: .text, view: toView)
+    static func showAutoDismissHUD(message : String,toView : UIView? = nil,isBottom: Bool = true){
+        MBProgressHUD.showMessageHUD(message: message, time: 2.0, model: .text, view: toView,isBottom: isBottom)
     }
     
     /// 自定义停留时间，纯文字提示
@@ -49,7 +49,7 @@ extension MBProgressHUD{
         MBProgressHUD.showMessageHUD(message: message, time: time, model: .text, view: toView)
     }
     
-    fileprivate static func showMessageHUD(message : String,time : CGFloat,model : MBProgressHUDMode,view : UIView? = nil){
+    fileprivate static func showMessageHUD(message : String,time : CGFloat,model : MBProgressHUDMode,view : UIView? = nil,isBottom: Bool = true){
         
         var toView = view
         if view == nil{
@@ -59,8 +59,10 @@ extension MBProgressHUD{
         let hud = MBProgressHUD.showAdded(to: toView!, animated: true)
         hud.mode = model
         hud.label.text = message
-        // Move to bottm center.
-        hud.offset = CGPoint.init(x: 0.0, y: MBProgressMaxOffset)
+        if isBottom {
+            // Move to bottm center.
+            hud.offset = CGPoint.init(x: 0.0, y: MBProgressMaxOffset)
+        }
         
         hud.hide(animated: true, afterDelay: TimeInterval(time))
     }

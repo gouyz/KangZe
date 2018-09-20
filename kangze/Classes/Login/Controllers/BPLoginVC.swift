@@ -15,6 +15,8 @@ class BPLoginVC: GYZBaseVC {
     var validPhone : Bool = false
     /// 密码是否合法
     var validPwd : Bool = false
+    /// 是否跳转到根目录
+    var isBackRootVC : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -207,6 +209,12 @@ class BPLoginVC: GYZBaseVC {
                 userDefaults.set(weakSelf?.phoneInputView.textFiled.text!, forKey: "phone")//用户电话
                 userDefaults.set(data["username"].stringValue, forKey: "username")//用户名称
                 userDefaults.set(data["key"].stringValue, forKey: "key")//key
+                
+//                if (weakSelf?.isBackRootVC)!{
+//                    _ = weakSelf?.navigationController?.popToRootViewController(animated: true)
+//                }else{
+//                   KeyWindow.rootViewController = GYZMainTabBarVC()
+//                }
                 KeyWindow.rootViewController = GYZMainTabBarVC()
 //                _ = weakSelf?.navigationController?.popViewController(animated: true)
             }else{

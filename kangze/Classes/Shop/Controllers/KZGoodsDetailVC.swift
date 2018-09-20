@@ -164,7 +164,7 @@ class KZGoodsDetailVC: GYZBaseVC {
         headerView.saleLab.text = "月销：" + (dataModel?.month_sell_count)! + "件"
         
         if !(dataModel?.mobile_body?.isEmpty)! {
-            webView.loadHTMLString((dataModel?.mobile_body)!, baseURL: nil)
+            webView.loadHTMLString((dataModel?.mobile_body)!.dealFuTextImgSize(), baseURL: nil)
         }
         
         if dataModel?.is_collect == "0" {// 是否收藏
