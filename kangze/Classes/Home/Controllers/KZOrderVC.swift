@@ -281,6 +281,8 @@ class KZOrderVC: GYZBaseVC {
                 }else if type == "yck"{// 余额支付
                     weakSelf?.requestYuEInfo()
                     weakSelf?.dealPayBack(index: index,status: "20")
+                }else if type == "wxpay"{// 微信支付
+                    weakSelf?.goWeChatPay(data: response["datas"]["prepay_order"],index: index)
                 }
                 
             }else{

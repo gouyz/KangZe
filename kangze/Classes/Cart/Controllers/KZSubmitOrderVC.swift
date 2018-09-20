@@ -122,7 +122,7 @@ class KZSubmitOrderVC: GYZBaseVC {
         case 2:// 支付宝支付
             requestPayData(type: "alipay_native")
         case 3://微信支付
-            break
+            requestPayData(type: "wxpay")
         case 4://pos支付
             let vc = KZPosPayVC()
             vc.paySN = paySN
@@ -228,6 +228,8 @@ class KZSubmitOrderVC: GYZBaseVC {
                     weakSelf?.goAliPay(orderInfo: payInfo)
                 }else if type == "yck"{// 余额支付
                     weakSelf?.clickedBackBtn()
+                }else if type == "wxpay"{// 微信支付
+                    weakSelf?.goWeChatPay(data: response["datas"]["prepay_order"])
                 }
                 
             }else{
