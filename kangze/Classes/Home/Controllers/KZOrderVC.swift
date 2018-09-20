@@ -244,7 +244,7 @@ class KZOrderVC: GYZBaseVC {
         case 2:// 支付宝支付
             requestPayData(type: "alipay_native",index: tag)
         case 3://微信支付
-            break
+            requestPayData(type: "wxpay",index: tag)
         case 4://pos支付
             let vc = KZPosPayVC()
             vc.paySN = dataList[tag].pay_sn!
