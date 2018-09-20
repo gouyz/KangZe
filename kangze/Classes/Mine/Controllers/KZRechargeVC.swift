@@ -214,7 +214,7 @@ class KZRechargeVC: GYZBaseVC {
         case 2:// 支付宝支付
             requestPayData(type: "alipay_native")
         case 3://微信支付
-            break
+            requestPayData(type: "wxpay")
         case 4://pos支付
             let vc = KZRechargePosPayVC()
             vc.paySN = paySN
@@ -242,6 +242,8 @@ class KZRechargeVC: GYZBaseVC {
                 if type == "alipay_native"{// 支付宝
                     let payInfo: String = response["datas"]["signStr"].stringValue
                     weakSelf?.goAliPay(orderInfo: payInfo)
+                }else if type == "wxpay"{// 微信支付
+                    weakSelf?.goWeChatPay(data: response["datas"]["prepay_order"])
                 }
                 
             }else{
