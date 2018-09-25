@@ -20,6 +20,8 @@
 		0A3184BA213ED42E003AB178 /* KZForgetPwdVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3184B9213ED42E003AB178 /* KZForgetPwdVC.swift */; };
 		0A3184BC213EDC36003AB178 /* KZGoodsFavouriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3184BB213EDC36003AB178 /* KZGoodsFavouriteVC.swift */; };
 		0A3184BE213EDD1E003AB178 /* KZGoodsFavouriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3184BD213EDD1E003AB178 /* KZGoodsFavouriteCell.swift */; };
+		0A3478472159C4BC00AA3D78 /* TSShareHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3478452159C4BB00AA3D78 /* TSShareHelper.m */; };
+		0A34784A2159CDCA00AA3D78 /* GYZSharedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3478492159CDCA00AA3D78 /* GYZSharedItem.m */; };
 		0A48FCB2214220AC000B5C1F /* KZKuCunInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48FCB1214220AC000B5C1F /* KZKuCunInfoVC.swift */; };
 		0A48FCB42142227C000B5C1F /* KZKuCunInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48FCB32142227C000B5C1F /* KZKuCunInfoCell.swift */; };
 		0A48FCB6214270C0000B5C1F /* KZGoodsParamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48FCB5214270C0000B5C1F /* KZGoodsParamsView.swift */; };
@@ -248,6 +250,10 @@
 		0A3184B9213ED42E003AB178 /* KZForgetPwdVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZForgetPwdVC.swift; sourceTree = "<group>"; };
 		0A3184BB213EDC36003AB178 /* KZGoodsFavouriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsFavouriteVC.swift; sourceTree = "<group>"; };
 		0A3184BD213EDD1E003AB178 /* KZGoodsFavouriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsFavouriteCell.swift; sourceTree = "<group>"; };
+		0A3478452159C4BB00AA3D78 /* TSShareHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSShareHelper.m; sourceTree = "<group>"; };
+		0A3478462159C4BB00AA3D78 /* TSShareHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSShareHelper.h; sourceTree = "<group>"; };
+		0A3478482159CDCA00AA3D78 /* GYZSharedItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GYZSharedItem.h; sourceTree = "<group>"; };
+		0A3478492159CDCA00AA3D78 /* GYZSharedItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GYZSharedItem.m; sourceTree = "<group>"; };
 		0A48FCB1214220AC000B5C1F /* KZKuCunInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZKuCunInfoVC.swift; sourceTree = "<group>"; };
 		0A48FCB32142227C000B5C1F /* KZKuCunInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZKuCunInfoCell.swift; sourceTree = "<group>"; };
 		0A48FCB5214270C0000B5C1F /* KZGoodsParamsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZGoodsParamsView.swift; sourceTree = "<group>"; };
@@ -506,6 +512,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A3478442159C4BB00AA3D78 /* SystemShared */ = {
+			isa = PBXGroup;
+			children = (
+				0A3478452159C4BB00AA3D78 /* TSShareHelper.m */,
+				0A3478462159C4BB00AA3D78 /* TSShareHelper.h */,
+				0A3478482159CDCA00AA3D78 /* GYZSharedItem.h */,
+				0A3478492159CDCA00AA3D78 /* GYZSharedItem.m */,
+			);
+			path = SystemShared;
+			sourceTree = "<group>";
+		};
 		0A717DD92149ED150062420D /* AliPay */ = {
 			isa = PBXGroup;
 			children = (
@@ -955,6 +972,7 @@
 		0A75CE0B21351FCC009B87E6 /* 3rdLib */ = {
 			isa = PBXGroup;
 			children = (
+				0A3478442159C4BB00AA3D78 /* SystemShared */,
 				0A7A0F8E21532D4E00C599B2 /* QQ */,
 				0A717DD92149ED150062420D /* AliPay */,
 				0A75CE0C21351FCC009B87E6 /* TagsView */,
@@ -1425,6 +1443,7 @@
 				0A75CD9821351CCE009B87E6 /* AppDelegate.swift in Sources */,
 				0A75CE6B21351FCD009B87E6 /* HXTagCollectionViewCell.m in Sources */,
 				0A75CE7121351FCD009B87E6 /* Picker.swift in Sources */,
+				0A3478472159C4BC00AA3D78 /* TSShareHelper.m in Sources */,
 				0A6F3C57213687E500BBFEBB /* KZGoodsDetailHeaderView.swift in Sources */,
 				0A75CEA02135467B009B87E6 /* KZCommonNavBarVC.swift in Sources */,
 				0A75CE7721351FCD009B87E6 /* SelectionTextField.swift in Sources */,
@@ -1490,6 +1509,7 @@
 				0A740EA62147BB4700392AC1 /* KZShouRuModel.swift in Sources */,
 				0A19B5B3214A8BF200859F88 /* KZPosDataModel.swift in Sources */,
 				0A75CE5421351FCC009B87E6 /* GYZMainTabBarVC.swift in Sources */,
+				0A34784A2159CDCA00AA3D78 /* GYZSharedItem.m in Sources */,
 				0A71F31221411224001201C1 /* KZCashVC.swift in Sources */,
 				0A75CE7621351FCD009B87E6 /* UsefulPickerView.swift in Sources */,
 				0A496E6F214438D900E55C5B /* KZHomeModel.swift in Sources */,

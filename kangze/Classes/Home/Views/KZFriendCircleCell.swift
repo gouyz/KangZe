@@ -20,6 +20,7 @@ class KZFriendCircleCell: UITableViewCell {
                 contentLab.text = model.content
                 
                 if model.imageList?.count > 0{
+                    imgViews.isHidden = false
                     imgViews.selectImgUrls = model.imageList
                     let rowIndex = ceil(CGFloat.init((imgViews.selectImgUrls?.count)!) / CGFloat.init(imgViews.perRowItemCount))//向上取整
                     
@@ -28,7 +29,7 @@ class KZFriendCircleCell: UITableViewCell {
                         make.height.equalTo(imgViews.imgHight * rowIndex + kMargin * (rowIndex - 1))
                     })
                 }else{
-                    imgViews.isHidden = false
+                    imgViews.isHidden = true
                     imgViews.snp.updateConstraints({ (make) in
                         
                         make.height.equalTo(0)
@@ -146,7 +147,6 @@ class KZFriendCircleCell: UITableViewCell {
         lab.textAlignment = .center
         lab.cornerRadius = 10
         lab.backgroundColor = kBlueFontColor
-        lab.isHidden = true
         lab.text = "一键转发"
         
         return lab

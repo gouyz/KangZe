@@ -162,6 +162,10 @@ class KZPublicFriendCircleVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "请输入内容")
             return
         }
+        if selectImgs.count == 0 {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择至少一张图片")
+            return
+        }
         createHUD(message: "加载中...")
         if selectImgs.count > 0 {
             for (index,item) in selectImgs.enumerated(){

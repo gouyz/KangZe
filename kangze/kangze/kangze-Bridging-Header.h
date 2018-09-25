@@ -35,3 +35,8 @@
 #import <TencentOpenAPI/TencentOAuth.h>
 #import <TencentOpenAPI/QQApiInterfaceObject.h>
 #import <TencentOpenAPI/QQApiInterface.h>
+
+
+/// 用于实现系统分享
+#import "GYZSharedItem.h"
+#import "TSShareHelper.h"
