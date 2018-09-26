@@ -20,6 +20,7 @@ class KZCustomerInfoVC: GYZBaseVC {
         self.view.backgroundColor = kWhiteColor
         
         setupUI()
+        requestCustomerData()
     }
 
     override func didReceiveMemoryWarning() {

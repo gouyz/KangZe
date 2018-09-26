@@ -38,8 +38,11 @@ class KZMyVIPManagerVC: GYZBaseVC {
     func setChildVcs() -> [GYZBaseVC] {
         
         let customerVC = KZCustomerInfoVC()
+        customerVC.memberId = (dataModel?.member_id)!
         
         let kuCunVC = KZKuCunInfoVC()
+        kuCunVC.memberId = (dataModel?.member_id)!
+        
         let dataVC = KZShengYiDataVC()
         
         return [customerVC,kuCunVC,dataVC]
