@@ -153,6 +153,57 @@ class KZFriendCircleVC: GYZBaseVC {
         }
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    /// 一键转发
+    @objc func onClickedShared(sender:UITapGestureRecognizer){
+        
+        let tag = sender.view?.tag
+        let model = dataList[tag!]
+        /// 复制内容到剪贴板
+        UIPasteboard.general.string = model.content
+        MBProgressHUD.showAutoDismissHUD(message: "朋友圈内容已复制")
+        
+        var shareItems: [GYZSharedItem] = [GYZSharedItem]()
+        let docPath: String = NSHomeDirectory()
+        
+        var sharedUrls: [URL] = [URL]()
+        for (index,item) in model.imageList!.enumerated() {
+            
+            //把图片转成NSData类型
+            if let data: NSData = try? NSData.init(contentsOf: URL.init(string: item)!){
+                
+                //写入图片中
+                if let img: UIImage = UIImage.init(data: data as Data){
+                    //图片缓存的地址，自己进行替换
+                    let imgPath: String = docPath.appending(String.init(format: "/Documents/ShareWX%d.jpg", index))
+                    
+                    //把图片写进缓存，一定要先写入本地，不然会分享出错
+                    let imgData: NSData = UIImageJPEGRepresentation(img, 0.5)! as NSData
+                    imgData.write(toFile: imgPath, atomically: true)
+                    
+                    //把缓存图片的地址转成NSUrl格式
+                    let pathUrl = URL.init(fileURLWithPath: imgPath)
+                    //这个部分是自定义ActivitySource
+                    let itemSource: GYZSharedItem = GYZSharedItem.init(data: img, andFile: pathUrl)
+                    shareItems.append(itemSource)
+                    sharedUrls.append(pathUrl)
+                }
+                
+            }
+            
+        }
+        
+        TSShareHelper.share(with: .others, andController: self, andItems: shareItems) { (sharedHelp, isSuccess) in
+
+            var desStr: String = "分享失败"
+            if isSuccess{
+                desStr = "分享成功"
+            }
+            
+            MBProgressHUD.showAutoDismissHUD(message: desStr)
+        }
+        
+    }
 }
 
 extension KZFriendCircleVC: UITableViewDelegate,UITableViewDataSource{
@@ -169,6 +220,9 @@ extension KZFriendCircleVC: UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: friendCircleCell) as! KZFriendCircleCell
         
         cell.dataModel = dataList[indexPath.row]
+        
+        cell.sharedLab.tag = indexPath.row
+        cell.sharedLab.addOnClickListener(target: self, action: #selector(onClickedShared(sender:)))
         
         cell.selectionStyle = .none
         return cell
