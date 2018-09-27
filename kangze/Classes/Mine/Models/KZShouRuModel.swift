@@ -41,7 +41,7 @@ class KZShouRuChildModel: LHSBaseModel {
     
     /// 姓名
     var buyer_name : String?
-    /// 时间戳
+    /// 时间
     var payment_time : String?
     /// 零售金额
     var goods_pay_price : String? = "0"

@@ -95,7 +95,7 @@ static TSShareHelper * shareHelper;
                     completion(self,YES);
                 }
             } else {
-                completion(self,YES);
+                completion(self,NO);
             } };
         
         return YES;

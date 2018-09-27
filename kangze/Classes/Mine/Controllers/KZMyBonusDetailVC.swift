@@ -120,9 +120,9 @@ extension KZMyBonusDetailVC: UITableViewDelegate,UITableViewDataSource{
             cell.nameLab.textColor = kBlackFontColor
             cell.nameLab.text = model.buyer_name
             cell.dateLab.textColor = kBlackFontColor
-            cell.dateLab.text = model.payment_time?.getThumbImgUrl(size: "yyyy-MM-dd")
+            cell.dateLab.text = model.payment_time
             cell.moneyLab.textColor = kBlackFontColor
-            cell.moneyLab.text = "￥" + model.goods_pay_price!
+            cell.moneyLab.text = String.init(format: "￥%.2f", Double(model.goods_pay_price!)!)
             cell.productLab.textColor = kBlackFontColor
             cell.productLab.text = model.goods_name
         }

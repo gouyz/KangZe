@@ -79,6 +79,8 @@
 		0A740EA221475B0300392AC1 /* KZCartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A740EA121475B0300392AC1 /* KZCartModel.swift */; };
 		0A740EA42147AF6900392AC1 /* KZSubmitOrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A740EA32147AF6900392AC1 /* KZSubmitOrderModel.swift */; };
 		0A740EA62147BB4700392AC1 /* KZShouRuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A740EA52147BB4700392AC1 /* KZShouRuModel.swift */; };
+		0A7533EC215C8479004ADCBC /* KZMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7533EB215C8479004ADCBC /* KZMessageModel.swift */; };
+		0A7533EE215C8A71004ADCBC /* KZMyTotalBonusVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7533ED215C8A71004ADCBC /* KZMyTotalBonusVC.swift */; };
 		0A75CD9821351CCE009B87E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A75CD9721351CCE009B87E6 /* AppDelegate.swift */; };
 		0A75CD9A21351CCE009B87E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A75CD9921351CCE009B87E6 /* ViewController.swift */; };
 		0A75CD9D21351CCE009B87E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A75CD9B21351CCE009B87E6 /* Main.storyboard */; };
@@ -311,6 +313,8 @@
 		0A740EA121475B0300392AC1 /* KZCartModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCartModel.swift; sourceTree = "<group>"; };
 		0A740EA32147AF6900392AC1 /* KZSubmitOrderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZSubmitOrderModel.swift; sourceTree = "<group>"; };
 		0A740EA52147BB4700392AC1 /* KZShouRuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZShouRuModel.swift; sourceTree = "<group>"; };
+		0A7533EB215C8479004ADCBC /* KZMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMessageModel.swift; sourceTree = "<group>"; };
+		0A7533ED215C8A71004ADCBC /* KZMyTotalBonusVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyTotalBonusVC.swift; sourceTree = "<group>"; };
 		0A75CD9421351CCE009B87E6 /* kangze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kangze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A75CD9721351CCE009B87E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A75CD9921351CCE009B87E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -621,6 +625,7 @@
 				0A496E6A2144118800E55C5B /* KZOrderModel.swift */,
 				0A496E6E214438D900E55C5B /* KZHomeModel.swift */,
 				0A19B5B6214AB6B600859F88 /* KZFriendCircleModel.swift */,
+				0A7533EB215C8479004ADCBC /* KZMessageModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -810,6 +815,7 @@
 				0A87F20821421A9A002F0AB8 /* KZShengYiDataVC.swift */,
 				0A48FCB1214220AC000B5C1F /* KZKuCunInfoVC.swift */,
 				0A19B5B4214AA1B900859F88 /* KZRechargePosPayVC.swift */,
+				0A7533ED215C8A71004ADCBC /* KZMyTotalBonusVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1369,6 +1375,7 @@
 				0A75CE6821351FCD009B87E6 /* AXBadgeView.swift in Sources */,
 				0A75CE8A21351FCD009B87E6 /* GYZAddressBookManager.swift in Sources */,
 				0A75CE4821351FCC009B87E6 /* GYZCommonInfoCell.swift in Sources */,
+				0A7533EE215C8A71004ADCBC /* KZMyTotalBonusVC.swift in Sources */,
 				0A75CE9E21353318009B87E6 /* KZHomeCell.swift in Sources */,
 				0A8F32F3213FD22A00980EDE /* KZApplyFriendsVC.swift in Sources */,
 				0A7A9E7621490AC9005DF8DA /* KZCashRecordModel.swift in Sources */,
@@ -1511,6 +1518,7 @@
 				0A75CE5421351FCC009B87E6 /* GYZMainTabBarVC.swift in Sources */,
 				0A34784A2159CDCA00AA3D78 /* GYZSharedItem.m in Sources */,
 				0A71F31221411224001201C1 /* KZCashVC.swift in Sources */,
+				0A7533EC215C8479004ADCBC /* KZMessageModel.swift in Sources */,
 				0A75CE7621351FCD009B87E6 /* UsefulPickerView.swift in Sources */,
 				0A496E6F214438D900E55C5B /* KZHomeModel.swift in Sources */,
 				0A75CEA22135472A009B87E6 /* GYZSearchNavBarView.swift in Sources */,

@@ -44,6 +44,7 @@ class KZMyVIPManagerVC: GYZBaseVC {
         kuCunVC.memberId = (dataModel?.member_id)!
         
         let dataVC = KZShengYiDataVC()
+        dataVC.memberId = (dataModel?.member_id)!
         
         return [customerVC,kuCunVC,dataVC]
     }

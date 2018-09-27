@@ -52,7 +52,7 @@ class KZMyShouRuCell: UITableViewCell {
     /// 姓名
     lazy var nameLab : UILabel = {
         let lab = UILabel()
-        lab.font = k13Font
+        lab.font = k12Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .center
         
@@ -61,7 +61,7 @@ class KZMyShouRuCell: UITableViewCell {
     /// 时间
     lazy var dateLab : UILabel = {
         let lab = UILabel()
-        lab.font = k13Font
+        lab.font = k12Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .center
         
@@ -79,7 +79,7 @@ class KZMyShouRuCell: UITableViewCell {
     /// 产品
     lazy var productLab : UILabel = {
         let lab = UILabel()
-        lab.font = k13Font
+        lab.font = k12Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .center
         

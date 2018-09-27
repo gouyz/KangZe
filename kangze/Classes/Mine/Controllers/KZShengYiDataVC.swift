@@ -7,10 +7,16 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class KZShengYiDataVC: GYZBaseVC {
     
     let timeArr: [String] = ["当月","上个月","本季度","半年"]
+    let typeArr: [String] = ["1","2","3","4"]
+    /// 会员id
+    var memberId: String = ""
+    /// 选择时间type
+    var selectType: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +24,8 @@ class KZShengYiDataVC: GYZBaseVC {
         self.view.backgroundColor = kWhiteColor
         
         setupUI()
+        
+        requestDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -115,7 +123,7 @@ class KZShengYiDataVC: GYZBaseVC {
         lab.font = k15Font
         lab.textColor = kBlueFontColor
         lab.textAlignment = .center
-        lab.text = "本季度"
+        lab.text = timeArr[selectType]
         lab.addOnClickListener(target: self, action: #selector(onClickedSelectTime))
         
         return lab
@@ -127,7 +135,7 @@ class KZShengYiDataVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kBlueFontColor
         lab.textAlignment = .right
-        lab.text = "销售额：￥98888.00"
+        lab.text = "销售额：￥0.00"
         
         return lab
     }()
@@ -148,7 +156,7 @@ class KZShengYiDataVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .center
-        lab.text = "￥7788.00"
+        lab.text = "￥0.00"
         
         return lab
     }()
@@ -168,7 +176,7 @@ class KZShengYiDataVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kBlackFontColor
         lab.textAlignment = .center
-        lab.text = "￥7788.00"
+        lab.text = "￥0.00"
         
         return lab
     }()
@@ -181,11 +189,48 @@ class KZShengYiDataVC: GYZBaseVC {
     func showSelectTime(){
         GYZAlertViewTools.alertViewTools.showSheet(title: "选择时间", message: nil, cancleTitle: "取消", titleArray: timeArr, viewController: self) { [weak self](index) in
             
-            if index == 0{//拍照
-                //                self?.openCamera()
-            }else if index == 1 {//从相册选取
-                //                self?.openPhotos()
+            if index != cancelIndex{
+                self?.selectType = index
+                self?.timeLab.text = self?.timeArr[index]
+                
+                self?.requestDatas()
             }
         }
+    }
+    
+    ///获取数据
+    func requestDatas(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        showLoadingView()
+        
+        GYZNetWork.requestNetwork("member_invite&op=get_taocan_total_by_member",parameters: ["key": userDefaults.string(forKey: "key") ?? "","type":typeArr[selectType],"member_id":memberId],method : .get,  success: { (response) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                let data = response["datas"]
+                weakSelf?.moneyLab.text = String.init(format: "销售额：￥%.2f", Double(data["sell_total"].stringValue)!)
+                weakSelf?.heHuoMoneyLab.text = String.init(format: "￥%.2f", Double(data["daili_total"].stringValue)!)
+                weakSelf?.xuHuoMoneyLab.text = String.init(format: "￥%.2f", Double(data["xuhuo_total"].stringValue)!)
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.requestDatas()
+            })
+        })
     }
 }

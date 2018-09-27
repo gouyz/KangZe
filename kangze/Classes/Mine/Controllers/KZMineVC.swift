@@ -67,6 +67,8 @@ class KZMineVC: GYZBaseVC {
         
         if userDefaults.bool(forKey: kIsLoginTagKey) {
             requestMineData()
+        }else{
+            setEmptyHeaderData()
         }
     }
     
@@ -126,6 +128,17 @@ class KZMineVC: GYZBaseVC {
         
         userDefaults.set(data["is_shehe"].stringValue, forKey: "is_shehe")//是否完成实名认证
         userDefaults.set(data["is_buydl"].stringValue, forKey: "is_buydl")//是否完成合伙人套餐购买认证   1.是     0.否
+    }
+    
+    ///
+    func setEmptyHeaderData(){
+        userHeaderView.nameLab.text = "登录/注册"
+        userHeaderView.userHeaderView.image = UIImage.init(named: "icon_header_default")
+        userHeaderView.typeLab.text = "会员"
+        userHeaderView.phoneLab.text = "手机号"
+        userHeaderView.favouriteNumberLab.text = "0"
+        userHeaderView.kuCunNumberLab.text = "0"
+        
     }
     
     /// 未登录时，点击登录

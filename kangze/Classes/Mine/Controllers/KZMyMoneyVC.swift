@@ -11,7 +11,7 @@ import MBProgressHUD
 
 class KZMyMoneyVC: GYZBaseVC {
 
-    let titleArr : [String] = ["零售收入","业绩奖金"]
+    let titleArr : [String] = ["零售收入","零售奖金","业绩奖金"]
     var scrollPageView: ScrollPageView?
     
     override func viewDidLoad() {
@@ -36,10 +36,10 @@ class KZMyMoneyVC: GYZBaseVC {
     func setChildVcs() -> [GYZBaseVC] {
         
         let shouRuVC = KZMyShouRuVC()
+        let salebonusVC = KZMyBonusVC()
+        let bonusVC = KZMyTotalBonusVC()
         
-        let bonusVC = KZMyBonusVC()
-        
-        return [shouRuVC,bonusVC]
+        return [shouRuVC,salebonusVC,bonusVC]
     }
     
     /// 设置scrollView

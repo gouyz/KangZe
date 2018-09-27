@@ -14,8 +14,8 @@ private let homeCell = "homeCell"
 class KZHomeVC: KZCommonNavBarVC {
     
     var dataModel: KZHomeModel?
-    let titleArr: [String] = ["本周热销","合伙人套餐","续货套餐"]
-    let iconArr: [String] = ["icon_home_hot_sale","icon_home_hehuo","icon_home_xuhuo"]
+    var titleArr: [String] = [String]()
+    var iconArr: [String] = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,11 +48,12 @@ class KZHomeVC: KZCommonNavBarVC {
         table.separatorStyle = .none
         
         table.register(KZHomeCell.self, forCellReuseIdentifier: homeCell)
-        //        weak var weakSelf = self
-        //        ///添加下拉刷新
-        //        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
-        //            weakSelf?.refresh()
-        //        })
+        
+        weak var weakSelf = self
+        ///添加下拉刷新
+        GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
+            weakSelf?.requestHomeDatas()
+        })
         //        ///添加上拉加载更多
         //        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
         //            weakSelf?.loadMore()
@@ -63,6 +64,15 @@ class KZHomeVC: KZCommonNavBarVC {
     
     lazy var headerView: KZHomeAdsHeaderView = KZHomeAdsHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: (kScreenWidth - kMargin * 2) * 0.4 + 80))
     
+    /// 关闭上拉/下拉刷新
+    func closeRefresh(){
+        if tableView.mj_header.isRefreshing{//下拉刷新
+            GYZTool.endRefresh(scorllView: tableView)
+        }
+        //        else if tableView.mj_footer.isRefreshing{//上拉加载更多
+        //            GYZTool.endLoadMore(scorllView: tableView)
+        //        }
+    }
     ///获取首页数据
     func requestHomeDatas(){
         if !GYZTool.checkNetWork() {
@@ -72,9 +82,10 @@ class KZHomeVC: KZCommonNavBarVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("goods&op=shop_index",parameters: nil,method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork("goods&op=shop_index",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],method : .get,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
+            weakSelf?.closeRefresh()
             GYZLog(response)
             
             if response["code"].intValue == kQuestSuccessTag{//请求成功
@@ -89,12 +100,27 @@ class KZHomeVC: KZCommonNavBarVC {
         }, failture: { (error) in
             
             weakSelf?.hud?.hide(animated: true)
+            weakSelf?.closeRefresh()
             GYZLog(error)
         })
     }
     
     func setData(){
         headerView.adsImgView.setUrlsGroup([(dataModel?.header_pic)!])
+        if dataModel?.goodList != nil {
+            for item in (dataModel?.goodList)! {
+                if item.goods_type == "1"{
+                    titleArr.append("本周热销")
+                    iconArr.append("icon_home_hot_sale")
+                }else if item.goods_type == "2"{
+                    titleArr.append("合伙人套餐")
+                    iconArr.append("icon_home_hehuo")
+                }else if item.goods_type == "3"{
+                    titleArr.append("续货套餐")
+                    iconArr.append("icon_home_xuhuo")
+                }
+            }
+        }
         tableView.reloadData()
     }
     
