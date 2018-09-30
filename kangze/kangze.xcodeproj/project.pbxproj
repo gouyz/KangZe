@@ -197,6 +197,8 @@
 		0A7C9B28213CDD4F00E04E81 /* KZFriendCircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7C9B27213CDD4F00E04E81 /* KZFriendCircleCell.swift */; };
 		0A7C9B2A213D0A0D00E04E81 /* KZPublicFriendCircleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7C9B29213D0A0C00E04E81 /* KZPublicFriendCircleVC.swift */; };
 		0A7C9B2C213D0E8D00E04E81 /* KZMessageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7C9B2B213D0E8D00E04E81 /* KZMessageVC.swift */; };
+		0A878AE22160B1B800DFE075 /* KZMessageDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A878AE12160B1B800DFE075 /* KZMessageDetailVC.swift */; };
+		0A878AE42160B35000DFE075 /* KZMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A878AE32160B35000DFE075 /* KZMessageCell.swift */; };
 		0A87F207214217C5002F0AB8 /* KZCustomerInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A87F206214217C5002F0AB8 /* KZCustomerInfoVC.swift */; };
 		0A87F20921421A9A002F0AB8 /* KZShengYiDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A87F20821421A9A002F0AB8 /* KZShengYiDataVC.swift */; };
 		0A8F32DD213F7EEC00980EDE /* KZMyKuCunVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F32DC213F7EEC00980EDE /* KZMyKuCunVC.swift */; };
@@ -445,6 +447,8 @@
 		0A7C9B27213CDD4F00E04E81 /* KZFriendCircleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZFriendCircleCell.swift; sourceTree = "<group>"; };
 		0A7C9B29213D0A0C00E04E81 /* KZPublicFriendCircleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZPublicFriendCircleVC.swift; sourceTree = "<group>"; };
 		0A7C9B2B213D0E8D00E04E81 /* KZMessageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMessageVC.swift; sourceTree = "<group>"; };
+		0A878AE12160B1B800DFE075 /* KZMessageDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMessageDetailVC.swift; sourceTree = "<group>"; };
+		0A878AE32160B35000DFE075 /* KZMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMessageCell.swift; sourceTree = "<group>"; };
 		0A87F206214217C5002F0AB8 /* KZCustomerInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCustomerInfoVC.swift; sourceTree = "<group>"; };
 		0A87F20821421A9A002F0AB8 /* KZShengYiDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZShengYiDataVC.swift; sourceTree = "<group>"; };
 		0A8F32DC213F7EEC00980EDE /* KZMyKuCunVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZMyKuCunVC.swift; sourceTree = "<group>"; };
@@ -644,6 +648,7 @@
 				0A7C9B29213D0A0C00E04E81 /* KZPublicFriendCircleVC.swift */,
 				0A7C9B2B213D0E8D00E04E81 /* KZMessageVC.swift */,
 				0A496E6821440C4000E55C5B /* KZArticleDetailVC.swift */,
+				0A878AE12160B1B800DFE075 /* KZMessageDetailVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -658,6 +663,7 @@
 				0A7C9B21213CC21500E04E81 /* KZOrderFooterView.swift */,
 				0A7C9B23213CC7B000E04E81 /* KZOrderCell.swift */,
 				0A7C9B27213CDD4F00E04E81 /* KZFriendCircleCell.swift */,
+				0A878AE32160B35000DFE075 /* KZMessageCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1408,6 +1414,7 @@
 				0A75CE7E21351FCD009B87E6 /* GYZScanQrcodeVC.swift in Sources */,
 				0A8F32DF213F7F6D00980EDE /* KZMyKuCunCell.swift in Sources */,
 				0A87F20921421A9A002F0AB8 /* KZShengYiDataVC.swift in Sources */,
+				0A878AE22160B1B800DFE075 /* KZMessageDetailVC.swift in Sources */,
 				0A740EA42147AF6900392AC1 /* KZSubmitOrderModel.swift in Sources */,
 				0A75CE8621351FCD009B87E6 /* ScrollSegmentView.swift in Sources */,
 				0A75CE6E21351FCD009B87E6 /* HXTagAttribute.m in Sources */,
@@ -1524,6 +1531,7 @@
 				0A75CEA22135472A009B87E6 /* GYZSearchNavBarView.swift in Sources */,
 				0A1575982148007900F8DE40 /* KZApplySendModel.swift in Sources */,
 				0A75CE5721351FCC009B87E6 /* GYZBaseVC.swift in Sources */,
+				0A878AE42160B35000DFE075 /* KZMessageCell.swift in Sources */,
 				0A48FCB2214220AC000B5C1F /* KZKuCunInfoVC.swift in Sources */,
 				0A71F316214114E7001201C1 /* KZCashRecordVC.swift in Sources */,
 				0A496E6D214413DB00E55C5B /* KZGoodsModel.swift in Sources */,

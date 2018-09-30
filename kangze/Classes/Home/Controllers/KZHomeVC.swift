@@ -16,6 +16,8 @@ class KZHomeVC: KZCommonNavBarVC {
     var dataModel: KZHomeModel?
     var titleArr: [String] = [String]()
     var iconArr: [String] = [String]()
+    /// 未读消息数量
+    var msgNumber: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +43,11 @@ class KZHomeVC: KZCommonNavBarVC {
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        requestMessageNumber()
+    }
+    
     lazy var tableView : UITableView = {
         let table = UITableView(frame: CGRect.zero, style: .grouped)
         table.dataSource = self
@@ -53,6 +60,7 @@ class KZHomeVC: KZCommonNavBarVC {
         ///添加下拉刷新
         GYZTool.addPullRefresh(scorllView: table, pullRefreshCallBack: {
             weakSelf?.requestHomeDatas()
+            weakSelf?.requestMessageNumber()
         })
         //        ///添加上拉加载更多
         //        GYZTool.addLoadMore(scorllView: table, loadMoreCallBack: {
@@ -122,6 +130,39 @@ class KZHomeVC: KZCommonNavBarVC {
             }
         }
         tableView.reloadData()
+    }
+    
+    ///获取未读消息数量数据
+    func requestMessageNumber(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("message&op=get_unread_count",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],method : .get,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            weakSelf?.closeRefresh()
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.msgNumber = response["datas"]["unread_count"].stringValue
+                weakSelf?.setMsgBadage()
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            weakSelf?.closeRefresh()
+            GYZLog(error)
+        })
+    }
+    /// 设置消息角标
+    func setMsgBadage(){
+        headerView.messageBtn.badgeView.text = msgNumber
+        headerView.messageBtn.showBadge(animated: false)
     }
     
     /// 公司动态、订单、朋友圈素材、消息

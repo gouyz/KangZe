@@ -30,7 +30,8 @@ class KZHomeAdsHeaderView: UIView {
         self.addSubview(dynamicBtn)
         self.addSubview(orderBtn)
         self.addSubview(friendCircleBtn)
-        self.addSubview(messageBtn)
+        self.addSubview(msgBgView)
+        msgBgView.addSubview(messageBtn)
         
         adsImgView.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
@@ -52,14 +53,17 @@ class KZHomeAdsHeaderView: UIView {
         friendCircleBtn.snp.makeConstraints { (make) in
             make.top.bottom.equalTo(dynamicBtn)
             make.left.equalTo(orderBtn.snp.right)
-            make.width.equalTo(messageBtn)
+            make.width.equalTo(msgBgView)
         }
-        
-        messageBtn.snp.makeConstraints { (make) in
+        msgBgView.snp.makeConstraints { (make) in
             make.top.bottom.equalTo(dynamicBtn)
             make.left.equalTo(friendCircleBtn.snp.right)
             make.right.equalTo(adsImgView)
             make.width.equalTo(dynamicBtn)
+        }
+        messageBtn.snp.makeConstraints { (make) in
+            make.size.equalTo(CGSize.init(width: 50, height: 50))
+            make.center.equalTo(msgBgView)
         }
         
         dynamicBtn.set(image: UIImage.init(named: "icon_home_dynamic"), title: "公司动态", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
@@ -106,6 +110,13 @@ class KZHomeAdsHeaderView: UIView {
         btn.tag = 103
         btn.addTarget(self, action: #selector(clickedOperateBtn(btn:)), for: .touchUpInside)
         return btn
+    }()
+    
+    lazy var msgBgView: UIView = {
+        let view = UIView()
+        view.backgroundColor = kWhiteColor
+        
+        return view
     }()
     /// 消息
     lazy var messageBtn : UIButton = {

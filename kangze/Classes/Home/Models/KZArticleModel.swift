@@ -27,4 +27,6 @@ class KZArticleModel: LHSBaseModel {
     var article_content : String? = ""
     /// 添加时间
     var article_time : String?
+    /// //文章列表缩略图的url
+    var thumb : String?
 }

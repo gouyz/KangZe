@@ -19,4 +19,8 @@ class KZMessageModel: LHSBaseModel {
     var article_title : String? = ""
     /// 文章内容
     var article_content : String? = ""
+    /// 添加时间
+    var article_time : String? = ""
+    /// 0未读/1已读  状态
+    var read_status : String? = "0"
 }

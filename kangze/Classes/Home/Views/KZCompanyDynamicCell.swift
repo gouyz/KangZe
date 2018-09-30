@@ -18,7 +18,7 @@ class KZCompanyDynamicCell: UITableViewCell {
         didSet{
             if let model = dataModel {
                 
-                iconView.kf.setImage(with: URL.init(string: ""), placeholder: UIImage.init(named: "icon_dynamic_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                iconView.kf.setImage(with: URL.init(string: model.thumb!), placeholder: UIImage.init(named: "icon_dynamic_default"), options: nil, progressBlock: nil, completionHandler: nil)
                 nameLab.text = model.article_title
                 dateLab.text = model.article_time?.getDateTime(format: "yyyy-MM-dd")
             }
