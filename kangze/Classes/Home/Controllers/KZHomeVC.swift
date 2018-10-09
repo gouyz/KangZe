@@ -161,8 +161,13 @@ class KZHomeVC: KZCommonNavBarVC {
     }
     /// 设置消息角标
     func setMsgBadage(){
-        headerView.messageBtn.badgeView.text = msgNumber
-        headerView.messageBtn.showBadge(animated: false)
+        if Int.init(msgNumber) > 0 {
+            headerView.messageBtn.badgeView.text = msgNumber
+            headerView.messageBtn.showBadge(animated: false)
+        }else{
+            headerView.messageBtn.clearBadge(animated: false)
+        }
+        
     }
     
     /// 公司动态、订单、朋友圈素材、消息
