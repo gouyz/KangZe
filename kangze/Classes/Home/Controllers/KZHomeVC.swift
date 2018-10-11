@@ -252,7 +252,7 @@ extension KZHomeVC: UITableViewDelegate,UITableViewDataSource{
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return (kScreenWidth - kMargin * 2) * 0.5 + 70
+        return (kScreenWidth - kMargin * 2) * 0.49 + 70
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0.00001

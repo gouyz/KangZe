@@ -14,18 +14,18 @@ class KZMyBankCell: UITableViewCell {
         didSet{
             if let model = dataModel {
                 
-                let name: String = model.card_type!
-                var imgName: String = ""
-                if name.contains("建设银行") {
-                    imgName = "icon_bank_jianse"
-                }else if name.contains("农业银行") {
-                    imgName = "icon_bank_nongye"
-                }else if name.contains("中国银行") {
-                    imgName = "icon_bank_china"
-                }else if name.contains("交通银行") {
-                    imgName = "icon_bank_jiaotong"
-                }
-                iconView.image = UIImage.init(named: imgName)
+//                let name: String = model.card_type!
+//                var imgName: String = ""
+//                if name.contains("建设银行") {
+//                    imgName = "icon_bank_jianse"
+//                }else if name.contains("农业银行") {
+//                    imgName = "icon_bank_nongye"
+//                }else if name.contains("中国银行") {
+//                    imgName = "icon_bank_china"
+//                }else if name.contains("交通银行") {
+//                    imgName = "icon_bank_jiaotong"
+//                }
+//                iconView.image = UIImage.init(named: imgName)
                 nameLab.text = model.card_type
                 numberLab.text = model.end_num
             }
@@ -45,19 +45,19 @@ class KZMyBankCell: UITableViewCell {
     func setupUI(){
         contentView.backgroundColor = kWhiteColor
         
-        contentView.addSubview(iconView)
+//        contentView.addSubview(iconView)
         contentView.addSubview(nameLab)
         contentView.addSubview(numberLab)
         contentView.addSubview(checkImgView)
         
-        iconView.snp.makeConstraints { (make) in
-            make.left.equalTo(kMargin)
-            make.centerY.equalTo(contentView)
-            make.size.equalTo(CGSize.init(width: 30, height: 30))
-        }
+//        iconView.snp.makeConstraints { (make) in
+//            make.left.equalTo(kMargin)
+//            make.centerY.equalTo(contentView)
+//            make.size.equalTo(CGSize.init(width: 30, height: 30))
+//        }
         nameLab.snp.makeConstraints { (make) in
-            make.left.equalTo(iconView.snp.right).offset(kMargin)
-            make.top.equalTo(iconView)
+            make.left.equalTo(kMargin)
+            make.top.equalTo(kMargin)
             make.right.equalTo(checkImgView.snp.left).offset(-kMargin)
             make.height.equalTo(20)
         }
@@ -73,7 +73,7 @@ class KZMyBankCell: UITableViewCell {
     }
     
     /// 图标
-    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_bank_jianse"))
+//    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_bank_jianse"))
     
     /// 银行名称
     lazy var nameLab : UILabel = {

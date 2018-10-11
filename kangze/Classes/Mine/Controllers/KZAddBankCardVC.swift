@@ -14,7 +14,7 @@ class KZAddBankCardVC: GYZBaseVC {
     var resultBlock:(() -> Void)?
     
     /// 只能是指定的4个银行
-    var isNeedBank: Bool = true
+//    var isNeedBank: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +28,7 @@ class KZAddBankCardVC: GYZBaseVC {
         bgView.addSubview(cardNoField)
         bgView.addSubview(lineView1)
         bgView.addSubview(nameLab)
-        bgView.addSubview(iconView)
-        bgView.addSubview(bankNameLab)
+        bgView.addSubview(bankNameField)
         bgView.addSubview(lineView2)
         bgView.addSubview(noteLab)
         bgView.addSubview(saveBtn)
@@ -70,15 +69,9 @@ class KZAddBankCardVC: GYZBaseVC {
             make.left.right.height.equalTo(personLab)
             make.top.equalTo(lineView1.snp.bottom)
         }
-        iconView.snp.makeConstraints { (make) in
-            make.left.equalTo(personField)
-            make.centerY.equalTo(nameLab)
-            make.size.equalTo(CGSize.init(width: 30, height: 30))
-        }
-        bankNameLab.snp.makeConstraints { (make) in
-            make.left.equalTo(iconView.snp.right).offset(kMargin)
-            make.top.height.equalTo(nameLab)
-            make.right.equalTo(personField)
+        bankNameField.snp.makeConstraints { (make) in
+            make.left.right.equalTo(personField)
+            make.top.bottom.equalTo(nameLab)
         }
         lineView2.snp.makeConstraints { (make) in
             make.left.right.height.equalTo(lineView)
@@ -96,7 +89,7 @@ class KZAddBankCardVC: GYZBaseVC {
             make.height.equalTo(kUIButtonHeight)
         }
         
-        cardNoField.delegate = self
+//        cardNoField.delegate = self
     }
     
     override func didReceiveMemoryWarning() {
@@ -175,16 +168,16 @@ class KZAddBankCardVC: GYZBaseVC {
         return lab
     }()
     
-    /// 图标
-    lazy var iconView: UIImageView = UIImageView()
-    
-    /// 银行名称
-    lazy var bankNameLab : UILabel = {
-        let lab = UILabel()
-        lab.font = k15Font
-        lab.textColor = kBlackFontColor
+    /// 开户行名称输入内容
+    lazy var bankNameField : UITextField = {
         
-        return lab
+        let textFiled = UITextField()
+        textFiled.font = k15Font
+        textFiled.textColor = kBlackFontColor
+        textFiled.placeholder = "请输入开户行名称"
+        textFiled.clearButtonMode = .whileEditing
+        
+        return textFiled
     }()
     lazy var lineView2: UIView = {
         let view = UIView()
@@ -198,7 +191,7 @@ class KZAddBankCardVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kRedFontColor
         lab.numberOfLines = 2
-        lab.text = "目前仅支持建设银行、农业银行、中国银行、交通银行"
+//        lab.text = "目前仅支持建设银行、农业银行、中国银行、交通银行"
         
         return lab
     }()
@@ -232,8 +225,8 @@ class KZAddBankCardVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "请输入正确的银行卡号")
             return
         }
-        if (bankNameLab.text?.isEmpty)! {
-            MBProgressHUD.showAutoDismissHUD(message: "请绑定指定银行的银行卡")
+        if (bankNameField.text?.isEmpty)! {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入开户行名称")
             return
         }
         requestAddBankCard()
@@ -249,7 +242,7 @@ class KZAddBankCardVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("member_card&op=add_card",parameters: ["card_name":personField.text!,"key": userDefaults.string(forKey: "key") ?? "","card_type": bankNameLab.text!,"card_num": cardNoField.text!],  success: { (response) in
+        GYZNetWork.requestNetwork("member_card&op=add_card",parameters: ["card_name":personField.text!,"key": userDefaults.string(forKey: "key") ?? "","card_type": bankNameField.text!,"card_num": cardNoField.text!],  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
@@ -270,45 +263,45 @@ class KZAddBankCardVC: GYZBaseVC {
         })
     }
     
-    func setBankData(){
-        let name = GYZCheckTool.getBankName(cardNoField.text)
-        var imgName: String = ""
-        if (name?.contains("建设银行"))! || (name?.contains("农业银行"))! || (name?.contains("中国银行"))! || (name?.contains("交通银行"))!{
-            isNeedBank = true
-            bankNameLab.text = name
-            
-            if (name?.contains("建设银行"))! {
-                imgName = "icon_bank_jianse"
-            }else if (name?.contains("农业银行"))! {
-                imgName = "icon_bank_nongye"
-            }else if (name?.contains("中国银行"))! {
-                imgName = "icon_bank_china"
-            }else if (name?.contains("交通银行"))! {
-                imgName = "icon_bank_jiaotong"
-            }
-            
-        }else{
-            MBProgressHUD.showAutoDismissHUD(message: "请绑定指定银行的银行卡")
-            isNeedBank = false
-            bankNameLab.text = ""
-        }
-        iconView.image = UIImage.init(named: imgName)
-    }
+//    func setBankData(){
+//        let name = GYZCheckTool.getBankName(cardNoField.text)
+//        var imgName: String = ""
+//        if (name?.contains("建设银行"))! || (name?.contains("农业银行"))! || (name?.contains("中国银行"))! || (name?.contains("交通银行"))!{
+//            isNeedBank = true
+//            bankNameLab.text = name
+//
+//            if (name?.contains("建设银行"))! {
+//                imgName = "icon_bank_jianse"
+//            }else if (name?.contains("农业银行"))! {
+//                imgName = "icon_bank_nongye"
+//            }else if (name?.contains("中国银行"))! {
+//                imgName = "icon_bank_china"
+//            }else if (name?.contains("交通银行"))! {
+//                imgName = "icon_bank_jiaotong"
+//            }
+//
+//        }else{
+//            MBProgressHUD.showAutoDismissHUD(message: "请绑定指定银行的银行卡")
+//            isNeedBank = false
+//            bankNameLab.text = ""
+//        }
+//        iconView.image = UIImage.init(named: imgName)
+//    }
 }
-extension KZAddBankCardVC : UITextFieldDelegate{
-    //编辑结束
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.text?.count < 1 || textField.text?.count > 19 {
-            bankNameLab.text = ""
-            iconView.image = nil
-        }
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        if cardNoField.text?.count == 8 {
-            setBankData()
-        }
-        return true
-    }
-}
+//extension KZAddBankCardVC : UITextFieldDelegate{
+//    //编辑结束
+//    func textFieldDidEndEditing(_ textField: UITextField) {
+//        if textField.text?.count < 1 || textField.text?.count > 19 {
+//            bankNameLab.text = ""
+//            iconView.image = nil
+//        }
+//    }
+//
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//
+//        if cardNoField.text?.count == 8 {
+//            setBankData()
+//        }
+//        return true
+//    }
+//}
