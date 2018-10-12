@@ -16,10 +16,11 @@ class KZShopCell: UITableViewCell {
                 
                 iconView.kf.setImage(with: URL.init(string: model.goods_image_url!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
                 
-                let name: String = model.goos_type_str! + model.goods_name!
-                let nameAttr : NSMutableAttributedString = NSMutableAttributedString(string: name)
-                nameAttr.addAttribute(NSAttributedStringKey.foregroundColor, value: kRedFontColor, range: NSMakeRange(0, (model.goos_type_str?.count)!))
-                nameLab.attributedText = nameAttr
+//                let name: String = model.goos_type_str! + model.goods_name!
+//                let nameAttr : NSMutableAttributedString = NSMutableAttributedString(string: name)
+//                nameAttr.addAttribute(NSAttributedStringKey.foregroundColor, value: kRedFontColor, range: NSMakeRange(0, (model.goos_type_str?.count)!))
+//                nameLab.attributedText = nameAttr
+                nameLab.text = model.goods_name
                 priceLab.text = "￥" + model.goods_price!
                 saleLab.text = "月销\(model.month_sell_count!)件"
                 payNumberLab.text = "\(model.pay_count!)人付款"
