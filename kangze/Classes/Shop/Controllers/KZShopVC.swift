@@ -54,7 +54,7 @@ class KZShopVC: KZCommonNavBarVC {
         weak var weakSelf = self
         showLoadingView()
         
-        GYZNetWork.requestNetwork("goods&op=goods_list",parameters: nil,method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork("goods&op=goods_list",parameters: ["key": userDefaults.string(forKey: "key") ?? ""],method : .get,  success: { (response) in
             
             weakSelf?.hiddenLoadingView()
             GYZLog(response)

@@ -45,7 +45,13 @@ class KZHomeVC: KZCommonNavBarVC {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        requestMessageNumber()
+        if !userDefaults.bool(forKey: kIsLoginTagKey) {
+            msgNumber = "0"
+            setMsgBadage()
+        }else{
+            requestMessageNumber()
+        }
+        
     }
     
     lazy var tableView : UITableView = {

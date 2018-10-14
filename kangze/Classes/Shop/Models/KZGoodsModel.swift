@@ -64,7 +64,7 @@ class KZGoodsModel: LHSBaseModel {
     /// 商品属性
     var attr : KZGoodsAttrModel?
     /// 会员信息
-    var member : [String: String]?
+    var member : KZGoodsUserInfoModel?
     
     /// 收藏id
     var fav_id : String? = ""
@@ -76,12 +76,13 @@ class KZGoodsModel: LHSBaseModel {
             guard let datas = value as? [String : Any] else { return }
             attr = KZGoodsAttrModel.init(dict: datas)
         }else if key == "member"{
-            member = [String: String]()
             guard let datas = value as? [String : Any] else { return }
-            member!["is_login"] = datas["is_login"] as? String
-            member!["is_shehe"] = datas["is_shehe"] as? String
-            member!["is_buydl"] = datas["is_buydl"] as? String
-            member!["member_id"] = datas["member_id"] as? String
+            member = KZGoodsUserInfoModel.init(dict: datas)
+//            member!["is_login"] = String.init(format: "%d", (datas["is_login"] as? Int)!)
+//            member!["is_shehe"] = datas["is_shehe"] as? String
+//            member!["is_buydl"] = datas["is_buydl"] as? String
+//            //0 您还未实名认证，认证后才能享受合伙人制度！ 1 您的实名资料正在审核中！   2(无提示)    3 您的实名资料被拒绝！
+//            member!["sm_status"] = String.init(format: "%d", (datas["sm_status"] as? Int)!)
         }
         else {
             super.setValue(value, forKey: key)
@@ -107,5 +108,21 @@ class KZGoodsAttrModel: LHSBaseModel{
     var packaging_type : String? = ""
     /// 适用阶段
     var applicable_user : String?
+    /// 包含商品数量
+    var include_num : String? = "0"
+}
+
+/// 商品用户信息
+@objcMembers
+class KZGoodsUserInfoModel: LHSBaseModel{
+    
+    /// 是否登录
+    var is_login : String?
+    /// 是否实名认证
+    var is_shehe : String? = "0"
+    /// 是否购买合伙人套餐认证
+    var is_buydl : String? = "0"
+    //0 您还未实名认证，认证后才能享受合伙人制度！ 1 您的实名资料正在审核中！   2(无提示)    3 您的实名资料被拒绝！
+    var sm_status : String? = "0"
 }
 

@@ -28,9 +28,9 @@ class KZGoodsDetailHeaderView: UIView {
         bgView.addSubview(nameLab)
         bgView.addSubview(sharedBtn)
         bgView.addSubview(priceLab)
-        bgView.addSubview(typeLab)
-        bgView.addSubview(saleLab)
-        bgView.addSubview(addressLab)
+//        bgView.addSubview(typeLab)
+//        bgView.addSubview(saleLab)
+//        bgView.addSubview(addressLab)
         
         self.addSubview(productView)
         productView.addSubview(productLab)
@@ -47,7 +47,7 @@ class KZGoodsDetailHeaderView: UIView {
         
         bgView.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(self)
-            make.height.equalTo(kScreenWidth * 0.75 + 100)
+            make.height.equalTo(kScreenWidth * 0.75 + 70)
         }
         
         iconView.snp.makeConstraints { (make) in
@@ -69,26 +69,27 @@ class KZGoodsDetailHeaderView: UIView {
         priceLab.snp.makeConstraints { (make) in
             make.top.equalTo(nameLab.snp.bottom)
             make.left.equalTo(nameLab)
-            make.width.equalTo(80)
+            make.right.equalTo(-kMargin)
+//            make.width.equalTo(80)
             make.height.equalTo(20)
         }
         
-        typeLab.snp.makeConstraints { (make) in
-            make.top.height.equalTo(priceLab)
-            make.left.equalTo(priceLab.snp.right)
-            make.width.equalTo(80)
-        }
-        saleLab.snp.makeConstraints { (make) in
-            make.left.equalTo(nameLab)
-            make.top.equalTo(priceLab.snp.bottom).offset(kMargin)
-            make.height.equalTo(20)
-            make.width.equalTo(kScreenWidth * 0.4)
-        }
-        addressLab.snp.makeConstraints { (make) in
-            make.top.height.equalTo(saleLab)
-            make.left.equalTo(saleLab.snp.right).offset(kMargin)
-            make.right.equalTo(-kMargin)
-        }
+//        typeLab.snp.makeConstraints { (make) in
+//            make.top.height.equalTo(priceLab)
+//            make.left.equalTo(priceLab.snp.right)
+//            make.width.equalTo(80)
+//        }
+//        saleLab.snp.makeConstraints { (make) in
+//            make.left.equalTo(nameLab)
+//            make.top.equalTo(priceLab.snp.bottom).offset(kMargin)
+//            make.height.equalTo(20)
+//            make.width.equalTo(kScreenWidth * 0.4)
+//        }
+//        addressLab.snp.makeConstraints { (make) in
+//            make.top.height.equalTo(saleLab)
+//            make.left.equalTo(saleLab.snp.right).offset(kMargin)
+//            make.right.equalTo(-kMargin)
+//        }
         
         productView.snp.makeConstraints { (make) in
             make.left.right.equalTo(self)
@@ -195,36 +196,36 @@ class KZGoodsDetailHeaderView: UIView {
         return lab
     }()
     /// 会员类型
-    lazy var typeLab : UILabel = {
-        let lab = UILabel()
-        lab.font = k10Font
-        lab.textColor = kBlueFontColor
-        lab.borderColor = kBlueFontColor
-        lab.borderWidth = klineDoubleWidth
-        lab.textAlignment = .center
-        lab.text = "零售型会员"
-        
-        return lab
-    }()
+//    lazy var typeLab : UILabel = {
+//        let lab = UILabel()
+//        lab.font = k10Font
+//        lab.textColor = kBlueFontColor
+//        lab.borderColor = kBlueFontColor
+//        lab.borderWidth = klineDoubleWidth
+//        lab.textAlignment = .center
+//        lab.text = "零售型会员"
+//
+//        return lab
+//    }()
     /// 月销
-    lazy var saleLab : UILabel = {
-        let lab = UILabel()
-        lab.font = k12Font
-        lab.textColor = kGaryFontColor
-        lab.text = "月销：1245件"
-        
-        return lab
-    }()
+//    lazy var saleLab : UILabel = {
+//        let lab = UILabel()
+//        lab.font = k12Font
+//        lab.textColor = kGaryFontColor
+//        lab.text = "月销：1245件"
+//
+//        return lab
+//    }()
     /// 地点
-    lazy var addressLab : UILabel = {
-        let lab = UILabel()
-        lab.font = k12Font
-        lab.textAlignment = .right
-        lab.textColor = kGaryFontColor
-        lab.text = ""
-        
-        return lab
-    }()
+//    lazy var addressLab : UILabel = {
+//        let lab = UILabel()
+//        lab.font = k12Font
+//        lab.textAlignment = .right
+//        lab.textColor = kGaryFontColor
+//        lab.text = ""
+//
+//        return lab
+//    }()
     /// 产品参数
     lazy var productView: UIView = {
         let view = UIView()

@@ -25,13 +25,14 @@ class KZGoodsParamsView: UIView {
                 infoArr.append(model.is_imported!)
                 infoArr.append(model.packaging_type!)
                 infoArr.append(model.applicable_user!)
+                infoArr.append(model.include_num!)
                 
                 tableView.reloadData()
             }
         }
     }
     
-    let titleArr: [String] = ["生产日期","品牌","系类","型号","是否进口","包装种类","适用阶段"]
+    let titleArr: [String] = ["生产日期","品牌","系类","型号","是否进口","包装种类","适用阶段","商品数量"]
     var infoArr: [String] = [String]()
     
     // MARK: 生命周期方法

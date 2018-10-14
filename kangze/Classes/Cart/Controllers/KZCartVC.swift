@@ -119,7 +119,7 @@ class KZCartVC: GYZBaseVC {
         }else{
             bottomView.checkView.tagImgView.image = UIImage.init(named: "icon_check")
         }
-        
+        tableView.reloadData()
         setBottomData()
     }
     /// 设置底部数据

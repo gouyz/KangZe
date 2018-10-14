@@ -280,6 +280,7 @@ class KZOrderVC: GYZBaseVC {
                     weakSelf?.goAliPay(orderInfo: payInfo,index:index)
                 }else if type == "yck"{// 余额支付
                     weakSelf?.requestYuEInfo()
+                    MBProgressHUD.showAutoDismissHUD(message: "支付成功")
                     weakSelf?.dealPayBack(index: index,status: "20")
                 }else if type == "wxpay"{// 微信支付
                     weakSelf?.goWeChatPay(data: response["datas"]["prepay_order"],index: index)

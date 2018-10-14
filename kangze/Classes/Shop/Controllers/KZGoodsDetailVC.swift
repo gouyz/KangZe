@@ -16,7 +16,7 @@ private let goodsDetailCell = "goodsDetailCell"
 class KZGoodsDetailVC: GYZBaseVC {
     
     /// header 高度
-    var headerViewH: CGFloat = kScreenWidth * 0.75 + 110 + kTitleHeight * 3
+    var headerViewH: CGFloat = kScreenWidth * 0.75 + 80 + kTitleHeight * 3
     
     var goodsId: String = ""
     var dataModel: KZGoodsModel?
@@ -146,7 +146,7 @@ class KZGoodsDetailVC: GYZBaseVC {
     
     func setData(){
         if dataModel?.goods_type != "2" {// 非合伙人套餐
-            headerViewH = kScreenWidth * 0.75 + 110 + kTitleHeight * 2
+            headerViewH = kScreenWidth * 0.75 + 80 + kTitleHeight * 2
             headerView.areasView.isHidden = true
             headerView.areasView.snp.updateConstraints { (make) in
                 make.height.equalTo(0)
@@ -160,8 +160,8 @@ class KZGoodsDetailVC: GYZBaseVC {
         headerView.iconView.kf.setImage(with: URL.init(string: (dataModel?.goods_image)!), placeholder: UIImage.init(named: "icon_shop_default"), options: nil, progressBlock: nil, completionHandler: nil)
         headerView.nameLab.text = dataModel?.goods_name
         headerView.priceLab.text = "￥" + (dataModel?.goods_price)!
-        headerView.typeLab.text = dataModel?.member_type_name
-        headerView.saleLab.text = "月销：" + (dataModel?.month_sell_count)! + "件"
+//        headerView.typeLab.text = dataModel?.member_type_name
+//        headerView.saleLab.text = "月销：" + (dataModel?.month_sell_count)! + "件"
         
         if !(dataModel?.mobile_body?.isEmpty)! {
             webView.loadHTMLString((dataModel?.mobile_body)!.dealFuTextImgSize(), baseURL: nil)
@@ -197,20 +197,6 @@ class KZGoodsDetailVC: GYZBaseVC {
             showLogin()
             return
         }
-        /// 普通商品 ：都可以买（不限制）
-        /// 合伙人商品  :实名认证
-        /// 续货型套餐 :购买了合伙人套餐+实名认证
-        if dataModel?.goods_type == "2" {//合伙人套餐
-            if dataModel?.member!["is_shehe"] == "0"{
-                showProfile(isDetail: true)
-                return
-            }
-        }else if dataModel?.goods_type == "3" {//续货型套餐
-            if dataModel?.member!["is_buydl"] == "0" || dataModel?.member!["is_shehe"] == "0"{
-                showProfile(isDetail: false)
-                return
-            }
-        }
         
         if dataModel?.goods_type == "2" {// 合伙人套餐
             if selectProvinceModel == nil{
@@ -218,7 +204,34 @@ class KZGoodsDetailVC: GYZBaseVC {
                 return
             }
         }
+        /// 普通商品 ：都可以买（不限制）
+        /// 合伙人商品  :实名认证
+        /// 续货型套餐 :购买了合伙人套餐+实名认证
+        if dataModel?.goods_type == "2" {//合伙人套餐
+            let status: String = (dataModel?.member?.sm_status)!
+            //0 您还未实名认证，认证后才能享受合伙人制度！ 1 您的实名资料正在审核中！   2(无提示)    3 您的实名资料被拒绝！
+            if status == "0"{
+                showRealNameConfirm(isBuy: true)
+                return
+            }else if status == "1"{
+                showRealNameConfirmShenHe(isBuy: true)
+                return
+            }else if status == "3"{
+                showReViewRealNameConfirm(isBuy: true)
+                return
+            }
+        }else if dataModel?.goods_type == "3" {//续货型套餐
+            if dataModel?.member?.is_buydl == "0" || dataModel?.member?.sm_status != "2"{
+                showProfile()
+                return
+            }
+        }
         
+        submitOrder()
+        
+    }
+    /// 立即购买
+    func submitOrder(){
         let vc = KZSubmitOrderVC()
         vc.cartIds = (dataModel?.goods_id)! + "|1"
         vc.totalNum = 1
@@ -230,18 +243,66 @@ class KZGoodsDetailVC: GYZBaseVC {
         }
         
         navigationController?.pushViewController(vc, animated: true)
-        
     }
     /// 显示完善个人信息
-    func showProfile(isDetail: Bool){
+    func showProfile(){
         weak var weakSelf = self
         GYZAlertViewTools.alertViewTools.showAlert(title: "完善个人信息", message: "请前往个人中心完善个人信息", cancleTitle: "取消", viewController: self, buttonTitles: "前往") { (index) in
             
             if index != cancelIndex{
-                if isDetail{
-                    self.goRealNameConfirm()
+                weakSelf?.goConfirmProfile()
+            }
+        }
+    }
+    /// 显示实名认证 重新认证
+    func showReViewRealNameConfirm(isBuy: Bool){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: "提示", message: "您的实名资料被拒绝！", cancleTitle: "取消", viewController: self, buttonTitles: "继续购买","重新认证") { (index) in
+            
+            if index != cancelIndex{
+                if index == 0{
+                    if isBuy{//继续购买
+                        weakSelf?.submitOrder()
+                    }else{
+                        weakSelf?.addCart()
+                    }
                 }else{
-                    weakSelf?.goConfirmProfile()
+                    weakSelf?.goRealNameConfirm()
+                }
+                
+            }
+        }
+    }
+    /// 显示实名认证
+    func showRealNameConfirm(isBuy: Bool){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: "提示", message: "您还未实名认证，认证后才能享受合伙人制度！", cancleTitle: "取消", viewController: self, buttonTitles: "继续购买","前往认证") { (index) in
+            
+            if index != cancelIndex{
+                if index == 0{
+                    if isBuy{//继续购买
+                        weakSelf?.submitOrder()
+                    }else{
+                        weakSelf?.addCart()
+                    }
+                }else{
+                    weakSelf?.goRealNameConfirm()
+                }
+                
+            }
+        }
+    }
+    
+    /// 显示实名认证 审核中
+    func showRealNameConfirmShenHe(isBuy: Bool){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: "提示", message: "您的实名资料正在审核中", cancleTitle: "取消", viewController: self, buttonTitles: "继续购买") { (index) in
+            
+            if index != cancelIndex{
+                if isBuy{//继续购买
+                    weakSelf?.submitOrder()
+                }else{
+                    weakSelf?.addCart()
                 }
             }
         }
@@ -255,7 +316,7 @@ class KZGoodsDetailVC: GYZBaseVC {
     func goRealNameConfirm(){
         let vc = KZRealNameConfirmVC()
         vc.resultBlock = { [weak self] in
-            self?.dataModel?.member!["is_shehe"] = "1"
+            self?.dataModel?.member?.sm_status = "1"
             
         }
         navigationController?.pushViewController(vc, animated: true)
@@ -299,16 +360,28 @@ class KZGoodsDetailVC: GYZBaseVC {
         /// 合伙人商品  :实名认证
         /// 续货型套餐 :购买了合伙人套餐+实名认证
         if dataModel?.goods_type == "2" {//合伙人套餐
-            if dataModel?.member!["is_shehe"] == "0"{
-                showProfile(isDetail: true)
+            let status: String = (dataModel?.member?.sm_status)!
+            //0 您还未实名认证，认证后才能享受合伙人制度！ 1 您的实名资料正在审核中！   2(无提示)    3 您的实名资料被拒绝！
+            if status == "0"{
+                showRealNameConfirm(isBuy: false)
+                return
+            }else if status == "1"{
+                showRealNameConfirmShenHe(isBuy: false)
+                return
+            }else if status == "3"{
+                showReViewRealNameConfirm(isBuy: false)
                 return
             }
         }else if dataModel?.goods_type == "3" {//续货型套餐
-            if dataModel?.member!["is_buydl"] == "0" || dataModel?.member!["is_shehe"] == "0"{
-                showProfile(isDetail: false)
+            if dataModel?.member?.is_buydl == "0" || dataModel?.member?.sm_status != "2"{
+                showProfile()
                 return
             }
         }
+        addCart()
+    }
+    /// 添加购物车
+    func addCart(){
         if Int((dataModel?.goods_storage)!) > 0 {
             requestAddCart()
         }else{
@@ -402,7 +475,7 @@ class KZGoodsDetailVC: GYZBaseVC {
             GYZLog(response)
             
             if response["code"].intValue == kQuestSuccessTag{//请求成功
-                
+                MBProgressHUD.showAutoDismissHUD(message: "成功加入购物车")
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
             }

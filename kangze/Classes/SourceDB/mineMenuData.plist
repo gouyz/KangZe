@@ -12,7 +12,7 @@
 	</dict>
 	<dict>
 		<key>title</key>
-		<string>我的财产</string>
+		<string>我的账户</string>
 		<key>image</key>
 		<string>icon_mine_money</string>
 		<key>controller</key>

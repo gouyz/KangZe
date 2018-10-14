@@ -227,6 +227,7 @@ class KZSubmitOrderVC: GYZBaseVC {
                     let payInfo: String = response["datas"]["signStr"].stringValue
                     weakSelf?.goAliPay(orderInfo: payInfo)
                 }else if type == "yck"{// 余额支付
+                    MBProgressHUD.showAutoDismissHUD(message: "支付成功")
                     weakSelf?.clickedBackBtn()
                 }else if type == "wxpay"{// 微信支付
                     weakSelf?.goWeChatPay(data: response["datas"]["prepay_order"])
