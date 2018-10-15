@@ -110,6 +110,9 @@ class KZGoodsAttrModel: LHSBaseModel{
     var applicable_user : String?
     /// 包含商品数量
     var include_num : String? = "0"
+    
+    /// 1： 需要显示区域选择   0：不需要显示区域选择
+    var is_area : String? = "0"
 }
 
 /// 商品用户信息

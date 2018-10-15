@@ -16,6 +16,14 @@ class KZAboutVC: GYZBaseVC {
         self.navigationItem.title = "关于我们"
         self.view.backgroundColor = kWhiteColor
         
+        let rightBtn = UIButton(type: .custom)
+        rightBtn.setTitle("隐私政策", for: .normal)
+        rightBtn.titleLabel?.font = k13Font
+        rightBtn.setTitleColor(kBlackFontColor, for: .normal)
+        rightBtn.frame = CGRect.init(x: 0, y: 0, width: kTitleHeight, height: kTitleHeight)
+        rightBtn.addTarget(self, action: #selector(onClickRightBtn), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightBtn)
+        
         
         view.addSubview(logoImgView)
         view.addSubview(nameLab)
@@ -83,4 +91,12 @@ class KZAboutVC: GYZBaseVC {
         
         return lab
     }()
+    
+    /// 隐私政策
+    @objc func onClickRightBtn(){
+        let vc = KZWebViewVC()
+        vc.headerTitle = "隐私政策"
+        vc.url = "http://app.kangzesw.com/wap/tmpl/article_show.html?article_id=55"
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }

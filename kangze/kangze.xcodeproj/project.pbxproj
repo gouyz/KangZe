@@ -220,6 +220,7 @@
 		0A902C292139257A00149DE1 /* KZCompanyIntroduceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A902C282139257A00149DE1 /* KZCompanyIntroduceVC.swift */; };
 		0A902C2B2139259F00149DE1 /* KZCompanyArticlesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A902C2A2139259F00149DE1 /* KZCompanyArticlesVC.swift */; };
 		0A902C2D213927B200149DE1 /* KZCompanyDynamicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A902C2C213927B200149DE1 /* KZCompanyDynamicCell.swift */; };
+		0A94E3A5217439C200D20D54 /* KZWebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A94E3A4217439C200D20D54 /* KZWebViewVC.swift */; };
 		6917935A83D5DB7F5B41C00B /* Pods_kangze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D4A869173070C112BEA179 /* Pods_kangze.framework */; };
 /* End PBXBuildFile section */
 
@@ -470,6 +471,7 @@
 		0A902C282139257A00149DE1 /* KZCompanyIntroduceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCompanyIntroduceVC.swift; sourceTree = "<group>"; };
 		0A902C2A2139259F00149DE1 /* KZCompanyArticlesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCompanyArticlesVC.swift; sourceTree = "<group>"; };
 		0A902C2C213927B200149DE1 /* KZCompanyDynamicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZCompanyDynamicCell.swift; sourceTree = "<group>"; };
+		0A94E3A4217439C200D20D54 /* KZWebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KZWebViewVC.swift; sourceTree = "<group>"; };
 		2206044C49CA2D4C25D43A28 /* Pods-kangze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kangze.release.xcconfig"; path = "Pods/Target Support Files/Pods-kangze/Pods-kangze.release.xcconfig"; sourceTree = "<group>"; };
 		51BE3A6C7AE3F33524E79A06 /* Pods-kangze.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kangze.debug.xcconfig"; path = "Pods/Target Support Files/Pods-kangze/Pods-kangze.debug.xcconfig"; sourceTree = "<group>"; };
 		72D4A869173070C112BEA179 /* Pods_kangze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kangze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -733,6 +735,7 @@
 			isa = PBXGroup;
 			children = (
 				0A75CE9F2135467B009B87E6 /* KZCommonNavBarVC.swift */,
+				0A94E3A4217439C200D20D54 /* KZWebViewVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1465,6 +1468,7 @@
 				0A75CE5A21351FCC009B87E6 /* BPLoginVC.swift in Sources */,
 				0A3184BE213EDD1E003AB178 /* KZGoodsFavouriteCell.swift in Sources */,
 				0A75CE8021351FCD009B87E6 /* GYZSheetView.swift in Sources */,
+				0A94E3A5217439C200D20D54 /* KZWebViewVC.swift in Sources */,
 				0A75CE8721351FCD009B87E6 /* ContentView.swift in Sources */,
 				0A8F32EB213FBF3B00980EDE /* KZEditAddressVC.swift in Sources */,
 				0A75CE4B21351FCC009B87E6 /* LHSCheckView.swift in Sources */,

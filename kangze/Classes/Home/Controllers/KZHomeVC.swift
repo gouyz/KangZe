@@ -124,10 +124,10 @@ class KZHomeVC: KZCommonNavBarVC {
         if dataModel?.goodList != nil {
             for item in (dataModel?.goodList)! {
                 if item.goods_type == "1"{
-                    titleArr.append("零售型套餐")
+                    titleArr.append("热销商品")
                     iconArr.append("icon_home_hot_sale")
                 }else if item.goods_type == "2"{
-                    titleArr.append("合伙人套餐")
+                    titleArr.append("推荐商品")
                     iconArr.append("icon_home_hehuo")
                 }else if item.goods_type == "3"{
                     titleArr.append("续货套餐")

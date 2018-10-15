@@ -145,7 +145,7 @@ class KZGoodsDetailVC: GYZBaseVC {
     }
     
     func setData(){
-        if dataModel?.goods_type != "2" {// 非合伙人套餐
+        if !(dataModel?.goods_type == "2" && dataModel?.attr?.is_area == "1") {// 合伙人套餐并且需要显示选择区域是才显示区域
             headerViewH = kScreenWidth * 0.75 + 80 + kTitleHeight * 2
             headerView.areasView.isHidden = true
             headerView.areasView.snp.updateConstraints { (make) in
@@ -198,7 +198,7 @@ class KZGoodsDetailVC: GYZBaseVC {
             return
         }
         
-        if dataModel?.goods_type == "2" {// 合伙人套餐
+        if dataModel?.goods_type == "2"  && dataModel?.attr?.is_area == "1" {// 合伙人套餐
             if selectProvinceModel == nil{
                 MBProgressHUD.showAutoDismissHUD(message: "请选择区域")
                 return
@@ -457,7 +457,7 @@ class KZGoodsDetailVC: GYZBaseVC {
         }
         
         var dic: [String: String] = ["goods_id":goodsId,"key": userDefaults.string(forKey: "key") ?? "","quantity":"1"]
-        if dataModel?.goods_type == "2" {// 合伙人套餐
+        if dataModel?.goods_type == "2" && dataModel?.attr?.is_area == "1" {// 合伙人套餐
             if selectProvinceModel == nil{
                 MBProgressHUD.showAutoDismissHUD(message: "请选择区域")
                 return
