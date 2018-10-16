@@ -20,4 +20,6 @@ class KZYuERecordModel: LHSBaseModel {
     var lg_av_amount : String?
     /// 明细类型
     var type : String?
+    /// 当前用户余额
+    var lg_cur_amount : String? = ""
 }

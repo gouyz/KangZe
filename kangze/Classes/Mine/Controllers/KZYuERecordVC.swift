@@ -108,12 +108,13 @@ extension KZYuERecordVC: UITableViewDelegate,UITableViewDataSource{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: yuERecordCell) as! KZRecordCell
         
-        cell.statusLab.isHidden = true
-        
         let model = dataList[indexPath.row]
         cell.titleLab.text = model.type
-        cell.dateLab.text = model.lg_add_time?.getDateTime(format: "yyyy_MM-dd HH:mm:ss")
+        cell.statusLab.text = model.lg_add_time?.getDateTime(format: "yyyy_MM-dd HH:mm:ss")
+        cell.statusLab.textColor = kHeightGaryFontColor
+        cell.statusLab.font = k13Font
         cell.moneyLab.text = model.lg_av_amount
+        cell.dateLab.text = "余额：￥" + model.lg_cur_amount!
         
         cell.selectionStyle = .none
         return cell

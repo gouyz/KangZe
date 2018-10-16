@@ -154,7 +154,7 @@ let kLightGaryFontColor : UIColor = UIColor.UIColorFromRGB(valueRGB: 0xdcdcdc)
 /// 红色字体颜色
 let kRedFontColor : UIColor = UIColor.UIColorFromRGB(valueRGB: 0xf53333)
 /// 蓝色字体颜色
-let kBlueFontColor : UIColor = UIColor.RGBColor(21, g: 135, b: 204)
+let kBlueFontColor : UIColor = UIColor.UIColorFromRGB(valueRGB: 0x2a98e8)
 /// 绿色字体颜色
 let kGreenFontColor : UIColor = UIColor.UIColorFromRGB(valueRGB: 0x2dae99)
 /// 灰色线的颜色

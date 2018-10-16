@@ -87,7 +87,7 @@ class KZMineVC: GYZBaseVC {
         return table
     }()
     
-    lazy var userHeaderView: KZMineHeaderView = KZMineHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: 210 + kStateHeight))
+    lazy var userHeaderView: KZMineHeaderView = KZMineHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth, height: kScreenWidth * 0.49 + kStateHeight))
     
     
     /// 获取我的 数据
@@ -145,9 +145,11 @@ class KZMineVC: GYZBaseVC {
     @objc func onClickedLogin(){
         
         if userDefaults.bool(forKey: kIsLoginTagKey) {
-            return
+            onClickedUpdateHeader()
+        }else {
+            goLogin()
         }
-        goLogin()
+        
     }
     /// 登录
     func goLogin(){

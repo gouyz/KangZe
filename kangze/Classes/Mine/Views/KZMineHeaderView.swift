@@ -23,28 +23,32 @@ class KZMineHeaderView: UIView {
     }
     
     func setupUI(){
-        self.addSubview(bgView)
+        self.addSubview(bgViewImg)
+        bgViewImg.addSubview(bgView)
         bgView.addSubview(userHeaderView)
         bgView.addSubview(nameLab)
         bgView.addSubview(typeLab)
         bgView.addSubview(phoneLab)
         
-        self.addSubview(leftView)
+        bgViewImg.addSubview(leftView)
         leftView.addSubview(favouriteNumberLab)
         leftView.addSubview(favouriteLab)
-        self.addSubview(rightView)
+        bgViewImg.addSubview(rightView)
         rightView.addSubview(kuCunNumberLab)
         rightView.addSubview(kuCunLab)
         
-        bgView.snp.makeConstraints { (make) in
-            make.left.right.equalTo(self)
+        bgViewImg.snp.makeConstraints { (make) in
+            make.left.right.bottom.equalTo(self)
             make.top.equalTo(kStateHeight)
+        }
+        bgView.snp.makeConstraints { (make) in
+            make.left.top.right.equalTo(bgViewImg)
             make.bottom.equalTo(leftView.snp.top)
         }
         userHeaderView.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self)
-            make.top.equalTo(20)
-            make.size.equalTo(CGSize.init(width: 60, height: 60))
+            make.centerX.equalTo(bgView)
+            make.top.equalTo(kMargin)
+            make.size.equalTo(CGSize.init(width: kTitleHeight, height: kTitleHeight))
         }
         nameLab.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
@@ -63,7 +67,7 @@ class KZMineHeaderView: UIView {
             make.top.equalTo(typeLab.snp.bottom)
         }
         leftView.snp.makeConstraints { (make) in
-            make.left.bottom.equalTo(self)
+            make.left.bottom.equalTo(bgViewImg)
             make.width.equalTo(rightView)
             make.height.equalTo(50)
         }
@@ -80,7 +84,7 @@ class KZMineHeaderView: UIView {
         }
         rightView.snp.makeConstraints { (make) in
             make.left.equalTo(leftView.snp.right)
-            make.right.bottom.equalTo(self)
+            make.right.bottom.equalTo(bgViewImg)
             make.height.equalTo(leftView)
         }
         favouriteLab.snp.makeConstraints { (make) in
@@ -96,17 +100,24 @@ class KZMineHeaderView: UIView {
     }
     
     /// 背景
+    lazy var bgViewImg: UIImageView = {
+        let imgView = UIImageView.init(image: UIImage.init(named: "icon_mine_bg"))
+        imgView.isUserInteractionEnabled = true
+        
+        return imgView
+    }()
+    /// 背景
     lazy var bgView: UIView = {
         let view = UIView()
-        view.backgroundColor = kBlueFontColor
-        
+        view.isUserInteractionEnabled = true
         return view
     }()
     
     /// 用户头像 图片
     lazy var userHeaderView: UIImageView = {
         let imgView = UIImageView.init(image: UIImage.init(named: "icon_header_default"))
-        imgView.cornerRadius = 30
+        imgView.cornerRadius = 22
+        imgView.isUserInteractionEnabled = true
         
         return imgView
     }()
@@ -143,8 +154,6 @@ class KZMineHeaderView: UIView {
     /// 背景
     lazy var leftView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.RGBColor(21, g: 123, b: 182)
-        
         return view
     }()
     
@@ -171,8 +180,6 @@ class KZMineHeaderView: UIView {
     /// 背景
     lazy var rightView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.RGBColor(21, g: 123, b: 182)
-        
         return view
     }()
     /// 我的库存 数量

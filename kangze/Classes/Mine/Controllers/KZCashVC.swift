@@ -22,6 +22,8 @@ class KZCashVC: GYZBaseVC {
     var selectBankCardModel: KZBankModel?
     /// 余额
     var yuEMoney: String = "0"
+    /// 提现规则
+    var ruleModel: KZArticleModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +43,7 @@ class KZCashVC: GYZBaseVC {
         
         bgBankView.isHidden = true
         requestYuEInfo()
+        requestRuleDatas()
         
     }
     
@@ -159,7 +162,7 @@ class KZCashVC: GYZBaseVC {
             make.left.equalTo(kMargin)
             make.right.equalTo(-kMargin)
             make.top.equalTo(bgView.snp.bottom).offset(20)
-            make.height.equalTo(80)
+            make.height.equalTo(100)
         }
         saveBtn.snp.makeConstraints { (make) in
             make.left.equalTo(20)
@@ -292,7 +295,7 @@ class KZCashVC: GYZBaseVC {
         lab.font = k12Font
         lab.textColor = kHeightGaryFontColor
         lab.numberOfLines = 0
-        lab.text = "说明\n1.每月最多提现一次\n2.每次最少提现100元\n3.提现1000元以上时，需出具发票寄回公司方可办理\n4.提现申请后预计三十个工作日内完成。"
+//        lab.text = "说明\n1.每月最多提现一次\n2.每次最少提现100元\n3.提现1000元以上时，需出具发票寄回公司方可办理\n4.提现申请后预计三十个工作日内完成。"
         
         return lab
     }()
@@ -402,6 +405,47 @@ class KZCashVC: GYZBaseVC {
             weakSelf?.hud?.hide(animated: true)
             GYZLog(error)
         })
+    }
+    
+    ///获取提现规则数据
+    func requestRuleDatas(){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        weak var weakSelf = self
+        GYZNetWork.requestNetwork("article&op=tx_rule",parameters: nil,  success: { (response) in
+            
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["datas"].dictionaryObject else { return }
+                
+                weakSelf?.ruleModel = KZArticleModel.init(dict: data)
+                weakSelf?.setRuleLab()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["datas"]["error"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            GYZLog(error)
+        })
+    }
+    
+    func setRuleLab(){
+        let attrStr = try! NSMutableAttributedString.init(data: (ruleModel?.article_content?.dealFuTextImgSize().data(using: .unicode, allowLossyConversion: true))!, options: [.documentType: NSAttributedString.DocumentType.html,
+                                                                                                                                                                   .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+        
+        //调整行间距
+        let paragraphStye = NSMutableParagraphStyle()
+        
+        paragraphStye.lineSpacing = 5
+        let rang = NSMakeRange(0, attrStr.length)
+        attrStr.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStye, range: rang)
+        
+        cashNoteLab.attributedText = attrStr
     }
     /// 全部提现
     @objc func clickedAllCashBtn(){
