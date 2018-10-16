@@ -68,7 +68,7 @@ class KZHomeAdsHeaderView: UIView {
         
         dynamicBtn.set(image: UIImage.init(named: "icon_home_dynamic"), title: "公司动态", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
         orderBtn.set(image: UIImage.init(named: "icon_home_order"), title: "订单", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
-        friendCircleBtn.set(image: UIImage.init(named: "icon_home_friend_circle"), title: "朋友圈素材", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
+        friendCircleBtn.set(image: UIImage.init(named: "icon_home_friend_circle"), title: "朋友圈", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
         messageBtn.set(image: UIImage.init(named: "icon_home_msg"), title: "消息", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
     }
     
