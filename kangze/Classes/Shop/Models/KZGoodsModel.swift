@@ -71,6 +71,9 @@ class KZGoodsModel: LHSBaseModel {
     /// 收藏次数
     var goods_collect : String? = "0"
     
+    /// 单位
+    var unit : String? = ""
+    
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "attr"{
             guard let datas = value as? [String : Any] else { return }
@@ -113,6 +116,9 @@ class KZGoodsAttrModel: LHSBaseModel{
     
     /// 1： 需要显示区域选择   0：不需要显示区域选择
     var is_area : String? = "0"
+    
+    /// 单位
+    var unit : String? = ""
 }
 
 /// 商品用户信息

@@ -22,7 +22,9 @@ class KZShopCell: UITableViewCell {
 //                nameLab.attributedText = nameAttr
                 nameLab.text = model.goods_name
                 priceLab.text = "￥" + model.goods_price!
-                saleLab.text = "月销\(model.month_sell_count!)件"
+                
+                let str: String = "月销\(model.month_sell_count!)" + ((model.unit?.isEmpty)! ? "" : "\(model.unit!)")
+                saleLab.text = str
                 payNumberLab.text = "\(model.pay_count!)人付款"
             }
         }

@@ -54,4 +54,6 @@ class KZCartGoodsModel: LHSBaseModel{
     var goods_total : String? = ""
     /// 月销数量
     var month_sell : String? = "0"
+    /// 单位
+    var unit : String? = ""
 }

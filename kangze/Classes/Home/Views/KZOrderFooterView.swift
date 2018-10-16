@@ -15,7 +15,7 @@ class KZOrderFooterView: UITableViewHeaderFooterView {
         didSet{
             if let model = dataModel {
                 
-                totalLab.text = "共\((model.goodList?.count)!)件商品  合计：￥\(model.goods_amount!)"
+                totalLab.text = "合计：￥\(model.goods_amount!)"
                 ///订单状态：0(已取消)10(默认):未付款;20:已付款;30:已发货;40:已收货;
                 let status: String = model.order_state!
                 if status == "0"{

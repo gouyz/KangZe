@@ -85,11 +85,11 @@ class KZSelectPayMethodView: UIView {
         }
         yuENameLab.snp.makeConstraints { (make) in
             make.left.equalTo(yuEIconView.snp.right).offset(kMargin)
-            make.width.equalTo(100)
+            make.width.equalTo(80)
             make.top.bottom.equalTo(yuEView)
         }
         yuEMoneyLab.snp.makeConstraints { (make) in
-            make.right.equalTo(yuECheckBtn.snp.left).offset(-20)
+            make.right.equalTo(yuECheckBtn.snp.left).offset(-kMargin)
             make.left.equalTo(yuENameLab.snp.right).offset(kMargin)
             make.top.bottom.equalTo(yuEView)
         }
@@ -216,7 +216,7 @@ class KZSelectPayMethodView: UIView {
     /// 可用余额
     lazy var yuEMoneyLab : UILabel = {
         let lab = UILabel()
-        lab.font = k15Font
+        lab.font = k13Font
         lab.textColor = kBlueFontColor
         lab.textAlignment = .right
         lab.text = "可用余额：￥30"

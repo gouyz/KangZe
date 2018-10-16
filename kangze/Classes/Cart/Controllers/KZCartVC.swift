@@ -63,6 +63,7 @@ class KZCartVC: GYZBaseVC {
         cartModel = nil
         totalMoney = 0.0
         totalNum = 0
+        selectGoods.removeAll()
         setBottomData()
         tableView.reloadData()
         requestCartDatas()

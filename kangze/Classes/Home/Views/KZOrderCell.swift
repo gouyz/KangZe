@@ -19,6 +19,7 @@ class KZOrderCell: UITableViewCell {
                 nameLab.text = model.goods_name
                 priceLab.text = "￥" + model.goods_price!
                 numberLab.text = "x" + model.goods_num!
+                unitLab.text = (model.unit?.isEmpty)! ? "" : "单位：\(model.unit!)"
             }
         }
     }
@@ -39,6 +40,7 @@ class KZOrderCell: UITableViewCell {
         contentView.addSubview(nameLab)
         contentView.addSubview(numberLab)
         contentView.addSubview(priceLab)
+        contentView.addSubview(unitLab)
         
         iconView.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
@@ -54,12 +56,17 @@ class KZOrderCell: UITableViewCell {
             make.top.equalTo(nameLab.snp.bottom).offset(kMargin)
             make.left.equalTo(nameLab)
             make.right.equalTo(numberLab.snp.left).offset(-kMargin)
-            make.height.equalTo(20)
+            make.bottom.equalTo(unitLab.snp.top)
         }
         numberLab.snp.makeConstraints { (make) in
             make.right.equalTo(nameLab)
             make.top.height.top.equalTo(priceLab)
             make.width.equalTo(80)
+        }
+        unitLab.snp.makeConstraints { (make) in
+            make.left.right.equalTo(priceLab)
+            make.bottom.equalTo(iconView)
+            make.height.equalTo(20)
         }
     }
     /// 图标
@@ -90,6 +97,14 @@ class KZOrderCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k13Font
         lab.textColor = kRedFontColor
+        
+        return lab
+    }()
+    /// 单位
+    lazy var unitLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k13Font
+        lab.textColor = kGaryFontColor
         
         return lab
     }()

@@ -19,7 +19,7 @@ class KZCartCell: UITableViewCell {
                 
                 nameLab.text = model.goods_name
                 priceLab.text = "￥" + model.goods_price!
-                saleLab.text = "月销\(model.month_sell!)件"
+                saleLab.text = "月销\(model.month_sell!)" + ((model.unit?.isEmpty)! ? "" : "\(model.unit!)")
                 countLab.text = model.goods_num
             }
         }

@@ -321,7 +321,7 @@ extension KZSubmitOrderVC: UITableViewDelegate,UITableViewDataSource{
             let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: submitOrderFooterView) as! KZSubmitOrderFooterView
             
             if dataModel != nil{
-                footerView.totalLab.text = "共\(totalNum)件商品  合计：￥" + String(format:"%.2f",Double((dataModel?.store_goods_total)!)!)
+                footerView.totalLab.text = "合计：￥" + String(format:"%.2f",Double((dataModel?.store_goods_total)!)!)
             }
             
             return footerView

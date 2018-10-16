@@ -26,13 +26,14 @@ class KZGoodsParamsView: UIView {
                 infoArr.append(model.packaging_type!)
                 infoArr.append(model.applicable_user!)
                 infoArr.append(model.include_num!)
+                infoArr.append(model.unit!)
                 
                 tableView.reloadData()
             }
         }
     }
     
-    let titleArr: [String] = ["生产日期","品牌","系类","型号","是否进口","包装种类","适用阶段","商品数量"]
+    let titleArr: [String] = ["生产日期","品牌","系类","型号","是否进口","包装种类","适用阶段","商品数量","单位"]
     var infoArr: [String] = [String]()
     
     // MARK: 生命周期方法
@@ -65,7 +66,7 @@ class KZGoodsParamsView: UIView {
         bgView.addSubview(tableView)
         bgView.addSubview(cancleBtn)
         
-        bgView.frame = CGRect.init(x: 0, y: frame.size.height, width: kScreenWidth, height: kCellH * 10)
+        bgView.frame = CGRect.init(x: 0, y: frame.size.height, width: kScreenWidth, height: kCellH * 12)
         
         tableView.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(bgView)
