@@ -25,6 +25,7 @@ class KZHistorySendCell: UITableViewCell {
                 
                 nameLab.text = model.goodsInfo?.goods_name
                 numberLab.text = "X\(model.goods_num!)"
+                unitLab.text = (model.goodsInfo?.unit?.isEmpty)! ? "" : "单位：\((model.goodsInfo?.unit)!)"
                 
                 if model.status == "2" && model.pay_status == "1"{
                     receivedBtn.isHidden = false
@@ -77,6 +78,7 @@ class KZHistorySendCell: UITableViewCell {
         bgView.addSubview(iconView)
         bgView.addSubview(nameLab)
         bgView.addSubview(numberLab)
+        bgView.addSubview(unitLab)
         bgView.addSubview(receivedBtn)
         
         bgView.snp.makeConstraints { (make) in
@@ -117,10 +119,16 @@ class KZHistorySendCell: UITableViewCell {
             make.right.equalTo(-kMargin)
             make.bottom.equalTo(numberLab.snp.top)
         }
-        numberLab.snp.makeConstraints { (make) in
-            make.left.right.equalTo(nameLab)
-            make.height.equalTo(20)
+        unitLab.snp.makeConstraints { (make) in
+            make.left.equalTo(nameLab)
             make.bottom.equalTo(iconView)
+            make.height.equalTo(20)
+            make.right.equalTo(numberLab.snp.left).offset(-kMargin)
+        }
+        numberLab.snp.makeConstraints { (make) in
+            make.right.equalTo(-20)
+            make.height.bottom.equalTo(unitLab)
+            make.width.equalTo(80)
         }
         receivedBtn.snp.makeConstraints { (make) in
             make.right.equalTo(-kMargin)
@@ -193,11 +201,20 @@ class KZHistorySendCell: UITableViewCell {
         
         return lab
     }()
+    /// 单位
+    lazy var unitLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k13Font
+        lab.textColor = kGaryFontColor
+        
+        return lab
+    }()
     /// 数量
     lazy var numberLab : UILabel = {
         let lab = UILabel()
         lab.font = k13Font
         lab.textColor = kBlackFontColor
+        lab.textAlignment = .right
         lab.text = "X2"
         
         return lab

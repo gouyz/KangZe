@@ -118,7 +118,7 @@ extension KZKuCunInfoVC: UITableViewDelegate,UITableViewDataSource{
             cell.titleLab.textColor = kBlackFontColor
             cell.titleLab.text = model?.goods_name
             cell.numberLab.textColor = kBlackFontColor
-            cell.numberLab.text = model?.stock
+            cell.numberLab.text = (model?.stock)! + ((model?.unit?.isEmpty)! ? "" : "\((model?.unit)!)")
         }
         
         cell.selectionStyle = .none

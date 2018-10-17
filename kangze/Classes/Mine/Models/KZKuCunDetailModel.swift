@@ -40,4 +40,6 @@ class KZKuCunChildModel: LHSBaseModel {
     var stock : String? = "0"
     /// 商品
     var goods_name : String?
+    /// 单位
+    var unit : String? = ""
 }

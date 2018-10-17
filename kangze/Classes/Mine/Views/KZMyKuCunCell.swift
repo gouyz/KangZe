@@ -19,6 +19,7 @@ class KZMyKuCunCell: UITableViewCell {
                 
                 nameLab.text = model.goods_name
                 numberLab.text = "X\(model.stock!)"
+                unitLab.text = (model.unit?.isEmpty)! ? "" : "单位：\(model.unit!)"
             }
         }
     }
@@ -38,6 +39,7 @@ class KZMyKuCunCell: UITableViewCell {
         contentView.addSubview(iconView)
         contentView.addSubview(nameLab)
         contentView.addSubview(numberLab)
+        contentView.addSubview(unitLab)
         contentView.addSubview(historySendBtn)
         contentView.addSubview(sendBtn)
         
@@ -52,10 +54,16 @@ class KZMyKuCunCell: UITableViewCell {
             make.right.equalTo(-kMargin)
             make.height.equalTo(kTitleHeight)
         }
-        numberLab.snp.makeConstraints { (make) in
-            make.left.right.equalTo(nameLab)
+        unitLab.snp.makeConstraints { (make) in
+            make.left.equalTo(nameLab)
             make.top.equalTo(nameLab.snp.bottom)
             make.bottom.equalTo(sendBtn.snp.top)
+            make.right.equalTo(numberLab.snp.left).offset(-kMargin)
+        }
+        numberLab.snp.makeConstraints { (make) in
+            make.right.equalTo(nameLab)
+            make.top.bottom.equalTo(unitLab)
+            make.width.equalTo(80)
         }
         sendBtn.snp.makeConstraints { (make) in
             make.right.equalTo(-kMargin)
@@ -88,6 +96,14 @@ class KZMyKuCunCell: UITableViewCell {
         lab.textColor = kBlackFontColor
         lab.textAlignment = .right
         lab.text = "X5"
+        
+        return lab
+    }()
+    /// 单位
+    lazy var unitLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k13Font
+        lab.textColor = kGaryFontColor
         
         return lab
     }()

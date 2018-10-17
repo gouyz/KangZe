@@ -19,7 +19,7 @@ class KZCartCell: UITableViewCell {
                 
                 nameLab.text = model.goods_name
                 priceLab.text = "￥" + model.goods_price!
-                saleLab.text = "月销\(model.month_sell!)" + ((model.unit?.isEmpty)! ? "" : "\(model.unit!)")
+                saleLab.text = (model.unit?.isEmpty)! ? "" : "单位：\(model.unit!)"
                 countLab.text = model.goods_num
             }
         }
@@ -115,7 +115,6 @@ class KZCartCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k12Font
         lab.textColor = kGaryFontColor
-        lab.text = "月销4578件"
         
         return lab
     }()

@@ -62,6 +62,7 @@ class KZApplySendVC: GYZBaseVC {
         contentView.addSubview(iconView)
         contentView.addSubview(nameLab)
         contentView.addSubview(kuCunLab)
+        contentView.addSubview(unitLab)
         contentView.addSubview(minusIconView)
         contentView.addSubview(countLab)
         contentView.addSubview(addIconView)
@@ -141,6 +142,12 @@ class KZApplySendVC: GYZBaseVC {
             make.left.right.equalTo(nameLab)
             make.height.equalTo(20)
             make.bottom.equalTo(addIconView.snp.top)
+        }
+        unitLab.snp.makeConstraints { (make) in
+            make.left.equalTo(nameLab)
+            make.right.equalTo(minusIconView.snp.left).offset(-kMargin)
+            make.bottom.equalTo(iconView)
+            make.height.equalTo(minusIconView)
         }
         addIconView.snp.makeConstraints { (make) in
             make.bottom.equalTo(iconView)
@@ -249,6 +256,14 @@ class KZApplySendVC: GYZBaseVC {
         lab.font = k12Font
         lab.textColor = kBlackFontColor
         lab.text = "现有库存：0"
+        
+        return lab
+    }()
+    /// 单位
+    lazy var unitLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k12Font
+        lab.textColor = kGaryFontColor
         
         return lab
     }()
@@ -480,6 +495,7 @@ class KZApplySendVC: GYZBaseVC {
         iconView.kf.setImage(with: URL.init(string: (dataModel?.goodsInfo?.image_url)!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
         nameLab.text = dataModel?.goodsInfo?.goods_name
         kuCunLab.text = "现有库存：" + (dataModel?.stock)!
+        unitLab.text = (dataModel?.goodsInfo?.unit?.isEmpty)! ? "" : "单位：\((dataModel?.goodsInfo?.unit)!)"
         
         freight = (dataModel?.freight)!
         moneyLab.text = "运费：￥" + freight

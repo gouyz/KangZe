@@ -44,4 +44,6 @@ class KZSendGoodsModel: LHSBaseModel {
     var goods_name : String?
     /// 商品的缩略图片url
     var image_url : String?
+    /// 单位
+    var unit : String? = ""
 }
