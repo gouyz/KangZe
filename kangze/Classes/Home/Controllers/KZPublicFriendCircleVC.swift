@@ -20,7 +20,7 @@ class KZPublicFriendCircleVC: GYZBaseVC {
     /// 选择的图片
     var selectImgs: [UIImage] = []
     /// 最大选择图片数量
-    var maxImgCount: Int = 6
+    var maxImgCount: Int = kMaxSelectCount
     // 内容
     var content: String = ""
     // 上传图URL 多个图片用英文逗号隔开

@@ -26,7 +26,7 @@ class KZConfirmHeHuoRenVC: GYZBaseVC {
         
         setupUI()
         
-        requestGetGoodsId()
+//        requestGetGoodsId()
         
     }
 
@@ -192,9 +192,12 @@ class KZConfirmHeHuoRenVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "已认证，不需要再次认证")
             return
         }
-        let vc = KZGoodsDetailVC()
-        vc.goodsId = goodsId
-        navigationController?.pushViewController(vc, animated: true)
+        
+        self.tabBarController?.selectedIndex = 0
+        navigationController?.popToRootViewController(animated: true)
+//        let vc = KZGoodsDetailVC()
+//        vc.goodsId = goodsId
+//        navigationController?.pushViewController(vc, animated: true)
     }
     
     /// 获取代理型套餐商品id

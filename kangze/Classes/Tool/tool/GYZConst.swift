@@ -104,7 +104,7 @@ let kAliPayScheme = "KangZeAlipayAPI"
 let COMMUNITY_SELECTED = "community_selected"
 
 //APPID，应用提交时候替换
-let APPID = "1387703257"
+let APPID = "1436582102"
 /// 极光推送AppKey
 let kJPushAppKey = "62f70fe9bed6d366b2c740a8"
 /// 微信APPID
