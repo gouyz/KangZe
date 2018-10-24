@@ -95,6 +95,7 @@ class KZCompanyDynamicCell: UITableViewCell {
         lab.textColor = kGaryFontColor
         lab.textAlignment = .right
         lab.text = "分享"
+        lab.isHidden = true
         lab.addOnClickListener(target: self, action: #selector(onClickedShared))
         
         return lab

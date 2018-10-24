@@ -262,7 +262,7 @@ class BPRegisterVC: GYZBaseVC {
         return line
     }()
     /// 邀请码
-    fileprivate lazy var applyCodeInputView : GYZLoginInputView = GYZLoginInputView(iconName: "icon_register_qrcode", placeHolder: "请输入邀请码(必填)", isPhone: false)
+    fileprivate lazy var applyCodeInputView : GYZLoginInputView = GYZLoginInputView(iconName: "icon_register_qrcode", placeHolder: "请输入邀请码(选填)", isPhone: false)
     
     /// 分割线5
     fileprivate lazy var lineView5 : UIView = {
@@ -366,10 +366,10 @@ class BPRegisterVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "请输入验证码",isBottom:false)
             return
         }
-        if codeInputView.textFiled.text! != codeStr {
-            MBProgressHUD.showAutoDismissHUD(message: "验证码不正确",isBottom:false)
-            return
-        }
+//        if codeInputView.textFiled.text! != codeStr {
+//            MBProgressHUD.showAutoDismissHUD(message: "验证码不正确",isBottom:false)
+//            return
+//        }
 
         if pwdInputView.textFiled.text!.isEmpty {
             MBProgressHUD.showAutoDismissHUD(message: "请输入密码")

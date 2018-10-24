@@ -11,13 +11,13 @@ import MBProgressHUD
 
 class KZMyMoneyVC: GYZBaseVC {
 
-    let titleArr : [String] = ["零售收入","零售奖金","业绩奖金"]
+    let titleArr : [String] = ["零售收入","市场业绩","业绩奖金"]
     var scrollPageView: ScrollPageView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "我的财产"
+        self.navigationItem.title = "我的账户"
         
         view.addSubview(headerView)
         setupUI()

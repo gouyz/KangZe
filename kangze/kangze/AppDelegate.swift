@@ -19,10 +19,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         /// 检测网络状态
         networkManager?.startListening()
-        
+
         /// 设置键盘控制
         setKeyboardManage()
-        
+
         //微信注册
         WXApi.registerApp(kWeChatAppID)
         GYZTencentShare.shared.registeApp(kQQAppID)
