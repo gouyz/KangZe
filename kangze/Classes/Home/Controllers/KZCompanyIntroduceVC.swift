@@ -39,7 +39,6 @@ class KZCompanyIntroduceVC: GYZBaseVC {
         ///设置透明背景
         webView.backgroundColor = UIColor.clear
         webView.isOpaque = false
-        
         webView.scrollView.bouncesZoom = false
         webView.scrollView.bounces = false
         webView.scrollView.alwaysBounceHorizontal = false
@@ -81,8 +80,8 @@ class KZCompanyIntroduceVC: GYZBaseVC {
     func loadContent(){
 //        url = (dataModel?.article_content)!
         if url.hasPrefix("http://") || url.hasPrefix("https://") {
-            
-            webView.load(URLRequest.init(url: URL.init(string: url)!))
+            webView.load(URLRequest.init(url: URL.init(string: url)!, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 60))
+//            webView.load(URLRequest.init(url: URL.init(string: url)!))
         }else{
             webView.loadHTMLString(url.dealFuTextImgSize(), baseURL: nil)
         }

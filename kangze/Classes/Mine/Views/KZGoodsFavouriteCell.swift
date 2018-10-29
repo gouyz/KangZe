@@ -15,7 +15,7 @@ class KZGoodsFavouriteCell: UITableViewCell {
         didSet{
             if let model = dataModel {
                 
-                iconView.kf.setImage(with: URL.init(string: model.goods_image_url!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                iconView.kf.setImage(with: URL.init(string: model.goods_image_url!), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
                 
                 let name: String = model.goos_type_str! + model.goods_name!
                 let nameAttr : NSMutableAttributedString = NSMutableAttributedString(string: name)
@@ -68,7 +68,12 @@ class KZGoodsFavouriteCell: UITableViewCell {
     }
     
     /// 商品图标
-    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_shop_default"))
+    lazy var iconView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.backgroundColor = kBackgroundColor
+        
+        return imgView
+    }()
     
     /// 商品名称
     lazy var nameLab : UILabel = {

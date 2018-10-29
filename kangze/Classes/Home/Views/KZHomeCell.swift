@@ -69,5 +69,10 @@ class KZHomeCell: UITableViewCell {
     }()
     
     /// banner图标
-    lazy var adsImgView: UIImageView = UIImageView()
+    lazy var adsImgView: UIImageView =  {
+        let imgView = UIImageView()
+        imgView.backgroundColor = kBackgroundColor
+        
+        return imgView
+    }()
 }

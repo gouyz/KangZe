@@ -239,7 +239,12 @@ class KZApplySendVC: GYZBaseVC {
         return line
     }()
     /// 商品图标
-    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_shop_default"))
+    lazy var iconView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.backgroundColor = kBackgroundColor
+        
+        return imgView
+    }()
     
     /// 商品名称
     lazy var nameLab : UILabel = {
@@ -492,7 +497,7 @@ class KZApplySendVC: GYZBaseVC {
             selectAddressModel = dataModel?.addressList![0]
             setInfo()
         }
-        iconView.kf.setImage(with: URL.init(string: (dataModel?.goodsInfo?.image_url)!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+        iconView.kf.setImage(with: URL.init(string: (dataModel?.goodsInfo?.image_url)!), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
         nameLab.text = dataModel?.goodsInfo?.goods_name
         kuCunLab.text = "现有库存：" + (dataModel?.stock)!
         unitLab.text = (dataModel?.goodsInfo?.unit?.isEmpty)! ? "" : "单位：\((dataModel?.goodsInfo?.unit)!)"

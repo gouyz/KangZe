@@ -157,7 +157,7 @@ class KZGoodsDetailVC: GYZBaseVC {
         webView.scrollView.contentInset = UIEdgeInsets.init(top: headerViewH, left: 0, bottom: 0, right: 0)
         headerView.frame = CGRect.init(x: 0, y: -headerViewH, width: kScreenWidth, height: headerViewH)
         
-        headerView.iconView.kf.setImage(with: URL.init(string: (dataModel?.goods_image)!), placeholder: UIImage.init(named: "icon_shop_default"), options: nil, progressBlock: nil, completionHandler: nil)
+        headerView.iconView.kf.setImage(with: URL.init(string: (dataModel?.goods_image)!), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
         headerView.nameLab.text = dataModel?.goods_name
         headerView.priceLab.text = "￥" + (dataModel?.goods_price)!
 //        headerView.typeLab.text = dataModel?.member_type_name

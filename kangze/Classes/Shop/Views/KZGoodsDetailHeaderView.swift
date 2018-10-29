@@ -167,7 +167,12 @@ class KZGoodsDetailHeaderView: UIView {
         return view
     }()
     /// 商品图标
-    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_goods_detail_banner"))
+    lazy var iconView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.backgroundColor = kBackgroundColor
+        
+        return imgView
+    }()
     /// 商品名称
     lazy var nameLab : UILabel = {
         let lab = UILabel()

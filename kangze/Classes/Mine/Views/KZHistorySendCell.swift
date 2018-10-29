@@ -21,7 +21,7 @@ class KZHistorySendCell: UITableViewCell {
                 phoneLab.text = "电话：" + (model.addressInfo?.mob_phone)!
                 addressLab.text = "地址：" + (model.addressInfo?.province_name)! + (model.addressInfo?.city_name)! + (model.addressInfo?.area_name)! + (model.addressInfo?.address)!
                 
-                iconView.kf.setImage(with: URL.init(string: (model.goodsInfo?.goods_image_url)!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                iconView.kf.setImage(with: URL.init(string: (model.goodsInfo?.goods_image_url)!), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
                 
                 nameLab.text = model.goodsInfo?.goods_name
                 numberLab.text = "X\(model.goods_num!)"
@@ -190,7 +190,12 @@ class KZHistorySendCell: UITableViewCell {
     }()
     
     /// 商品图标
-    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_shop_default"))
+    lazy var iconView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.backgroundColor = kBackgroundColor
+        
+        return imgView
+    }()
     
     /// 商品名称
     lazy var nameLab : UILabel = {

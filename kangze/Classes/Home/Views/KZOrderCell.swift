@@ -15,7 +15,7 @@ class KZOrderCell: UITableViewCell {
         didSet{
             if let model = dataModel {
                 
-                iconView.kf.setImage(with: URL.init(string: model.goods_image_url!), placeholder: UIImage.init(named: "icon_goods_default"), options: nil, progressBlock: nil, completionHandler: nil)
+                iconView.kf.setImage(with: URL.init(string: model.goods_image_url!), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
                 nameLab.text = model.goods_name
                 priceLab.text = "￥" + model.goods_price!
                 numberLab.text = "x" + model.goods_num!
@@ -70,7 +70,12 @@ class KZOrderCell: UITableViewCell {
         }
     }
     /// 图标
-    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_goods_default"))
+    lazy var iconView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.backgroundColor = kWhiteColor
+        
+        return imgView
+    }()
     
     /// cell title
     lazy var nameLab : UILabel = {
