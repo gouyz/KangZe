@@ -115,6 +115,7 @@ extension KZCompanyArticlesVC: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = KZArticleDetailVC()
         vc.articleId = dataList[indexPath.row].article_id!
+        vc.articleTitle = dataList[indexPath.row].article_title!
         navigationController?.pushViewController(vc, animated: true)
     }
     ///MARK : UITableViewDelegate

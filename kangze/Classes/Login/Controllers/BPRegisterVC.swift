@@ -366,10 +366,10 @@ class BPRegisterVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "请输入验证码",isBottom:false)
             return
         }
-//        if codeInputView.textFiled.text! != codeStr {
-//            MBProgressHUD.showAutoDismissHUD(message: "验证码不正确",isBottom:false)
-//            return
-//        }
+        if codeInputView.textFiled.text! != codeStr {
+            MBProgressHUD.showAutoDismissHUD(message: "验证码不正确",isBottom:false)
+            return
+        }
 
         if pwdInputView.textFiled.text!.isEmpty {
             MBProgressHUD.showAutoDismissHUD(message: "请输入密码")
@@ -384,10 +384,10 @@ class BPRegisterVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "新密码与确认密码不一致")
             return
         }
-        if applyCodeInputView.textFiled.text!.isEmpty {
-            MBProgressHUD.showAutoDismissHUD(message: "请输入邀请码")
-            return
-        }
+//        if applyCodeInputView.textFiled.text!.isEmpty {
+//            MBProgressHUD.showAutoDismissHUD(message: "请输入邀请码")
+//            return
+//        }
         if nameInputView.textFiled.text!.isEmpty {
             MBProgressHUD.showAutoDismissHUD(message: "请输入姓名")
             return

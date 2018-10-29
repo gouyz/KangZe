@@ -169,12 +169,17 @@ class KZMineVC: GYZBaseVC {
     
     /// 修改头像
     @objc func onClickedUpdateHeader(){
-        GYZOpenCameraPhotosTool.shareTool.choosePicture(self, editor: true, finished: { [weak self] (image) in
-            
-            self?.selectUserImg = image
-            self?.userHeaderView.userHeaderView.image = image
-            self?.requestUpdateHeaderImg()
-        })
+        if userDefaults.bool(forKey: kIsLoginTagKey) {
+            GYZOpenCameraPhotosTool.shareTool.choosePicture(self, editor: true, finished: { [weak self] (image) in
+                
+                self?.selectUserImg = image
+                self?.userHeaderView.userHeaderView.image = image
+                self?.requestUpdateHeaderImg()
+            })
+        }else {
+            goLogin()
+        }
+        
     }
     ///控制跳转
     func goController(menu: KZMineModel){

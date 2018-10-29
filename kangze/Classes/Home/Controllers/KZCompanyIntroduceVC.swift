@@ -13,7 +13,7 @@ import MBProgressHUD
 class KZCompanyIntroduceVC: GYZBaseVC {
 
     /// 加载内容
-    var url: String = ""
+    var url: String = "http://app.kangzesw.com/wap/tmpl/article_show.html?article_id=43"
     var dataModel: KZArticleModel?
     
     override func viewDidLoad() {
@@ -25,7 +25,8 @@ class KZCompanyIntroduceVC: GYZBaseVC {
         webView.snp.makeConstraints { (make) in
             make.edges.equalTo(0)
         }
-        requestIntroduceDatas()
+        loadContent()
+//        requestIntroduceDatas()
     }
     
     override func didReceiveMemoryWarning() {
@@ -78,7 +79,7 @@ class KZCompanyIntroduceVC: GYZBaseVC {
     }
     /// 加载
     func loadContent(){
-        url = (dataModel?.article_content)!
+//        url = (dataModel?.article_content)!
         if url.hasPrefix("http://") || url.hasPrefix("https://") {
             
             webView.load(URLRequest.init(url: URL.init(string: url)!))
