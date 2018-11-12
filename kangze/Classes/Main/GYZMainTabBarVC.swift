@@ -18,6 +18,8 @@ class GYZMainTabBarVC: UITabBarController {
     
     func setUp(){
         tabBar.tintColor = kBlueFontColor
+        /// 解决iOS12.1 子页面返回时底部tabbar出现了错位
+        tabBar.isTranslucent = false
         
         addViewController(KZHomeVC(), title: "首页", normalImgName: "icon_tabbar_home")
         addViewController(KZShopVC(), title: "商城", normalImgName: "icon_tabbar_shop")
