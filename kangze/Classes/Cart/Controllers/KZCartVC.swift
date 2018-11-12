@@ -34,7 +34,7 @@ class KZCartVC: GYZBaseVC {
         bottomView.snp.makeConstraints { (make) in
             make.left.right.equalTo(view)
 
-            make.bottom.equalTo(-kTabBarHeight)
+            make.bottom.equalTo(view)
             make.height.equalTo(kTitleHeight)
         }
         tableView.snp.makeConstraints { (make) in
