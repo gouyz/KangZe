@@ -239,7 +239,7 @@ extension KZHomeVC: UITableViewDelegate,UITableViewDataSource{
         
         cell.iconView.image = UIImage.init(named: iconArr[indexPath.row])
         cell.nameLab.text = titleArr[indexPath.row]
-        cell.adsImgView.kf.setImage(with: URL.init(string: (model?.goods_image)!), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
+        cell.adsImgView.kf.setImage(with: URL.init(string: (model?.goods_image)!), placeholder: UIImage.init(named: "icon_home_goods"), options: nil, progressBlock: nil, completionHandler: nil)
         
         cell.selectionStyle = .none
         return cell
