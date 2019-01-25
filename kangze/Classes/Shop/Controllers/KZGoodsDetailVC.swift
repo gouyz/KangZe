@@ -10,9 +10,6 @@ import UIKit
 import WebKit
 import MBProgressHUD
 
-private let goodsDetailCell = "goodsDetailCell"
-
-
 class KZGoodsDetailVC: GYZBaseVC {
     
     /// header 高度
