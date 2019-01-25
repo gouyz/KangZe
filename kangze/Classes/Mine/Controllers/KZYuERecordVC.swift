@@ -109,10 +109,12 @@ extension KZYuERecordVC: UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: yuERecordCell) as! KZRecordCell
         
         let model = dataList[indexPath.row]
-        cell.titleLab.text = model.type
-        cell.statusLab.text = model.lg_add_time?.getDateTime(format: "yyyy_MM-dd HH:mm:ss")
-        cell.statusLab.textColor = kHeightGaryFontColor
-        cell.statusLab.font = k13Font
+        cell.titleLab.text = model.lg_add_time?.getDateTime(format: "yyyy-MM-dd HH:mm:ss")
+        cell.statusLab.text = ""
+//        cell.titleLab.text = model.type
+//        cell.statusLab.text = model.lg_add_time?.getDateTime(format: "yyyy-MM-dd HH:mm:ss")
+//        cell.statusLab.textColor = kHeightGaryFontColor
+//        cell.statusLab.font = k13Font
         cell.moneyLab.text = model.lg_av_amount
         cell.dateLab.text = "余额：￥" + model.lg_cur_amount!
         

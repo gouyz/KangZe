@@ -18,7 +18,7 @@ class KZMyBonusDetailVC: GYZBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.title = "一级市场"
+//        self.navigationItem.title = "一级市场"
         view.addSubview(tableView)
         
         tableView.snp.makeConstraints { (make) in
@@ -108,11 +108,11 @@ extension KZMyBonusDetailVC: UITableViewDelegate,UITableViewDataSource{
         
         if indexPath.row == 0 {
             cell.nameLab.textColor = kBlueFontColor
-            cell.nameLab.text = "一级代理"
+            cell.nameLab.text = "客户"
             cell.dateLab.textColor = kBlueFontColor
             cell.dateLab.text = "时间"
             cell.moneyLab.textColor = kBlueFontColor
-            cell.moneyLab.text = "当月业绩"
+            cell.moneyLab.text = "金额"
             cell.productLab.textColor = kBlueFontColor
             cell.productLab.text = "产品"
         }else{
