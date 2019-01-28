@@ -95,7 +95,7 @@ class KZCustomerInfoVC: GYZBaseVC {
         lab.font = k13Font
         lab.textColor = kBlueFontColor
         lab.textAlignment = .center
-        lab.text = "代理人数"
+        lab.text = "招商人数"
         
         return lab
     }()
